@@ -1,0 +1,36 @@
+.auth-wrapper {
+  /* Ocupar toda la pantalla */
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  /* Fondo base por si tarda en cargar la imagen */
+  background-color: #0F3F7A; 
+
+  /* CONFIGURACIÓN DE FONDO */
+  background-image: url('/assets/wave-bg.svg');
+  background-repeat: no-repeat;
+  
+  /* Posición: Centrado arriba. 
+     Esto asegura que el logo (que está arriba en el SVG) siempre se vea centrado. */
+  background-position: top center;
+  
+  /* Tamaño: COVER.
+     Hace que la imagen cubra todo el fondo. Como el SVG ahora está bien hecho,
+     se adaptará sin deformarse y sin dejar líneas raras. */
+  background-size: cover;
+
+  /* Espaciado interior para que el texto no choque con el logo */
+  padding-top: 160px; 
+  padding-bottom: 40px;
+}
+
+/* Ajuste para Móvil */
+@media (max-width: 991px) {
+  .auth-wrapper {
+    /* En móvil damos un poco más de aire arriba para el logo */
+    padding-top: 140px;
+    background-position: top center;
+  }
+}
