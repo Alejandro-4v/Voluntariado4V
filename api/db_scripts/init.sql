@@ -44,7 +44,7 @@ CREATE TABLE
         id_actividad INT AUTO_INCREMENT PRIMARY KEY,
         nombre VARCHAR(50) NOT NULL,
         descripcion VARCHAR(400),
-        estado ENUM ('A', 'F', 'P', 'C', 'R') NOT NULL DEFAULT 'P',
+        estado ENUM ('A', 'F', 'P', 'C', 'R', 'E') NOT NULL DEFAULT 'P',
         convoca SMALLINT NOT NULL,
         inicio TIMESTAMP NOT NULL,
         fin TIMESTAMP NOT NULL,
