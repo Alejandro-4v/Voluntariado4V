@@ -56,6 +56,24 @@ CREATE TABLE
 
 CREATE INDEX IX_ACTIVIDAD_nombre ON ACTIVIDAD (nombre);
 
+DELIMITER //
+
+CREATE TRIGGER trg_actividad_before_insert
+BEFORE INSERT ON ACTIVIDAD
+FOR EACH ROW
+    BEGIN
+        SET NEW.estado = UPPER(NEW.estado);
+    END //
+
+CREATE TRIGGER trg_actividad_before_update
+BEFORE UPDATE ON ACTIVIDAD
+FOR EACH ROW
+    BEGIN
+        SET NEW.estado = UPPER(NEW.estado);
+    END //
+
+DELIMITER ;
+
 CREATE TABLE
     VOLUNTARIO (
         nif CHAR(10) CHECK (
@@ -68,10 +86,29 @@ CREATE TABLE
         grado TINYINT NOT NULL,
         mail VARCHAR(255) NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
+        estado ENUM ('A', 'P', 'R', 'I') NOT NULL DEFAULT 'P'
         FOREIGN KEY (grado) REFERENCES GRADO (id_grado)
     );
 
 CREATE INDEX IX_VOLUNTARIO_nombre_completo ON VOLUNTARIO (nombre, apellido_1, apellido_2);
+
+DELIMITER //
+
+CREATE TRIGGER trg_voluntario_before_insert
+BEFORE INSERT ON VOLUNTARIO
+FOR EACH ROW
+    BEGIN
+        SET NEW.estado = UPPER(NEW.estado);
+    END //
+
+CREATE TRIGGER trg_voluntario_before_update
+BEFORE UPDATE ON VOLUNTARIO
+FOR EACH ROW
+    BEGIN
+        SET NEW.estado = UPPER(NEW.estado);
+    END //
+
+DELIMITER ;
 
 CREATE TABLE
     ADMINISTRADOR (
