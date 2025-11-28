@@ -163,3 +163,12 @@ CREATE TABLE
         FOREIGN KEY (id_dia) REFERENCES DIA_SEMANA (id_dia),
         CONSTRAINT CK_DISPONIBILIDAD_inicio_antes_de_fin CHECK (hora_inicio < hora_fin)
     );
+
+INSERT INTO
+    DIA_SEMANA (id_dia, descripcion)
+VALUES
+    (1, 'Lunes'),
+    (2, 'Martes'),
+    (3, 'Miércoles'),
+    (4, 'Jueves'),
+    (5, 'Viernes');
