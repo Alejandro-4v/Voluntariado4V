@@ -1,0 +1,58 @@
+<div class="auth-card animate__animated animate__fadeInUp">
+  
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <small class="text-muted fw-bold" style="font-size: 0.8rem;">Cuatrovientos Voluntariado</small>
+      <h2 class="fw-bold text-dark mt-1">Inscríbete</h2>
+    </div>
+    <img src="/assets/logo-blue.svg" alt="Logo Azul" width="60">
+  </div>
+
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label">Correo electrónico</label>
+      <input 
+        type="email" 
+        class="form-control" 
+        formControlName="email" 
+        placeholder="nuevo_voluntario@gmail.com"
+        [class.is-invalid]="studentForm.get('email')?.invalid && (studentForm.get('email')?.dirty || studentForm.get('email')?.touched)">
+        
+      <div class="invalid-feedback" *ngIf="studentForm.get('email')?.errors?.['required']">
+        El correo es obligatorio.
+      </div>
+      <div class="invalid-feedback" *ngIf="studentForm.get('email')?.errors?.['email']">
+        Introduce un correo válido.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Nombre y apellidos</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        formControlName="name" 
+        placeholder="John Doe"
+        [class.is-invalid]="studentForm.get('name')?.invalid && (studentForm.get('name')?.dirty || studentForm.get('name')?.touched)">
+      
+      <div class="invalid-feedback" *ngIf="studentForm.get('name')?.errors?.['required']">
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4 mb-4 small">
+      <div>
+        <span class="text-muted">¿Ya tienes cuenta?</span><br>
+        <a routerLink="/login" class="fw-bold">Inicia sesión</a>
+      </div>
+      <div class="text-end">
+        <span class="text-muted">¿Eres una entidad?</span><br>
+        <a routerLink="/register-entity" class="fw-bold">Manda una solicitud</a>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary-cv w-100">
+      Inscríbete
+    </button>
+  </form>
+</div>

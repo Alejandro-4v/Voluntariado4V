@@ -1,1 +1,74 @@
-/* You can add global styles to this file, and also import other style files */
+/* 1. Bootstrap */
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+/* 2. Fuentes y Variables */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --cv-blue: #003399; /* Azul Corporativo */
+  --cv-blue-hover: #002266;
+  --cv-text-muted: #6c757d;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--cv-blue); 
+}
+
+/* 3. CLASE PRINCIPAL: LA TARJETA BLANCA (Auth Card) */
+/* Si esto falta, se ve transparente como en tu imagen */
+.auth-card {
+  background: white;
+  border-radius: 20px; /* Bordes redondeados */
+  padding: 2.5rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); /* Sombra elegante */
+  border: none;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+/* 4. Inputs redondeados */
+.form-control {
+  border-radius: 10px;
+  padding: 12px 15px;
+  border: 1px solid #dee2e6;
+}
+
+.form-control:focus {
+  border-color: var(--cv-blue);
+  box-shadow: 0 0 0 0.25rem rgba(0, 51, 153, 0.15);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.btn-primary-cv {
+  background-color: var(--cv-blue);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s;
+}
+
+.btn-primary-cv:hover {
+  background-color: var(--cv-blue-hover);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* 6. Enlaces */
+a {
+  color: var(--cv-blue);
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+}
