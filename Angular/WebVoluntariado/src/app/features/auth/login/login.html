@@ -8,6 +8,18 @@
     <img src="/assets/logo-blue.svg" alt="Logo Azul" width="60">
   </div>
 
+  <!-- Error message -->
+  <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Mock credentials info (helpful during development) -->
+  <div class="alert alert-info alert-sm mb-3" role="alert">
+    <small>
+      <strong>Demo:</strong> email: iryna_pavlenko@cuatrovientos.org | password: password123
+    </small>
+  </div>
+
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label class="form-label">Correo electrónico</label>
@@ -16,7 +28,8 @@
         class="form-control" 
         formControlName="email" 
         placeholder="iryna_pavlenko@cuatrovientos.org"
-        [class.is-invalid]="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)">
+        [class.is-invalid]="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+        [disabled]="isLoading">
       
       <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['required']">
         El correo es obligatorio.
@@ -33,7 +46,8 @@
         class="form-control" 
         formControlName="password" 
         placeholder="Contraseña"
-        [class.is-invalid]="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
+        [class.is-invalid]="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+        [disabled]="isLoading">
       
       <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['required']">
         La contraseña es obligatoria.
@@ -48,8 +62,11 @@
       <a routerLink="/forgot-password" class="text-primary text-decoration-none">¿Has olvidado tu contraseña?</a>
     </div>
 
-    <button type="submit" class="btn btn-primary-cv w-100">
-      Iniciar sesión
+    <button 
+      type="submit" 
+      class="btn btn-primary-cv w-100"
+      [disabled]="isLoading">
+      {{ isLoading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
     </button>
   </form>
 </div>

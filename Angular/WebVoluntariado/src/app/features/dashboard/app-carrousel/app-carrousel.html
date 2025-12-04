@@ -1,0 +1,38 @@
+<div class="position-relative w-100 px-5">
+
+  <!-- FLECHA IZQUIERDA -->
+  <button
+    class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y"
+    style="width: 42px; height: 42px; z-index: 10; left: 10px; transform: translateY(-50%);"
+    (click)="scroll('left')"
+  >
+    <span class="fw-bold fs-4">&lsaquo;</span>
+  </button>
+
+  <!-- CARRUSEL (centrado y ancho fijo con clase personalizada) -->
+  <div 
+    #track 
+    class="d-flex flex-nowrap overflow-hidden carrousel-track mx-auto gap-2 carousel-width"
+  >
+    <div class="flex-shrink-0 card-width" *ngFor="let item of items">
+      <activity-card
+        [name]="item.name"
+        [type]="item.type || item.entity || 'N/A'"
+        [slots]="item.slots || 0"
+        [filled]="item.filled || 0"
+        [image]="item.image || ''"
+      >
+      </activity-card>
+    </div>
+  </div>
+
+  <!-- FLECHA DERECHA -->
+  <button
+    class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y"
+    style="width: 42px; height: 42px; z-index: 10; right: 10px; transform: translateY(-50%);"
+    (click)="scroll('right')"
+  >
+    <span class="fw-bold fs-4">&rsaquo;</span>
+  </button>
+
+</div>

@@ -5,6 +5,7 @@ import { RegisterEntityComponent } from './features/auth/register-entity/registe
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password';
 import { StatusMessageComponent } from './features/auth/status-message/status-message';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout';
+import { DashboardComponent } from './features/dashboard/dashboard';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,10 @@ export const routes: Routes = [
       },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
   },
   { path: '**', redirectTo: 'login' }
 ];
