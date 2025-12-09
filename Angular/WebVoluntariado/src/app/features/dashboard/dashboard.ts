@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivityCardComponent } from './activity-card-component/activity-card-component';
 import { AppCarrouselComponent } from './app-carrousel/app-carrousel';
+import { Navbar } from './navbar/navbar';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ActivityCardComponent, AppCarrouselComponent],
+  imports: [CommonModule, ActivityCardComponent, AppCarrouselComponent, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -39,15 +40,15 @@ export class DashboardComponent implements OnInit {
   ];
 
   proposals = [
-    { name: 'Voluntariado en eventos', type: 'Eventos', slots: 10, filled: 2, image: '' },
-    { name: 'Taller de tecnología', type: 'Tecnología', slots: 8, filled: 5, image: '' },
-    { name: 'Limpieza comunitaria', type: 'Comunitario', slots: 12, filled: 7, image: '' }
+    { name: 'Voluntariado en eventos', type: 'Eventos', slots: 10, filled: 2, image: '', customBackground: '#fff', showIcon: true },
+    { name: 'Taller de tecnología', type: 'Tecnología', slots: 8, filled: 5, image: '', customBackground: '#fff', showIcon: true },
+    { name: 'Limpieza comunitaria', type: 'Comunitario', slots: 12, filled: 7, image: '', customBackground: '#fff', showIcon: true }
   ];
 
   otherEntities = [
-    { name: 'Cáritas Diocesana', type: 'ONG Social', slots: 20, filled: 10, image: '' },
-    { name: 'Cruz Roja', type: 'Organización Humanitaria', slots: 15, filled: 8, image: '' },
-    { name: 'Fundación Española', type: 'Fundación', slots: 10, filled: 3, image: '' }
+    { name: 'Cáritas Diocesana', type: 'ONG Social', slots: 0, filled: 0, image: 'assets/caritas.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' },
+    { name: 'Cruz Roja', type: 'Organización Humanitaria', slots: 0, filled: 0, image: 'assets/cruzroja.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' },
+    { name: 'Fundación Española', type: 'Fundación', slots: 0, filled: 0, image: 'assets/fundacion.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' }
   ];
 
   ngOnInit() {
@@ -57,10 +58,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
+
 
   scrollCarousel(event: Event, direction: 'left' | 'right') {
     event.preventDefault();

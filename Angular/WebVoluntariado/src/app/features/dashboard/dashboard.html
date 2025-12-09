@@ -1,20 +1,8 @@
 <div class="dashboard-wrapper min-vh-100 bg-light">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">
-        <img src="/assets/logo-blue.svg" alt="Logo" height="40" class="me-2">
-        Cuatrovientos
-      </a>
-
-      <div class="ms-auto d-flex gap-3 align-items-center">
-        <a href="#" class="text-muted text-decoration-none">Mis actividades pendientes</a>
-        <a href="#" class="text-muted text-decoration-none">Contacto</a>
-        <button class="btn btn-primary-cv btn-sm" (click)="logout()">Cerrar sesión</button>
-      </div>
-    </div>
-  </nav>
+  <!-- Navbar -->
+  <app-navbar></app-navbar>
 
   <!-- Main content -->
   <main class="dashboard-content bg-white py-5">
@@ -34,8 +22,7 @@
           </h2>
 
           <!-- Carrusel reutilizable -->
-          <app-carrousel
-            [items]="entity.activities">
+          <app-carrousel [items]="entity.activities">
           </app-carrousel>
 
         </section>
@@ -48,8 +35,7 @@
           Propuestas desde Cuatrovientos
         </h2>
 
-        <app-carrousel
-          [items]="proposals">
+        <app-carrousel [items]="proposals" cardType="proposal">
         </app-carrousel>
 
       </section>
@@ -61,8 +47,7 @@
           Otras entidades que puedan ser de tu interés
         </h2>
 
-        <app-carrousel
-          [items]="otherEntities">
+        <app-carrousel [items]="otherEntities" cardType="entity">
         </app-carrousel>
 
       </section>

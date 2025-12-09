@@ -14,6 +14,9 @@ export class ActivityCardComponent {
   @Input() slots!: number;
   @Input() filled!: number;
   @Input() image?: string;
+  @Input() showIcon: boolean = true;
+  @Input() imageFit: 'cover' | 'contain' = 'cover';
+  @Input() customBackground?: string;
 
   getProgressPercentage(): number {
     return this.slots > 0 ? Math.round((this.filled / this.slots) * 100) : 0;
