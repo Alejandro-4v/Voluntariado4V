@@ -66,4 +66,22 @@ class Grado
         return $this;
     }
 
+    /**
+     * Summary of getActividades
+     * @return Actividad[]|Collection
+     */
+    public function getActividades(): Collection
+    {
+        return $this->actividades;
+    }
+
+    /**
+     * Summary of getVoluntarios
+     * @return Voluntario[]|Collection
+     */
+    public function getVoluntarios(): Collection
+    {
+        return $this->voluntarios;
+    }
+
 }
