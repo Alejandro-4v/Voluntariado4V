@@ -36,11 +36,11 @@ class Voluntario
     private ?Grado $grado = null;
 
     #[ORM\Column(name: 'mail', type: 'string', length: 255)]
-    #[Groups(['voluntario: read'])]
+    #[Groups(['voluntario: read', 'voluntario: login'])]
     private string $mail;
 
     #[ORM\Column(name: 'password_hash', type: 'string', length: 255)]
-    #[Groups(['voluntario: read'])]
+    #[Groups(['voluntario: read', 'voluntario: login'])]
     private string $passwordHash;
 
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
