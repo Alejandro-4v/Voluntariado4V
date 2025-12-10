@@ -4,6 +4,15 @@
   <!-- Navbar -->
   <app-navbar></app-navbar>
 
+  <!-- Activity Modal -->
+  <app-activity-modal 
+    [isOpen]="isModalOpen"
+    [activity]="selectedActivity"
+    [buttonType]="'participar'"
+    (close)="closeActivityModal()"
+    (action)="onActivityAction()">
+  </app-activity-modal>
+
   <!-- Main content -->
   <main class="dashboard-content bg-white py-5">
     <div class="container-lg">
@@ -22,7 +31,7 @@
           </h2>
 
           <!-- Carrusel reutilizable -->
-          <app-carrousel [items]="entity.activities">
+          <app-carrousel [items]="entity.activities" (cardClick)="openActivityModal($event)">
           </app-carrousel>
 
         </section>
@@ -35,7 +44,7 @@
           Propuestas desde Cuatrovientos
         </h2>
 
-        <app-carrousel [items]="proposals" cardType="proposal">
+        <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
         </app-carrousel>
 
       </section>
@@ -47,7 +56,7 @@
           Otras entidades que puedan ser de tu interés
         </h2>
 
-        <app-carrousel [items]="otherEntities" cardType="entity">
+        <app-carrousel [items]="otherEntities" cardType="entity" (cardClick)="openActivityModal($event)">
         </app-carrousel>
 
       </section>

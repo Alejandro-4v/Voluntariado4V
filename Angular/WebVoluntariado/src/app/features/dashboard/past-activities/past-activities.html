@@ -16,34 +16,43 @@
       </p>
 
       <!-- Rated activities section -->
-      <div class="mb-5" [hidden]="ratedActivities.length === 0">
+      <div class="mb-5" [hidden]="allActivities.length === 0">
 
         <h2 class="fs-6 fw-bold mb-4 text-dark">
           Todas tus actividades
         </h2>
 
-        <!-- Carrusel de actividades valoradas -->
-        <app-carrousel [items]="ratedActivities.concat(unratedActivities)" cardType="activity">
+        <!-- Carrusel de todas las actividades -->
+        <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
             
         </app-carrousel>
       </div>
 
       <!-- Unrated activities section -->
-      <div class="mb-5" [hidden]="ratedActivities.length === 0">
+      <div class="mb-5" [hidden]="unratedActivities.length === 0">
 
         <h2 class="fs-6 fw-bold mb-4 text-dark">
           Queremos saber tu opinión sobre estas actividades
         </h2>
 
         <!-- Carrusel de actividades sin valorar -->
-        <app-carrousel [items]="unratedActivities" cardType="activity">
+        <app-carrousel [items]="unratedActivities" cardType="activity" (cardClick)="openActivityModal($event)">
         </app-carrousel>
       </div>
 
       <!-- Empty state -->
-      <div *ngIf="ratedActivities.length === 0 && unratedActivities.length === 0" class="alert alert-info" role="alert">
+      <div *ngIf="allActivities.length === 0 && unratedActivities.length === 0" class="alert alert-info" role="alert">
         <p class="mb-0">Aún no has participado en ninguna actividad. ¡Únete a nuestro programa de voluntariado!</p>
       </div>
     </div>
   </main>
+
+  <!-- Activity Modal -->
+  <app-activity-modal 
+    [isOpen]="isModalOpen"
+    [activity]="selectedActivity"
+    buttonType="valorar"
+    (close)="closeActivityModal()"
+    (action)="onActivityAction()">
+  </app-activity-modal>
 </div>

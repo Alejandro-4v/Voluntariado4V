@@ -21,16 +21,16 @@
       <activity-card *ngSwitchCase="'activity'" [name]="item.name" [type]="item.type || item.entity || 'N/A'"
         [slots]="item.slots || 0" [filled]="item.filled || 0" [image]="item.image || ''"
         [showIcon]="item.showIcon !== false" [imageFit]="item.imageFit || 'cover'"
-        [customBackground]="item.customBackground">
+        [customBackground]="item.customBackground" (cardClick)="onActivityClick(item)">
       </activity-card>
 
       <!-- Proposal Card -->
       <proposal-card *ngSwitchCase="'proposal'" [name]="item.name" [slots]="item.slots || 0"
-        [filled]="item.filled || 0">
+        [filled]="item.filled || 0" (cardClick)="onActivityClick(item)">
       </proposal-card>
 
       <!-- Entity Card -->
-      <entity-card *ngSwitchCase="'entity'" [name]="item.name" [type]="item.type || 'N/A'" [image]="item.image">
+      <entity-card *ngSwitchCase="'entity'" [name]="item.name" [type]="item.type || 'N/A'" [image]="item.image" (cardClick)="onActivityClick(item)">
       </entity-card>
 
     </div>

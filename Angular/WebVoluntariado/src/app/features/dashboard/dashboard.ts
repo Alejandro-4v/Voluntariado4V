@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppCarrouselComponent } from './app-carrousel/app-carrousel';
 import { Navbar } from './navbar/navbar';
+import { ActivityModalComponent } from './activity-modal/activity-modal';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, Navbar],
+  imports: [CommonModule, AppCarrouselComponent, Navbar, ActivityModalComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -17,6 +18,8 @@ export class DashboardComponent implements OnInit {
   private authService = inject(AuthService);
 
   currentUser: User | null = null;
+  selectedActivity: any = null;
+  isModalOpen = false;
 
   entitiesActivities = [
     {
@@ -98,5 +101,26 @@ export class DashboardComponent implements OnInit {
         behavior: 'smooth'
       });
     }
+  }
+
+  openActivityModal(activity: any) {
+    this.selectedActivity = {
+      ...activity,
+      location: activity.location || 'Polideportivo Municipal',
+      time: activity.time || '10:00',
+      description: activity.description || 'Descripción breve de tareas de la actividad'
+    };
+    this.isModalOpen = true;
+  }
+
+  closeActivityModal() {
+    this.isModalOpen = false;
+    this.selectedActivity = null;
+  }
+
+  onActivityAction() {
+    // Aquí irá la lógica de participar
+    console.log('Participar en:', this.selectedActivity.name);
+    this.closeActivityModal();
   }
 }

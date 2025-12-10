@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivityCardComponent } from '../activity-card-component/activity-card-component';
 import { ProposalCardComponent } from '../proposal-card/proposal-card.component';
@@ -22,6 +22,7 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
   get items() { return this._items; }
 
   @Input() cardType: 'activity' | 'proposal' | 'entity' = 'activity';
+  @Output() cardClick = new EventEmitter<any>();
   @ViewChild('track', { static: false }) track!: ElementRef<HTMLElement>;
 
   activeIndex = 0;
@@ -146,5 +147,8 @@ scroll(direction: 'left' | 'right') {
   });
 }
 
+onActivityClick(item: any) {
+  this.cardClick.emit(item);
+}
 
 }
