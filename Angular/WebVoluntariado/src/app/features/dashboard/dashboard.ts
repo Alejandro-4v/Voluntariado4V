@@ -1,13 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivityCardComponent } from './activity-card-component/activity-card-component';
 import { AppCarrouselComponent } from './app-carrousel/app-carrousel';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ActivityCardComponent, AppCarrouselComponent],
+  imports: [CommonModule, AppCarrouselComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

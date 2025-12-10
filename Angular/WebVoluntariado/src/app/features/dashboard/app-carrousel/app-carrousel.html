@@ -9,21 +9,23 @@
     <span class="fw-bold fs-4">&lsaquo;</span>
   </button>
 
-  <!-- CARRUSEL (centrado y ancho fijo con clase personalizada) -->
+  <!-- CARRUSEL -->
   <div 
     #track 
     class="d-flex flex-nowrap overflow-hidden carrousel-track mx-auto gap-2 carousel-width"
   >
-    <div class="flex-shrink-0 card-width" *ngFor="let item of items">
-      <activity-card
-        [name]="item.name"
-        [type]="item.type || item.entity || 'N/A'"
-        [slots]="item.slots || 0"
-        [filled]="item.filled || 0"
-        [image]="item.image || ''"
-      >
-      </activity-card>
-    </div>
+    @for (item of items; track $index) {
+      <div class="flex-shrink-0 card-width">
+        <activity-card
+          [name]="item.name"
+          [type]="item.type || item.entity || 'N/A'"
+          [slots]="item.slots || 0"
+          [filled]="item.filled || 0"
+          [image]="item.image || ''"
+        >
+        </activity-card>
+      </div>
+    }
   </div>
 
   <!-- FLECHA DERECHA -->

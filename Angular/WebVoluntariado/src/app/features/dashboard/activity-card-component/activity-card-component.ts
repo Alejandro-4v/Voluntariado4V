@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,7 +15,13 @@ export class ActivityCardComponent {
   @Input() filled!: number;
   @Input() image?: string;
 
+  @Output() cardClick = new EventEmitter<void>();
+
   getProgressPercentage(): number {
     return this.slots > 0 ? Math.round((this.filled / this.slots) * 100) : 0;
+  }
+
+  onCardClick() {
+    this.cardClick.emit();
   }
 }

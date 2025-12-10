@@ -1,15 +1,23 @@
 <div class="card card-activity border-0 shadow-sm" style="width: 18rem;">
-	<div class="card-img-top rounded-top" [ngStyle]="{
-		height: '200px',
-		background: image ? 'url(' + image + ') center/cover' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-	}"></div>
-	<div class="card-body p-3">
-		<h5 class="card-title fs-6 fw-bold mb-3">{{ name }}</h5>
-		<p class="text-muted small mb-1">Tipo: {{ type }}</p>
-		<p class="text-muted small mb-1">Plazas máximas: {{ slots }}</p>
-		<p class="text-muted small mb-3">Plazas ocupadas: {{ filled }}</p>
-		<div class="progress" style="height: 6px;">
-			<div class="progress-bar bg-primary" [style.width.%]="getProgressPercentage()"></div>
-		</div>
-	</div>
+  <div class="card-img-top rounded-top position-relative" [ngStyle]="{
+    height: '200px',
+    background: image ? 'url(' + image + ') center/cover' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  }"></div>
+
+  <!-- Botón flotante -->
+  <button
+  class="btn btn-warning rounded-circle d-flex align-items-center justify-content-center hand-btn position-relative ms-3"
+  (click)="onCardClick()"
+>
+  <span class="fs-5">✋</span>
+</button>
+
+
+  <div class="card-body p-3 pt-4">
+    <h5 class="card-title fs-6 fw-bold mb-3">{{ name }}</h5>
+    <p class="text-muted small mb-3">Plazas: {{ slots - filled }}</p>
+    <div class="progress" style="height: 6px;">
+      <div class="progress-bar bg-primary" [style.width.%]="getProgressPercentage()"></div>
+    </div>
+  </div>
 </div>
