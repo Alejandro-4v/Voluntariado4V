@@ -14,6 +14,9 @@ export class ActivityCardComponent {
   @Input() slots!: number;
   @Input() filled!: number;
   @Input() image?: string;
+  @Input() showIcon: boolean = true;
+  @Input() imageFit: 'cover' | 'contain' = 'cover';
+  @Input() customBackground?: string;
 
   @Output() cardClick = new EventEmitter<void>();
 

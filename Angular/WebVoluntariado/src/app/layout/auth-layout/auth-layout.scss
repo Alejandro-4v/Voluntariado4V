@@ -4,7 +4,6 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
-
   /* IMPORTANTE: Esto es lo que te falta para recuperar el scroll y que el SVG se vea grande.
      'content-box' hace que el padding (160px + 40px) se SUME a la altura de la pantalla,
      forzando que la página sea más alta que el monitor y aparezca el scroll. */
