@@ -1,7 +1,7 @@
-name: "Servicios para proyecto intermodular"
+name: "Intermodular"
 
 networks:
-  proyecto:
+  api:
     driver: bridge
 
 services:
@@ -17,5 +17,32 @@ services:
       MYSQL_PASSWORD: 4v
     volumes:
       - ./docker/mysql:/var/lib/mysql
+    profiles:
+      - "api"
     networks:
-      - proyecto
+      - api
+
+  p-apache-php:
+    build: ./docker/images/p-apache-php
+    container_name: p-apache-php
+    ports:
+      - "80:80"
+      - "8000:8000"
+      - "9003:9003"
+    volumes:
+      - ./symfony-api:/var/www/html/voluntariado-cuatrovientos
+      - ./docker/gdni_apache_error_log/error.log:/var/log/apache2/error.log
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+      - APACHE_LOG_DIR=/var/log/apache2
+      - APACHE_PID_FILE=/var/run/apache2/apache2.pid
+      - APACHE_RUN_DIR=/var/run/apache2
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - p-mysql
+    profiles:
+      - "api"
+    networks:
+      - api
