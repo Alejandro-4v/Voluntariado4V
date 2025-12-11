@@ -22,7 +22,6 @@ class GradoRepository extends ServiceEntityRepository
     public function findById($value): Grado
     {
 
-        error_log('Got to Repository findByID');
         return $this->createQueryBuilder('g')
             ->andWhere('g.idGrado = :val')
             ->setParameter('val', $value)
@@ -36,7 +35,6 @@ class GradoRepository extends ServiceEntityRepository
      */
     public function findByLevel(string $value): array
     {
-        error_log("Searching for Grado with nivel: " . $value);
 
         return $this->createQueryBuilder('g')
             ->andWhere('g.nivel = :val')
@@ -57,7 +55,6 @@ class GradoRepository extends ServiceEntityRepository
 
     public function remove(Grado $entity, bool $flush = false): void
     {
-        error_log('Got to Repository');
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
