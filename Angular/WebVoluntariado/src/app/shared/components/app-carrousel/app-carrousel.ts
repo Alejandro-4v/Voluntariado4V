@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivityCardComponent } from '../activity-card-component/activity-card-component';
-import { ProposalCardComponent } from '../proposal-card/proposal-card.component';
-import { EntityCardComponent } from '../entity-card/entity-card.component';
+import { ActivityCardComponent } from '../activity-card/activity-card-component';
+import { ProposalCardComponent } from '../../../features/dashboard/proposal-card/proposal-card.component';
+import { EntityCardComponent } from '../../../features/dashboard/entity-card/entity-card.component';
 
 @Component({
   selector: 'app-carrousel',
@@ -29,7 +29,7 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
   private initialized = false;
   private pendingInit = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     // podríamos no tener track aún si componente fue renderizado oculto; detectaremos en AfterViewChecked
@@ -89,37 +89,37 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
     return containerWidth / 3;
   }
 
-scroll(direction: 'left' | 'right') {
-  const el = this.track?.nativeElement;
-  if (!el) return;
+  scroll(direction: 'left' | 'right') {
+    const el = this.track?.nativeElement;
+    if (!el) return;
 
-  const firstCard = el.querySelector('.card-width') as HTMLElement;
-  if (!firstCard) return;
+    const firstCard = el.querySelector('.card-width') as HTMLElement;
+    if (!firstCard) return;
 
-  // Calcular ancho real de la card (incluyendo margenes)
-  const style = window.getComputedStyle(firstCard);
-  const marginRight = parseFloat(style.marginRight) || 0;
-  const marginLeft = parseFloat(style.marginLeft) || 0;
-  const cardWidth = firstCard.offsetWidth + marginLeft + marginRight;
+    // Calcular ancho real de la card (incluyendo margenes)
+    const style = window.getComputedStyle(firstCard);
+    const marginRight = parseFloat(style.marginRight) || 0;
+    const marginLeft = parseFloat(style.marginLeft) || 0;
+    const cardWidth = firstCard.offsetWidth + marginLeft + marginRight;
 
-  // Distancia a mover (positivo o negativo según dirección)
-  const amount = direction === 'left' ? -cardWidth : cardWidth;
+    // Distancia a mover (positivo o negativo según dirección)
+    const amount = direction === 'left' ? -cardWidth : cardWidth;
 
-  // Posición actual y límites
-  const maxScrollLeft = el.scrollWidth - el.clientWidth;
-  let newScrollLeft = el.scrollLeft + amount;
+    // Posición actual y límites
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
+    let newScrollLeft = el.scrollLeft + amount;
 
-  // Limitar scroll para que no pase los extremos
-  if (newScrollLeft < 0) newScrollLeft = 0;
-  if (newScrollLeft > maxScrollLeft) newScrollLeft = maxScrollLeft;
+    // Limitar scroll para que no pase los extremos
+    if (newScrollLeft < 0) newScrollLeft = 0;
+    if (newScrollLeft > maxScrollLeft) newScrollLeft = maxScrollLeft;
 
-  // Scroll a la nueva posición
-  el.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
+    // Scroll a la nueva posición
+    el.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
 
-  console.log('scrollBy cardWidth:', cardWidth);
-  console.log('scrollLeft actual:', el.scrollLeft);
-  console.log('nuevo scrollLeft:', newScrollLeft);
-}
+    console.log('scrollBy cardWidth:', cardWidth);
+    console.log('scrollLeft actual:', el.scrollLeft);
+    console.log('nuevo scrollLeft:', newScrollLeft);
+  }
 
 
   onScroll(event: Event) {
@@ -133,22 +133,22 @@ scroll(direction: 'left' | 'right') {
   }
 
   scrollToIndex(index: number) {
-  const el = this.track?.nativeElement;
-  if (!el) return;
+    const el = this.track?.nativeElement;
+    if (!el) return;
 
-  const firstCard = el.querySelector('.card-width') as HTMLElement;
-  if (!firstCard) return;
+    const firstCard = el.querySelector('.card-width') as HTMLElement;
+    if (!firstCard) return;
 
-  const cardWidth = firstCard.offsetWidth;
+    const cardWidth = firstCard.offsetWidth;
 
-  el.scrollTo({
-    left: index * cardWidth,
-    behavior: 'smooth'
-  });
-}
+    el.scrollTo({
+      left: index * cardWidth,
+      behavior: 'smooth'
+    });
+  }
 
-onActivityClick(item: any) {
-  this.cardClick.emit(item);
-}
+  onActivityClick(item: any) {
+    this.cardClick.emit(item);
+  }
 
 }

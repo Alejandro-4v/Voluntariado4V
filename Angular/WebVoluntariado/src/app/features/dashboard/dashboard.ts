@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppCarrouselComponent } from './app-carrousel/app-carrousel';
+import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
 import { Navbar } from './navbar/navbar';
 import { ActivityModalComponent } from './activity-modal/activity-modal';
 import { Router } from '@angular/router';

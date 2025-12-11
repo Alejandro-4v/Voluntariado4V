@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth.service';
-import { AppCarrouselComponent } from '../app-carrousel/app-carrousel';
+import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../activity-modal/activity-modal';
 import { Navbar } from '../navbar/navbar';
 
@@ -55,7 +55,7 @@ export class PastActivitiesComponent implements OnInit {
     }
 
     const userActivities = this.pastActivitiesByUser[this.currentUser.id] || [];
-    
+
     // Todas las actividades ordenadas de más reciente a más antigua
     this.allActivities = userActivities
       .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
