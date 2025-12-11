@@ -30,7 +30,7 @@ CREATE UNIQUE INDEX IX_ENTIDAD_nombre_entidad ON ENTIDAD (nombre);
 CREATE TABLE
     TIPO_ACTIVIDAD (
         id_tipo_actividad TINYINT AUTO_INCREMENT PRIMARY KEY,
-        descripcion VARCHAR(20) NOT NULL
+        descripcion VARCHAR(50) NOT NULL
     );
 
 CREATE TABLE
@@ -86,7 +86,7 @@ CREATE TABLE
         grado TINYINT NOT NULL,
         mail VARCHAR(255) NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
-        estado ENUM ('A', 'P', 'R', 'I') NOT NULL DEFAULT 'P'
+        estado ENUM ('A', 'P', 'R', 'I') NOT NULL DEFAULT 'P',
         FOREIGN KEY (grado) REFERENCES GRADO (id_grado)
     );
 
