@@ -5,11 +5,31 @@ import { RegisterEntityComponent } from './features/auth/register-entity/registe
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password';
 import { StatusMessageComponent } from './features/auth/status-message/status-message';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout';
+import { UserLayoutComponent } from './layout/user-layout/user-layout.component';
 import { DashboardComponent } from './features/dashboard/dashboard';
 import { PastActivitiesComponent } from './features/dashboard/past-activities/past-activities';
 import { ContactComponent } from './features/dashboard/contact/contact';
+import { AdminDashboardComponent } from './features/admin-dashboard/admin-dashboard.component';
 
 export const routes: Routes = [
+  {
+    path: 'admin',
+    component: AdminDashboardComponent
+  },
+  {
+    path: 'dashboard',
+    component: UserLayoutComponent,
+    children: [
+      { path: '', component: DashboardComponent }
+    ]
+  },
+  {
+    path: 'past-activities',
+    component: UserLayoutComponent,
+    children: [
+      { path: '', component: PastActivitiesComponent }
+    ]
+  },
   {
     path: '',
     component: AuthLayoutComponent,
@@ -17,10 +37,10 @@ export const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
-        data: { 
+        data: {
           // DATOS DEL LAYOUT (Izquierda - Fondo Azul)
-          title: 'Inicia sesión en', 
-          subtitle: 'Cuatrovientos Voluntariado', 
+          title: 'Inicia sesión en',
+          subtitle: 'Cuatrovientos Voluntariado',
           text1: 'Con tu pequeño gesto podremos hacer grandes historias que contar.',
           text2: 'Que nuestras anécdotas sean testimonio de que cada sonrisa cuenta'
         }
@@ -28,7 +48,7 @@ export const routes: Routes = [
       {
         path: 'register-student',
         component: RegisterStudentComponent,
-        data: { 
+        data: {
           title: 'Inscríbete en',
           subtitle: 'Cuatrovientos Voluntariado',
           text1: 'Con tu pequeño gesto podremos hacer grandes historias que contar.',
@@ -38,9 +58,9 @@ export const routes: Routes = [
       {
         path: 'register-entity',
         component: RegisterEntityComponent,
-        data: { 
+        data: {
           title: '¿Quieres formar parte del cambio?',
-          text1: 'Únete como entidad colaboradora y ayúdanos a crecer.' 
+          text1: 'Únete como entidad colaboradora y ayúdanos a crecer.'
         }
       },
       {
@@ -61,9 +81,8 @@ export const routes: Routes = [
           title: '¡Gracias!',
           subtitle: 'Cuatrovientos Voluntariado',
           text1: 'Hemos recibido tu solicitud correctamente.',
-          
+
           // --- DATOS PARA LA TARJETA (Parte Derecha) ---
-          // Necesarios para que withComponentInputBinding los inyecte en los @Input
           cardTitle: '¡Solicitud enviada!',
           cardMessage: 'Pronto recibirás un correo electrónico a la dirección que nos has proporcionado con la resolución de tu petición.'
         }

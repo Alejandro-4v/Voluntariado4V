@@ -1,0 +1,98 @@
+$primary-blue: #0d47a1;
+$text-blue: #1e3a8a;
+
+:host {
+    display: block;
+}
+
+.navbar {
+    transition: all 0.3s ease;
+
+    &.navbar-mode-white {
+        background-color: white !important;
+        border-bottom: 1px solid #f8f9fa; // border-light
+
+        .nav-link-custom {
+            color: $text-blue;
+
+            &:hover {
+                color: darken($text-blue, 10%);
+            }
+        }
+
+        .btn-custom {
+            background-color: $primary-blue;
+            color: white;
+
+            &:hover {
+                background-color: darken($primary-blue, 10%);
+            }
+        }
+
+        .logout-btn {
+            color: $text-blue;
+        }
+
+        .navbar-toggler svg {
+            fill: $primary-blue;
+        }
+    }
+
+    &.navbar-mode-blue {
+        background-color: $primary-blue !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        .nav-link-custom {
+            color: white;
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        .btn-custom {
+            background-color: white; // White button on blue bg
+            color: $primary-blue; // Blue text
+
+            &:hover {
+                background-color: #f0f0f0;
+            }
+        }
+
+        .logout-btn {
+            color: white;
+        }
+
+        .navbar-toggler svg {
+            fill: white;
+        }
+    }
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+
+        &.bg-white-mobile {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .ms-auto {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+    }
+}

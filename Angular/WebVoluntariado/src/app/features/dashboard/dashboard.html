@@ -1,16 +1,9 @@
 <div class="dashboard-wrapper min-vh-100 bg-light">
 
-  <!-- Navbar -->
-  <!-- Navbar -->
-  <app-navbar></app-navbar>
 
   <!-- Activity Modal -->
-  <app-activity-modal 
-    [isOpen]="isModalOpen"
-    [activity]="selectedActivity"
-    [buttonType]="'participar'"
-    (close)="closeActivityModal()"
-    (action)="onActivityAction()">
+  <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" [buttonType]="'participar'"
+    (close)="closeActivityModal()" (action)="onActivityAction()">
   </app-activity-modal>
 
   <!-- Main content -->

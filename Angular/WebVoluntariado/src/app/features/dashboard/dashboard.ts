@@ -1,14 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
-import { Navbar } from './navbar/navbar';
 import { ActivityModalComponent } from './activity-modal/activity-modal';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
+import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
+import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, Navbar, ActivityModalComponent],
+  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -122,5 +122,18 @@ export class DashboardComponent implements OnInit {
     // Aquí irá la lógica de participar
     console.log('Participar en:', this.selectedActivity.name);
     this.closeActivityModal();
+  }
+
+  get navbarOptions(): NavbarOption[] {
+    return [
+      { label: 'Mis actividades pasadas', path: '/past-activities' },
+      { label: 'Contacto', path: '#' },
+      { label: 'Nuevas actividades', type: 'button', path: '/dashboard' }
+    ];
+  }
+
+  handleLogout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

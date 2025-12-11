@@ -4,12 +4,11 @@ import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth.service';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../activity-modal/activity-modal';
-import { Navbar } from '../navbar/navbar';
 
 @Component({
   selector: 'app-past-activities',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, Navbar],
+  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent],
   templateUrl: 'past-activities.html',
   styleUrl: 'past-activities.scss'
 })
