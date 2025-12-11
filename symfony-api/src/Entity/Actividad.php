@@ -45,6 +45,11 @@ class Actividad
     #[Groups(['actividad: read'])]
     private DateTimeImmutable $fin;
 
+    #[ORM\Column(name:'image_url', type: 'string', length:255, nullable: true)]
+    #[Groups(['actividad:read'])]
+    private ?string $image_url = null;
+
+
     // Mapeo ManyToOne a GRADO (clave foránea 'grado')
     // El campo 'grado' en la DB es un TINYINT, pero su valor semántico es el nivel.
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'actividades')]

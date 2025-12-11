@@ -47,6 +47,10 @@ class Voluntario
     #[Groups(['voluntario: read'])]
     private string $estado = 'P';
 
+    #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
+    #[Groups(['voluntario:read'])]
+    private ?string $perfil_url = null;
+
     #[ORM\OneToMany(targetEntity: Disponibilidad::class, mappedBy: 'voluntario')]
     #[Groups(['voluntario: read'])]
     private Collection $disponibilidades;
@@ -149,6 +153,17 @@ class Voluntario
     public function setEstado(string $estado): self
     {
         $this->estado = $estado;
+        return $this;
+    }
+
+    public function getPerfilUrl(): string
+    {
+        return $this->perfil_url;
+    }
+
+    public function serPerfilUrl(string $perfil_url): self
+    {
+        $this->perfil_url = $perfil_url;
         return $this;
     }
 

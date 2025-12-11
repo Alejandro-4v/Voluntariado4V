@@ -51,6 +51,11 @@ class Entidad
     #[Groups(['entidad:read', 'entidad:login'])]
     private ?string $passwordHash = null;
 
+    #[ORM\Column(name:'perfil_url', type: 'string', length:255, nullable: true)]
+    #[Groups(['entidad:read'])]
+    private ?string $perfil_url = null;
+
+
     // Relación bidireccional: Una Entidad convoca muchas Actividades.
     #[ORM\OneToMany(targetEntity: Actividad::class, mappedBy: 'convoca')]
     #[Groups(['entidad:read'])]
@@ -152,6 +157,17 @@ class Entidad
     public function setPasswordHash(?string $passwordHash): self
     {
         $this->passwordHash = $passwordHash;
+        return $this;
+    }
+
+    public function getPerfilUrl(): string
+    {
+        return $this->perfil_url;
+    }
+
+    public function setPerfilUrl(string $perfil_url): self
+    {
+        $this->perfil_url = $perfil_url;
         return $this;
     }
 
