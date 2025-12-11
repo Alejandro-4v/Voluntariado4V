@@ -1,5 +1,5 @@
 INSERT INTO
-    GRADO (id_grado, nivel, descripcion)
+    GRADO (nivel, descripcion)
 VALUES
     ('M', 'Sistemas Microinformáticos y Redes'),
     ('S', 'Administración de Sistemas Informáticos en Red'),
@@ -9,7 +9,6 @@ VALUES
 
 INSERT INTO
     ENTIDAD (
-        id_entidad,
         cif,
         nombre,
         nombre_responsable,
@@ -69,7 +68,7 @@ VALUES
     (11, 'Ciudades y comunidades sostenibles');
 
 INSERT INTO
-    TIPO_ACTIVIDAD (id_tipo_actividad, descripcion)
+    TIPO_ACTIVIDAD (descripcion)
 VALUES
     ('Apoyo a Mayores'),
     ('Refuerzo Escolar'),
@@ -79,7 +78,6 @@ VALUES
 
 INSERT INTO
     ACTIVIDAD (
-        id_actividad,
         nombre,
         descripcion,
         estado,
@@ -180,7 +178,6 @@ INSERT INTO
         password_hash,
         nombre,
         apellido_1,
-        apellido_2
     )
 VALUES
     (
@@ -189,15 +186,6 @@ VALUES
         'Iryna',
         'Pavlenko'
     );
-
-INSERT INTO
-    DIA_SEMANA (id_dia, descripcion)
-VALUES
-    (1, 'Lunes'),
-    (2, 'Martes'),
-    (3, 'Miércoles'),
-    (4, 'Jueves'),
-    (5, 'Viernes');
 
 INSERT INTO
     DISPONIBILIDAD (nif, id_dia, hora_inicio, hora_fin)
