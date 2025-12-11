@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class ActivityModalComponent {
   @Input() isOpen = false;
   @Input() activity: any = null;
-  @Input() buttonType: 'participar' | 'valorar' = 'participar';
+  @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
   
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();
@@ -30,4 +30,18 @@ export class ActivityModalComponent {
       filled: index < rating
     }));
   }
+
+  getButtonLabel(): string {
+    switch (this.buttonType) {
+      case 'participar':
+        return 'Participar';
+      case 'valorar':
+        return 'Valorar';
+      case 'informar':
+        return 'Informar de un problema';
+      default:
+        return 'Participar';
+    }
+  }
 }
+

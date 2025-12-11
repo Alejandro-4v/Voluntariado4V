@@ -46,23 +46,10 @@
           <p class="info-text">{{ activity.description || 'Sin descripción disponible' }}</p>
         </div>
 
-        <!-- Rating (for past activities) -->
-        <div class="info-section" *ngIf="buttonType === 'valorar' && activity.rating">
-          <h3 class="info-label">Tu valoración</h3>
-          <div class="rating-stars">
-            <span
-              class="star"
-              *ngFor="let star of getRatingStars(activity.rating)"
-              [class.filled]="star.filled"
-              >★</span
-            >
-          </div>
-        </div>
-
         <!-- Action Buttons -->
         <div class="modal-buttons">
           <button type="button" class="btn btn-primary" (click)="onAction()">
-            {{ buttonType === 'participar' ? 'Participar' : 'Valorar' }}
+            {{ getButtonLabel() }}
           </button>
           <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
         </div>

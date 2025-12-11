@@ -1,0 +1,79 @@
+<div class="dashboard-wrapper min-vh-100 bg-light">
+  <!-- Navbar -->
+  <app-navbar></app-navbar>
+
+  <!-- Main content -->
+  <main class="dashboard-content bg-white py-5">
+    <div class="container-lg">
+      <!-- Main title -->
+      <h1 class="fs-4 fw-bold mb-2 text-dark">
+        Tienes algún problema o comentario sobre una actividad?
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-muted mb-5">
+        Tus actividades pasadas
+      </p>
+
+      <!-- Past activities section -->
+      <div class="mb-5" [hidden]="allActivities.length === 0">
+        <!-- Carrusel de actividades pasadas -->
+        <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+      </div>
+
+      <!-- Empty state for past activities -->
+      <div *ngIf="allActivities.length === 0" class="alert alert-info mb-5" role="alert">
+        <p class="mb-0">No tienes actividades pasadas aun.</p>
+      </div>
+
+      <!-- Upcoming activities section -->
+      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5">
+        Tus proximas actividades
+      </h2>
+
+      <div class="mb-5" [hidden]="upcomingActivities.length === 0">
+        <!-- Carrusel de proximas actividades -->
+        <app-carrousel [items]="upcomingActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+      </div>
+
+      <!-- Empty state for upcoming activities -->
+      <div *ngIf="upcomingActivities.length === 0" class="alert alert-info mb-5" role="alert">
+        <p class="mb-0">No hay proximas actividades disponibles.</p>
+      </div>
+
+      <!-- Entities section -->
+      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5">
+        Contacta con una entidad
+      </h2>
+
+      <p class="text-muted mb-4">
+        Entidades que participan con nosotros
+      </p>
+
+      <div class="mb-5" [hidden]="entities.length === 0">
+        <!-- Carrusel de entidades -->
+        <app-carrousel [items]="entities" cardType="entity">
+        </app-carrousel>
+      </div>
+
+      <!-- Empty state for entities -->
+      <div *ngIf="entities.length === 0" class="alert alert-info mb-5" role="alert">
+        <p class="mb-0">No hay entidades disponibles.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Activity Modal -->
+  <app-activity-modal 
+    [isOpen]="isModalOpen"
+    [activity]="selectedActivity"
+    buttonType="informar"
+    (close)="closeActivityModal()"
+    (action)="onActivityAction()">
+  </app-activity-modal>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+</div>

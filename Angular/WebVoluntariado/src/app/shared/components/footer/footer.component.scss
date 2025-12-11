@@ -1,0 +1,35 @@
+.footer-container {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding-top: 3rem !important;
+  padding-bottom: 2rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  padding: 2rem 0;
+}
+
+.footer-content h2 {
+  color: #0d47a1;
+  margin-bottom: 1rem;
+}
+
+.footer-content p {
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding-top: 2rem !important;
+    padding-bottom: 1rem;
+  }
+
+  .footer-content {
+    padding: 1rem 0;
+  }
+
+  .footer-content h2 {
+    font-size: 1.1rem;
+  }
+}

@@ -7,6 +7,7 @@ import { StatusMessageComponent } from './features/auth/status-message/status-me
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout';
 import { DashboardComponent } from './features/dashboard/dashboard';
 import { PastActivitiesComponent } from './features/dashboard/past-activities/past-activities';
+import { ContactComponent } from './features/dashboard/contact/contact';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,10 @@ export const routes: Routes = [
   {
     path: 'past-activities',
     component: PastActivitiesComponent
+  },
+  {
+    path: 'contact',
+    component: ContactComponent
   },
   { path: '**', redirectTo: 'login' }
 ];
