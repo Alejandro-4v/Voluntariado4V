@@ -1,0 +1,21 @@
+name: "Servicios para proyecto intermodular"
+
+networks:
+  proyecto:
+    driver: bridge
+
+services:
+  p-mysql:
+    image: mysql:8.1
+    container_name: p-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: VOLUNTARIADO_CUATROVIENTOS
+      MYSQL_USER: 4v
+      MYSQL_PASSWORD: 4v
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - proyecto
