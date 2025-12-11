@@ -16,28 +16,54 @@ class GradoRepository extends ServiceEntityRepository
         parent::__construct($registry, Grado::class);
     }
 
-    //    /**
-    //     * @return Grado[] Returns an array of Grado objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('g.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Grado
+     */
+    public function findById($value): Grado
+    {
 
-    //    public function findOneBySomeField($value): ?Grado
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        error_log('Got to Repository findByID');
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.idGrado = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @return Grado[]
+     */
+    public function findByLevel(string $value): array
+    {
+        error_log("Searching for Grado with nivel: " . $value);
+
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.nivel = :val')
+            ->setParameter('val', strtoupper($value))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function add(Grado $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Grado $entity, bool $flush = false): void
+    {
+        error_log('Got to Repository');
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+
 }

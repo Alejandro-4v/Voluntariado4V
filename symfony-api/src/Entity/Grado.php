@@ -67,7 +67,6 @@ class Grado
     }
 
     /**
-     * Summary of getActividades
      * @return Actividad[]|Collection
      */
     public function getActividades(): Collection
@@ -75,8 +74,7 @@ class Grado
         return $this->actividades;
     }
 
-    /**
-     * Summary of getVoluntarios
+     /** 
      * @return Voluntario[]|Collection
      */
     public function getVoluntarios(): Collection
