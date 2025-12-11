@@ -4,13 +4,12 @@ import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth.service';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../activity-modal/activity-modal';
-import { Navbar } from '../navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
-
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, Navbar, FooterComponent],
+  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, FooterComponent, NavbarComponent],
   templateUrl: './contact.html',
   styleUrl: './contact.scss'
 })

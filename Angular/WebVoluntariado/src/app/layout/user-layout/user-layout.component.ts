@@ -23,7 +23,7 @@ export class UserLayoutComponent implements OnInit {
 
     currentOptions: NavbarOption[] = [
         { label: 'Mis actividades pasadas', path: '/past-activities' },
-        { label: 'Contacto', path: '#' },
+        { label: 'Contacto', path: '/contact' },
         { label: 'Nuevas actividades', type: 'button', path: '/dashboard' }
     ];
 

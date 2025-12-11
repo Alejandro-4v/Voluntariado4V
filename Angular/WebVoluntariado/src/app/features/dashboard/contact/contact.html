@@ -1,7 +1,4 @@
 <div class="dashboard-wrapper min-vh-100 bg-light">
-  <!-- Navbar -->
-  <app-navbar></app-navbar>
-
   <!-- Main content -->
   <main class="dashboard-content bg-white py-5">
     <div class="container-lg">
@@ -66,12 +63,8 @@
   </main>
 
   <!-- Activity Modal -->
-  <app-activity-modal 
-    [isOpen]="isModalOpen"
-    [activity]="selectedActivity"
-    buttonType="informar"
-    (close)="closeActivityModal()"
-    (action)="onActivityAction()">
+  <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" buttonType="informar"
+    (close)="closeActivityModal()" (action)="onActivityAction()">
   </app-activity-modal>
 
   <!-- Footer -->

@@ -31,6 +31,13 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'contact',
+    component: UserLayoutComponent,
+    children: [
+      { path: '', component: ContactComponent }
+    ]
+  },
+  {
     path: '',
     component: AuthLayoutComponent,
     children: [
@@ -89,18 +96,6 @@ export const routes: Routes = [
       },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent
-  },
-  {
-    path: 'past-activities',
-    component: PastActivitiesComponent
-  },
-  {
-    path: 'contact',
-    component: ContactComponent
   },
   { path: '**', redirectTo: 'login' }
 ];
