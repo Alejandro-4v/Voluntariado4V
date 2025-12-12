@@ -150,6 +150,15 @@ CREATE TABLE
         FOREIGN KEY (id_ods) REFERENCES ODS (id_ods)
     );
 
+CREATE TABLE 
+    ACTIVIDAD_VOLUNTARIO (
+        id_actividad INT NOT NULL,
+        nif CHAR(10) NOT NULL,
+        PRIMARY KEY (id_actividad, nif),
+        FOREIGN KEY (id_actividad) REFERENCES ACTIVIDAD (id_actividad),
+        FOREIGN KEY (nif) REFERENCES VOLUNTARIO (nif)
+    );
+
 CREATE TABLE
     DIA_SEMANA (
         id_dia TINYINT PRIMARY KEY,

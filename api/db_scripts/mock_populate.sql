@@ -67,20 +67,55 @@ VALUES
 INSERT INTO
     ODS (id_ods, descripcion, imagen_url)
 VALUES
-    (1, 'Fin de la pobreza', 'https://placehold.co/400/png?text=Fin+de+la+pobreza'),
-    (3, 'Salud y bienestar', 'https://placehold.co/400/png?text=Salud+y+bienestar'),
-    (4, 'Educación de calidad', 'https://placehold.co/400/png?text=Educaci%C3%B3n+de+calidad'),
-    (10, 'Reducción de las desigualdades', 'https://placehold.co/400/png?text=Reducci%C3%B3n+de+las+desigualdades'),
-    (11, 'Ciudades y comunidades sostenibles', 'https://placehold.co/400/png?text=Ciudades+y+comunidades+sostenibles');
+    (
+        1,
+        'Fin de la pobreza',
+        'https://placehold.co/400/png?text=Fin+de+la+pobreza'
+    ),
+    (
+        3,
+        'Salud y bienestar',
+        'https://placehold.co/400/png?text=Salud+y+bienestar'
+    ),
+    (
+        4,
+        'Educación de calidad',
+        'https://placehold.co/400/png?text=Educaci%C3%B3n+de+calidad'
+    ),
+    (
+        10,
+        'Reducción de las desigualdades',
+        'https://placehold.co/400/png?text=Reducci%C3%B3n+de+las+desigualdades'
+    ),
+    (
+        11,
+        'Ciudades y comunidades sostenibles',
+        'https://placehold.co/400/png?text=Ciudades+y+comunidades+sostenibles'
+    );
 
 INSERT INTO
     TIPO_ACTIVIDAD (descripcion, imagen_url)
 VALUES
-    ('Apoyo a Mayores', 'https://placehold.co/400/png?text=Apoyo'),
-    ('Refuerzo Escolar', 'https://placehold.co/400/png?text=Refuerzo'),
-    ('Recogida de Alimentos', 'https://placehold.co/400/png?text=Recogida'),
-    ('Mantenimiento', 'https://placehold.co/400/png?text=Mantenimiento'),
-    ('Actividades Lúdicas', 'https://placehold.co/400/png?text=L%C3%BAdicas');
+    (
+        'Apoyo a Mayores',
+        'https://placehold.co/400/png?text=Apoyo'
+    ),
+    (
+        'Refuerzo Escolar',
+        'https://placehold.co/400/png?text=Refuerzo'
+    ),
+    (
+        'Recogida de Alimentos',
+        'https://placehold.co/400/png?text=Recogida'
+    ),
+    (
+        'Mantenimiento',
+        'https://placehold.co/400/png?text=Mantenimiento'
+    ),
+    (
+        'Actividades Lúdicas',
+        'https://placehold.co/400/png?text=L%C3%BAdicas'
+    );
 
 INSERT INTO
     ACTIVIDAD (
@@ -243,3 +278,13 @@ VALUES
     (2, 1),
     (3, 4),
     (4, 11);
+
+INSERT INTO
+    ACTIVIDAD_VOLUNTARIO (id_actividad, nif)
+VALUES
+    ('11111111A', 1),
+    ('22222222B', 2),
+    ('22222222B', 4),
+    ('33333333C', 3),
+    ('33333333C', 2),
+    ('44444444D', 4);
