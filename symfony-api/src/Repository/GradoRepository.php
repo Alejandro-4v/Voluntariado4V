@@ -16,50 +16,26 @@ class GradoRepository extends ServiceEntityRepository
         parent::__construct($registry, Grado::class);
     }
 
-    /**
-     * @return Grado
-     */
-    public function findById($value): Grado
+    public function add(Grado $grado): void
     {
+        $this->getEntityManager()->persist($grado);
 
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.idGrado = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->getEntityManager()->flush();
     }
 
-    /**
-     * @return Grado[]
-     */
-    public function findByLevel(string $value): array
+    public function update(Grado $grado): void
     {
+        $this->getEntityManager()->persist($grado);
 
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.nivel = :val')
-            ->setParameter('val', strtoupper($value))
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->getEntityManager()->flush();
     }
 
-    public function add(Grado $entity, bool $flush = false): void
+
+    public function remove(Grado $grado): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->remove($grado);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(Grado $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
 

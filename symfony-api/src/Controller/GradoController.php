@@ -2,63 +2,31 @@
 
 namespace App\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ErrorLoggerCompilerPass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use App\Repository\GradoRepository;
 use App\Entity\Grado;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 final class GradoController extends AbstractController
 {
 
     #[Route('/grado', name: 'grado_index', methods: ['GET'])]
     public function index(
-        GradoRepository $gradoRepository,
-        #[MapQueryParameter] ?string $nivel
+        GradoRepository $gradoRepository
     ): JsonResponse {
-
-        if ($nivel) {
-            /** @var Grado[] $grados */
-            $grados = $gradoRepository->findByLevel($nivel);
-
-            return $this->json(
-                $grados,
-                context: ['groups' => ['grado:read']]
-            );
-        }
-
-        /** @var Grado[] $grados */
-        $grados = $gradoRepository->findAll();
-
-        return $this->json(
-            $grados,
-            context: ['groups' => ['grado:read']]
-        );
-
-    }
-
-    #[Route('/grado/{id}', name: 'grado_show', methods: ['GET'])]
-    public function show(
-        GradoRepository $gradoRepository,
-        int $id
-    ): JsonResponse {
-
-        /** @var Grado $grado */
-        $grado = $gradoRepository->findById($id);
+        /** @var Grado[] $grado */
+        $grado = $gradoRepository->findAll();
 
         return $this->json(
             $grado,
             context: ['groups' => ['grado:read']]
         );
-
     }
 
     #[Route('/grado', name: 'grado_create', methods: ['POST'])]
@@ -72,13 +40,18 @@ final class GradoController extends AbstractController
         try {
             /** @var Grado $grado */
             $grado = $serializer->deserialize($data, Grado::class, 'json');
-            $gradoRepository->add($grado, true);
-        } catch (\Symfony\Component\Serializer\Exception\ExceptionInterface $e) {
+            $gradoRepository->add($grado);
+        } catch (UniqueConstraintViolationException $e) {
             return $this->json([
-                'error' => 'Invalid JSON',
+                'error' => 'Unique constraint violation',
                 'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
+        } catch (\Symfony\Component\Serializer\Exception\ExceptionInterface $e) {
+            return $this->json([
+                'error' => 'Internal server error',
+                'details' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $e) {
             return $this->json([
                 'error' => 'Internal server error',
                 'details' => $e->getMessage()
@@ -88,15 +61,52 @@ final class GradoController extends AbstractController
         return $this->json($grado, context: ['groups' => ['grado:read']], status: Response::HTTP_CREATED);
     }
 
+    #[Route('/grado', name: 'grado_update', methods: ['PUT'])]
+    public function update(
+        Request $request,
+        GradoRepository $gradoRepository,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $data = $request->getContent();
+        $json = json_decode($data, true);
+
+        if (!isset($json['idGrado'])) {
+            return $this->json([
+                'error' => 'Missing ID',
+                'details' => 'PUT request must include idGrado'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $grado = $gradoRepository->find($json['idGrado']);
+
+        if (!$grado) {
+            return $this->json([
+                'error' => 'Grado not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $serializer->deserialize(
+            $data,
+            Grado::class,
+            'json',
+            [
+                'object_to_populate' => $grado,
+                'groups' => ['grado:update']
+            ]
+        );
+
+        $gradoRepository->update($grado);
+
+        return $this->json($grado, context: ['groups' => ['grado:read']]);
+    }
+
+
     #[Route('/grado/{id}', name: 'grado_delete', methods: ['DELETE'])]
     public function delete(
-        Request $request,
         GradoRepository $gradoRepository,
         int $id
     ): JsonResponse {
-
-        /** @var Grado $grado */
-        $grado = $gradoRepository->findById($id);
+        $grado = $gradoRepository->find($id);
 
         if (!$grado) {
             return $this->json([
@@ -104,12 +114,11 @@ final class GradoController extends AbstractController
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $gradoRepository->remove($grado, true);
+        $gradoRepository->remove($grado);
 
         return $this->json([
             'message' => 'Grado deleted successfully',
-        ], Response::HTTP_OK);
-
+        ], Response::HTTP_ACCEPTED);
     }
 
 }

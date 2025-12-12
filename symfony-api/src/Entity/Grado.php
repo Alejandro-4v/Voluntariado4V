@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\GradoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\GradoRepository;
 
 #[ORM\Entity(repositoryClass: GradoRepository::class)]
 #[ORM\Table(name: 'GRADO')]
@@ -19,25 +19,12 @@ class Grado
     private ?int $idGrado = null;
 
     #[ORM\Column(name: 'nivel', type: 'string', length: 1)]
-    #[Groups(groups: ['grado:read'])]
+    #[Groups(groups: ['grado:read', 'grado:update'])]
     private string $nivel;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 50, unique: true)]
-    #[Groups(['grado:read'])]
+    #[Groups(['grado:read', 'grado:update'])]
     private string $descripcion;
-
-    // Relación bidireccional: Una entidad tiene un Grado, pero un Grado tiene muchas Actividades.
-    #[ORM\OneToMany(targetEntity: Actividad::class, mappedBy: 'grado')]
-    private Collection $actividades;
-
-    #[ORM\OneToMany(targetEntity: Voluntario::class, mappedBy: 'grado')]
-    private Collection $voluntarios;
-
-    public function __construct()
-    {
-        $this->actividades = new ArrayCollection();
-        $this->voluntarios = new ArrayCollection();
-    }
 
     public function getIdGrado(): ?int
     {
@@ -64,22 +51,6 @@ class Grado
     {
         $this->descripcion = $descripcion;
         return $this;
-    }
-
-    /**
-     * @return Actividad[]|Collection
-     */
-    public function getActividades(): Collection
-    {
-        return $this->actividades;
-    }
-
-     /** 
-     * @return Voluntario[]|Collection
-     */
-    public function getVoluntarios(): Collection
-    {
-        return $this->voluntarios;
     }
 
 }
