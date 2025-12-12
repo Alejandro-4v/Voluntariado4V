@@ -1,5 +1,6 @@
 INSERT INTO
-    GRADO (nivel, descripcion)
+    GRADO
+    (nivel, descripcion)
 VALUES
     ('M', 'Sistemas Microinformáticos y Redes'),
     ('S', 'Administración de Sistemas Informáticos en Red'),
@@ -8,14 +9,15 @@ VALUES
     ('S', 'Gestión de Ventas y Espacios Comerciales');
 
 INSERT INTO
-    ENTIDAD (
-        cif,
-        nombre,
-        nombre_responsable,
-        apellidos_responsable,
-        contact_mail,
-        login_mail,
-        perfil_url
+    ENTIDAD
+    (
+    cif,
+    nombre,
+    nombre_responsable,
+    apellidos_responsable,
+    contact_mail,
+    login_mail,
+    perfil_url
     )
 VALUES
     (
@@ -65,7 +67,8 @@ VALUES
     );
 
 INSERT INTO
-    ODS (id_ods, descripcion, imagen_url)
+    ODS
+    (id_ods, descripcion, imagen_url)
 VALUES
     (
         1,
@@ -94,7 +97,8 @@ VALUES
     );
 
 INSERT INTO
-    TIPO_ACTIVIDAD (descripcion, imagen_url)
+    TIPO_ACTIVIDAD
+    (descripcion, imagen_url)
 VALUES
     (
         'Apoyo a Mayores',
@@ -118,15 +122,16 @@ VALUES
     );
 
 INSERT INTO
-    ACTIVIDAD (
-        nombre,
-        descripcion,
-        estado,
-        convoca,
-        inicio,
-        fin,
-        grado,
-        imagen_url
+    ACTIVIDAD
+    (
+    nombre,
+    descripcion,
+    estado,
+    convoca,
+    inicio,
+    fin,
+    grado,
+    imagen_url
     )
 VALUES
     (
@@ -171,15 +176,16 @@ VALUES
     );
 
 INSERT INTO
-    VOLUNTARIO (
-        nif,
-        nombre,
-        apellido_1,
-        apellido_2,
-        grado,
-        mail,
-        password_hash,
-        perfil_url
+    VOLUNTARIO
+    (
+    nif,
+    nombre,
+    apellido_1,
+    apellido_2,
+    grado,
+    mail,
+    password_hash,
+    perfil_url
     )
 VALUES
     (
@@ -224,12 +230,13 @@ VALUES
     );
 
 INSERT INTO
-    ADMINISTRADOR (
-        login_mail,
-        password_hash,
-        nombre,
-        apellido_1,
-        perfil_url
+    ADMINISTRADOR
+    (
+    login_mail,
+    password_hash,
+    nombre,
+    apellido_1,
+    perfil_url
     )
 VALUES
     (
@@ -241,7 +248,8 @@ VALUES
     );
 
 INSERT INTO
-    DISPONIBILIDAD (nif, id_dia, hora_inicio, hora_fin)
+    DISPONIBILIDAD
+    (nif, id_dia, hora_inicio, hora_fin)
 VALUES
     ('11111111A', 1, '15:30:00', '19:00:00'),
     ('11111111A', 4, '15:00:00', '18:00:00'),
@@ -253,7 +261,8 @@ VALUES
     ('44444444D', 5, '15:00:00', '18:00:00');
 
 INSERT INTO
-    VOLUNTARIO_TIPO (nif, id_tipo_actividad)
+    VOLUNTARIO_TIPO
+    (nif, id_tipo_actividad)
 VALUES
     ('11111111A', 1),
     ('22222222B', 2),
@@ -263,7 +272,8 @@ VALUES
     ('44444444D', 4);
 
 INSERT INTO
-    ACTIVIDAD_TIPO (id_actividad, id_tipo_actividad)
+    ACTIVIDAD_TIPO
+    (id_actividad, id_tipo_actividad)
 VALUES
     (1, 1),
     (2, 3),
@@ -271,7 +281,8 @@ VALUES
     (4, 4);
 
 INSERT INTO
-    ACTIVIDAD_ODS (id_actividad, id_ods)
+    ACTIVIDAD_ODS
+    (id_actividad, id_ods)
 VALUES
     (1, 3),
     (1, 10),
@@ -280,11 +291,12 @@ VALUES
     (4, 11);
 
 INSERT INTO
-    ACTIVIDAD_VOLUNTARIO (id_actividad, nif)
+    ACTIVIDAD_VOLUNTARIO
+    (id_actividad, nif)
 VALUES
-    ('11111111A', 1),
-    ('22222222B', 2),
-    ('22222222B', 4),
-    ('33333333C', 3),
-    ('33333333C', 2),
-    ('44444444D', 4);
+    (1, '11111111A'),
+    (2, '22222222B'),
+    (4, '22222222B'),
+    (3, '33333333C'),
+    (2, '33333333C'),
+    (4, '44444444D');
