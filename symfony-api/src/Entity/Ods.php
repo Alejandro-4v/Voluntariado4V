@@ -13,25 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
 class Ods
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_ods', type: 'smallint')]
     #[Groups(['ods:read'])]
     private ?int $idOds = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 255)]
-    #[Groups(['ods:read'])]
+    #[Groups(['ods:read', 'ods:update'])]
     private string $descripcion;
 
     #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['ods:read'])]
+    #[Groups(['ods:read', 'ods:update'])]
     private ?string $imagen_url = null;
 
-    #[ORM\OneToMany(targetEntity: Actividad::class, mappedBy: 'ods')]
-    private Collection $actividades;
-
-    public function __construct()
+    public function setIdOds(int $idOds): self
     {
-        $this->actividades = new ArrayCollection();
+        $this->idOds = $idOds;
+        return $this;
     }
 
     public function getIdOds(): ?int
@@ -59,13 +56,5 @@ class Ods
     {
         $this->imagen_url = $imagen_url;
         return $this;
-    }
-
-    /**
-     * @return Actividad[]|Collection
-     */
-    public function getActividades(): Collection
-    {
-        return $this->actividades;
     }
 }
