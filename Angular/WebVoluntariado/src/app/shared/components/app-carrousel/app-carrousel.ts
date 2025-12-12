@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivityCardComponent } from '../activity-card/activity-card-component';
-import { ProposalCardComponent } from '../../../features/dashboard/proposal-card/proposal-card.component';
-import { EntityCardComponent } from '../../../features/dashboard/entity-card/entity-card.component';
+import { ProposalCardComponent } from '../proposal-card/proposal-card.component';
+import { EntityCardComponent } from '../entity-card/entity-card.component';
 
 @Component({
   selector: 'app-carrousel',
