@@ -22,9 +22,9 @@ export class UserLayoutComponent implements OnInit {
     private authService = inject(AuthService);
 
     currentOptions: NavbarOption[] = [
-        { label: 'Mis actividades pasadas', path: '/past-activities' },
-        { label: 'Contacto', path: '/contact' },
-        { label: 'Nuevas actividades', type: 'button', path: '/dashboard' }
+        { label: 'Mis actividades pasadas', path: '/student/actividades-pasadas' },
+        { label: 'Contacto', path: '/student/contacto' },
+        { label: 'Nuevas actividades', type: 'button', path: '/student/panel' }
     ];
 
     ngOnInit() {
@@ -33,6 +33,6 @@ export class UserLayoutComponent implements OnInit {
 
     handleLogout() {
         this.authService.logout();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/iniciar-sesion']);
     }
 }

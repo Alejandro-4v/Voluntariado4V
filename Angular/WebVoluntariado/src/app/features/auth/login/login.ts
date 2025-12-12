@@ -37,7 +37,7 @@ export class LoginComponent {
           if (response.success) {
             console.log('✓ Login exitoso:', response.user);
             // Redirigir al dashboard
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/student/panel']);
           }
         },
         error: (err) => {

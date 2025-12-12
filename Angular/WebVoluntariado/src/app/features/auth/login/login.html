@@ -1,5 +1,5 @@
 <div class="auth-card animate__animated animate__fadeInUp">
-  
+
   <div class="d-flex justify-content-between align-items-start mb-4">
     <div>
       <small class="text-muted fw-bold" style="font-size: 0.8rem;">Cuatrovientos Voluntariado</small>
@@ -23,14 +23,10 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
       <label class="form-label">Correo electrónico</label>
-      <input 
-        type="email" 
-        class="form-control" 
-        formControlName="email" 
-        placeholder="iryna_pavlenko@cuatrovientos.org"
+      <input type="email" class="form-control" formControlName="email" placeholder="iryna_pavlenko@cuatrovientos.org"
         [class.is-invalid]="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
         [disabled]="isLoading">
-      
+
       <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['required']">
         El correo es obligatorio.
       </div>
@@ -41,14 +37,10 @@
 
     <div class="mb-3">
       <label class="form-label">Contraseña</label>
-      <input 
-        type="password" 
-        class="form-control" 
-        formControlName="password" 
-        placeholder="Contraseña"
+      <input type="password" class="form-control" formControlName="password" placeholder="Contraseña"
         [class.is-invalid]="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
         [disabled]="isLoading">
-      
+
       <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['required']">
         La contraseña es obligatoria.
       </div>
@@ -57,15 +49,13 @@
     <div class="d-flex justify-content-between align-items-center mt-2 mb-4 small">
       <div>
         <span class="text-muted">¿Aún no estás inscrito?</span><br>
-        <a routerLink="/register-student" class="fw-bold">Inscríbete</a>
+        <a routerLink="/auth/registro-alumno" class="fw-bold">Inscríbete</a>
       </div>
-      <a routerLink="/forgot-password" class="text-primary text-decoration-none">¿Has olvidado tu contraseña?</a>
+      <a routerLink="/auth/recuperar-contrasena" class="text-primary text-decoration-none">¿Has olvidado tu
+        contraseña?</a>
     </div>
 
-    <button 
-      type="submit" 
-      class="btn btn-primary-cv w-100"
-      [disabled]="isLoading">
+    <button type="submit" class="btn btn-primary-cv w-100" [disabled]="isLoading">
       {{ isLoading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
     </button>
   </form>

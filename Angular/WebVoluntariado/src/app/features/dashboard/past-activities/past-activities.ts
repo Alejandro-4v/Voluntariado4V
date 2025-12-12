@@ -49,7 +49,7 @@ export class PastActivitiesComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     if (!this.currentUser) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/iniciar-sesion']);
       return;
     }
 

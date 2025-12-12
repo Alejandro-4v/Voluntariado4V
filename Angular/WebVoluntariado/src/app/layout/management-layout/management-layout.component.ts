@@ -1,18 +1,22 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
 
 @Component({
-    selector: 'app-admin-dashboard',
+    selector: 'app-management-layout',
     standalone: true,
-    imports: [CommonModule, NavbarComponent],
-    templateUrl: './admin-dashboard.component.html',
-    styleUrl: './admin-dashboard.component.scss'
+    imports: [CommonModule, RouterOutlet, NavbarComponent],
+    template: `
+    <div class="management-wrapper min-vh-100 bg-light">
+        <app-navbar [options]="navbarOptions" mode="blue" (logout)="handleLogout()"></app-navbar>
+        <router-outlet></router-outlet>
+    </div>
+    `
 })
-export class AdminDashboardComponent {
+export class ManagementLayoutComponent {
     private authService = inject(AuthService);
     private router = inject(Router);
 
@@ -28,6 +32,6 @@ export class AdminDashboardComponent {
 
     handleLogout() {
         this.authService.logout();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/iniciar-sesion']);
     }
 }
