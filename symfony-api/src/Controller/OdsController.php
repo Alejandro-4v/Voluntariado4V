@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -38,6 +39,11 @@ final class OdsController extends AbstractController
             /** @var Ods $ods */
             $ods = $serializer->deserialize($data, Ods::class, 'json');
             $odsRepository->add($ods);
+        } catch (UniqueConstraintViolationException $e) {
+            return $this->json([
+                'error' => 'Unique constraint violation',
+                'details' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
         } catch (\Symfony\Component\Serializer\Exception\ExceptionInterface $e) {
             return $this->json([
                 'error' => 'Invalid JSON',
