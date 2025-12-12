@@ -17,37 +17,37 @@ class Actividad
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_actividad', type: 'integer')]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private ?int $idActividad = null;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 50)]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private string $nombre;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 400, nullable: true)]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private ?string $descripcion = null;
 
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private string $estado = 'P';
 
     #[ORM\ManyToOne(targetEntity: Entidad::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(name: 'convoca', referencedColumnName: 'id_entidad', nullable: false)]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private ?Entidad $convoca = null;
 
     #[ORM\Column(name: 'inicio', type: 'datetime_immutable')]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private DateTimeImmutable $inicio;
 
     #[ORM\Column(name: 'fin', type: 'datetime_immutable')]
-    #[Groups(['actividad: read'])]
+    #[Groups(['actividad:read'])]
     private DateTimeImmutable $fin;
 
-    #[ORM\Column(name:'image_url', type: 'string', length:255, nullable: true)]
+    #[ORM\Column(name:'imagen_url', type: 'string', length:255, nullable: true)]
     #[Groups(['actividad:read'])]
-    private ?string $image_url = null;
+    private ?string $imagen_url = null;
 
 
     // Mapeo ManyToOne a GRADO (clave foránea 'grado')
