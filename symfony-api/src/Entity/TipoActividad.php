@@ -18,26 +18,13 @@ class TipoActividad
     #[Groups(['tipo_actividad:read'])]
     private ?int $idTipoActividad = null;
 
-    #[ORM\Column(name: 'descripcion', type: 'string', length: 20)]
-    #[Groups(['tipo_actividad:read'])]
+    #[ORM\Column(name: 'descripcion', type: 'string', length: 50)]
+    #[Groups(['tipo_actividad:read', 'tipo_actividad:update'])]
     private string $descripcion;
 
     #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['tipo_actividad:read'])]
+    #[Groups(['tipo_actividad:read', 'tipo_actividad:update'])]
     private ?string $imagen_url = null;
-
-    // Relación Inversa (ManyToMany) con Actividad, mapeada por 'tiposActividad' en Actividad.php
-    #[ORM\ManyToMany(targetEntity: Actividad::class, mappedBy: 'tiposActividad')]
-    private Collection $actividades;
-
-    #[ORM\ManyToMany(targetEntity: Voluntario::class, mappedBy: 'tiposActividad')]
-    private Collection $voluntarios;
-
-    public function __construct()
-    {
-        $this->actividades = new ArrayCollection();
-        $this->voluntarios = new ArrayCollection();
-    }
 
     public function getIdTipoActividad(): ?int
     {
@@ -64,22 +51,6 @@ class TipoActividad
     {
         $this->imagen_url = $imagen_url;
         return $this;
-    }
-
-    /**
-     * @return Collection<int, Actividad>
-     */
-    public function getActividades(): Collection
-    {
-        return $this->actividades;
-    }
-
-    /**
-     * @return Collection<int, Voluntario>
-     */
-    public function getVoluntarios(): Collection
-    {
-        return $this->voluntarios;
     }
 
 }
