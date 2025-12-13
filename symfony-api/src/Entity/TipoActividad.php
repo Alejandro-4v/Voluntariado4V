@@ -26,6 +26,12 @@ class TipoActividad
     #[Groups(['tipo_actividad:read', 'tipo_actividad:update'])]
     private ?string $imagen_url = null;
 
+    #[ORM\ManyToMany(targetEntity: Actividad::class, inversedBy: 'tiposActividad')]
+    #[ORM\JoinTable(name: 'ACTIVIDAD_TIPO')]
+    #[ORM\JoinColumn(name: 'id_tipo_actividad', referencedColumnName: 'id_tipo_actividad')]
+    #[ORM\InverseJoinColumn(name: 'id_actividad', referencedColumnName: 'id_actividad')]
+    private Collection $actividades;
+
     public function getIdTipoActividad(): ?int
     {
         return $this->idTipoActividad;
@@ -51,6 +57,11 @@ class TipoActividad
     {
         $this->imagen_url = $imagen_url;
         return $this;
+    }
+
+    public function getActividades(): Collection
+    {
+        return $this->actividades;
     }
 
 }

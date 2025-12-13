@@ -16,28 +16,41 @@ class TipoActividadRepository extends ServiceEntityRepository
         parent::__construct($registry, TipoActividad::class);
     }
 
-    //    /**
-    //     * @return TipoActividad[] Returns an array of TipoActividad objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findInUse(): array
+    {
+        $qb = $this->createQueryBuilder('t');
 
-    //    public function findOneBySomeField($value): ?TipoActividad
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // Subquery to check existence in ACTIVIDAD_TIPO
+        $qb->where(
+            $qb->expr()->in(
+                't.idTipoActividad',
+                'SELECT at.id_tipo_actividad FROM ACTIVIDAD_TIPO at'
+            )
+        );
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function add(TipoActividad $tipoActividad): void
+    {
+        $this->getEntityManager()->persist($tipoActividad);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(TipoActividad $tipoActividad): void
+    {
+        $this->getEntityManager()->persist($tipoActividad);
+
+        $this->getEntityManager()->flush();
+    }
+
+
+    public function remove(TipoActividad $tipoActividad): void
+    {
+        $this->getEntityManager()->remove($tipoActividad);
+
+        $this->getEntityManager()->flush();
+    }
 }
