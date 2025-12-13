@@ -20,11 +20,11 @@ final class GradoController extends AbstractController
     public function index(
         GradoRepository $gradoRepository
     ): JsonResponse {
-        /** @var Grado[] $grado */
-        $grado = $gradoRepository->findAll();
+        /** @var Grado[] $grados */
+        $grados = $gradoRepository->findAll();
 
         return $this->json(
-            $grado,
+            $grados,
             context: ['groups' => ['grado:read']]
         );
     }
