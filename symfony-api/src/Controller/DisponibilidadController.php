@@ -8,12 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DisponibilidadController extends AbstractController
 {
-    #[Route('/api/disponibilidad', name: 'app_api_disponibilidad')]
+    #[Route('/disponibilidad', name: 'app_api_disponibilidad')]
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/DisponibilidadController.php',
+            'path' => 'src/Controller/DisponibilidadController.php',
         ]);
     }
 }

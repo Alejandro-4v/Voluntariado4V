@@ -8,12 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class EntidadController extends AbstractController
 {
-    #[Route('/api/entidad', name: 'app_api_entidad')]
+    #[Route('/entidad', name: 'app_api_entidad')]
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/EntidadController.php',
+            'path' => 'src/Controller/EntidadController.php',
         ]);
     }
 }

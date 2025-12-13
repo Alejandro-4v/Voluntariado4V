@@ -8,12 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AdministradorController extends AbstractController
 {
-    #[Route('/api/administrador', name: 'app_api_administrador')]
+    #[Route('/administrador', name: 'app_api_administrador')]
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/AdministradorController.php',
+            'path' => 'src/Controller/AdministradorController.php',
         ]);
     }
 }
