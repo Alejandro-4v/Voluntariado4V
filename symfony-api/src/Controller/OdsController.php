@@ -2,15 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Ods;
+use App\Repository\OdsRepository;
+
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
+use Exception;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\OdsRepository;
-use App\Entity\Ods;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 final class OdsController extends AbstractController
 {
@@ -49,7 +54,7 @@ final class OdsController extends AbstractController
                 'error' => 'Invalid JSON',
                 'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'error' => 'Internal server error',
                 'details' => $e->getMessage()
