@@ -28,6 +28,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ActividadController extends AbstractController
 {
+    private const ESTADOS_VALIDOS = ['A', 'F', 'P', 'C', 'R', 'E'];
+
     #[Route('/actividad', name: 'actividad_index', methods: ['GET'])]
     public function index(
         ActividadRepository $actividadRepository
@@ -98,7 +100,7 @@ final class ActividadController extends AbstractController
         if (isset($json['estado'])) {
             /** @var string $estado*/
             $estado = $json['estado'];
-            if (!\in_array($estado, ['A', 'F', 'P', 'C', 'R', 'E'])) {
+            if (!\in_array($estado, self::ESTADOS_VALIDOS)) {
                 return $this->json([
                     'error' => 'Invalid estado',
                     'details' => 'Estado must be one of A, F, P, C, R, E'
@@ -312,7 +314,7 @@ final class ActividadController extends AbstractController
             }
 
             if ($estado != $actividad->getEstado()) {
-                if (!\in_array($estado, ['A', 'F', 'P', 'C', 'R', 'E'])) {
+                if (!\in_array($estado, self::ESTADOS_VALIDOS)) {
                     return $this->json([
                         'error' => 'Invalid estado',
                         'details' => 'Estado must be one of A, F, P, C, R, E'
