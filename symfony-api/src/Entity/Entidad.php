@@ -51,12 +51,10 @@ class Entidad
     #[Groups(['entidad:read', 'entidad:login'])]
     private ?string $passwordHash = null;
 
-    #[ORM\Column(name:'perfil_url', type: 'string', length:255, nullable: true)]
+    #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
     #[Groups(['entidad:read', 'actividad:read'])]
     private ?string $perfilUrl = null;
 
-
-    // Relación bidireccional: Una Entidad convoca muchas Actividades.
     #[ORM\OneToMany(targetEntity: Actividad::class, mappedBy: 'convoca')]
     #[Groups(['entidad:read'])]
     private Collection $actividades;
@@ -170,10 +168,16 @@ class Entidad
         $this->perfilUrl = $perfilUrl;
         return $this;
     }
-    
+
     public function getActividades(): Collection
     {
         return $this->actividades;
+    }
+
+    public function setActividades(Collection $actividades): self
+    {
+        $this->actividades = $actividades;
+        return $this;
     }
 
 }
