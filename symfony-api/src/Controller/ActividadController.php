@@ -49,6 +49,13 @@ final class ActividadController extends AbstractController
         /** @var Actividad $actividad */
         $actividad = $actividadRepository->find($id);
 
+        if (!$actividad) {
+            return $this->json(
+                ['error' => 'Actividad not found'],
+                status: Response::HTTP_NOT_FOUND
+            );
+        }
+
         return $this->json(
             $actividad,
             context: ['groups' => ['actividad:read']]
