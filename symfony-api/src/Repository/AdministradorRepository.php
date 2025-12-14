@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Administrador;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Administrador;
 
 /**
  * @extends ServiceEntityRepository<Administrador>

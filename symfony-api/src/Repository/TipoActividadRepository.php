@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\TipoActividad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\TipoActividad;
 
 /**
  * @extends ServiceEntityRepository<TipoActividad>
@@ -20,7 +20,6 @@ class TipoActividadRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-        // Subquery to check existence in ACTIVIDAD_TIPO
         $qb->where(
             $qb->expr()->in(
                 't.idTipoActividad',

@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Grado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Grado;
 
 /**
  * @extends ServiceEntityRepository<Grado>
