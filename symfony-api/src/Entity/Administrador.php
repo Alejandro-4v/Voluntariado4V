@@ -34,7 +34,7 @@ class Administrador
 
     #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
     #[Groups(['administrador:read'])]
-    private ?string $perfil_url = null;
+    private ?string $perfilUrl = null;
 
     public function getLoginMail(): ?string
     {
@@ -93,12 +93,12 @@ class Administrador
 
     public function getPerfilUrl(): string
     {
-        return $this->perfil_url;
+        return $this->perfilUrl;
     }
 
-    public function setPerfilUrl(string $perfil_url): self
+    public function setPerfilUrl(string $perfilUrl): self
     {
-        $this->perfil_url = $perfil_url;
+        $this->perfilUrl = $perfilUrl;
         return $this;
     }
 
