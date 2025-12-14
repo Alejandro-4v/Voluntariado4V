@@ -6,6 +6,7 @@ use App\Entity\Grado;
 use App\Repository\GradoRepository;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use \Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 use Exception;
 
@@ -49,7 +50,7 @@ final class GradoController extends AbstractController
                 'error' => 'Unique constraint violation',
                 'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
-        } catch (\Symfony\Component\Serializer\Exception\ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             return $this->json([
                 'error' => 'Internal server error',
                 'details' => $e->getMessage()
