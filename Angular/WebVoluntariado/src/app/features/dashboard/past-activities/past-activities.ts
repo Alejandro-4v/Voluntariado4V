@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth.service';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
-import { ActivityModalComponent } from '../activity-modal/activity-modal';
+import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 
 @Component({
   selector: 'app-past-activities',

@@ -1,10 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivityModalComponent } from './activity-modal/activity-modal';
+import { ActivityModalComponent } from '../../shared/components/activity-modal/activity-modal';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
 import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
+import { ActivitiesService } from '../../services/activities.service';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -16,42 +18,15 @@ export class DashboardComponent implements OnInit {
 
   private router = inject(Router);
   private authService = inject(AuthService);
+  private activitiesService = inject(ActivitiesService);
 
   currentUser: User | null = null;
   selectedActivity: any = null;
   isModalOpen = false;
 
-  entitiesActivities = [
-    {
-      entity: 'Amabir',
-      activities: [
-        { name: 'Actividad de jardín', type: 'Jardinería', slots: 5, filled: 1, image: '' },
-        { name: 'Taller de manualidades', type: 'Manualidades', slots: 5, filled: 3, image: '' },
-        { name: 'Paseo acompañado', type: 'Acompañamiento', slots: 5, filled: 0, image: '' },
-        { name: 'Lectura compartida', type: 'Lectura', slots: 5, filled: 2, image: '' }
-      ]
-    },
-    {
-      entity: 'Solera Asistencial',
-      activities: [
-        { name: 'Ayuda en tareas', type: 'Apoyo', slots: 5, filled: 1, image: '' },
-        { name: 'Compañía en residencia', type: 'Acompañamiento', slots: 5, filled: 4, image: '' },
-        { name: 'Apoyo administrativo', type: 'Administrativo', slots: 5, filled: 2, image: '' }
-      ]
-    }
-  ];
-
-  proposals = [
-    { name: 'Voluntariado en eventos', type: 'Eventos', slots: 10, filled: 2, image: '', customBackground: '#fff', showIcon: true },
-    { name: 'Taller de tecnología', type: 'Tecnología', slots: 8, filled: 5, image: '', customBackground: '#fff', showIcon: true },
-    { name: 'Limpieza comunitaria', type: 'Comunitario', slots: 12, filled: 7, image: '', customBackground: '#fff', showIcon: true }
-  ];
-
-  otherEntities = [
-    { name: 'Cáritas Diocesana', type: 'ONG Social', slots: 0, filled: 0, image: 'assets/caritas.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' },
-    { name: 'Cruz Roja', type: 'Organización Humanitaria', slots: 0, filled: 0, image: 'assets/cruzroja.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' },
-    { name: 'Fundación Española', type: 'Fundación', slots: 0, filled: 0, image: 'assets/fundacion.png', customBackground: '#fff', showIcon: false, imageFit: 'contain' }
-  ];
+  entitiesActivities: any[] = [];
+  proposals: any[] = [];
+  otherEntities: any[] = [];
 
   // Actividades pasadas por usuario
   pastActivitiesByUser: { [userId: number]: any[] } = {
@@ -83,6 +58,10 @@ export class DashboardComponent implements OnInit {
     if (!this.currentUser) {
       this.router.navigate(['/auth/iniciar-sesion']);
     }
+
+    this.activitiesService.getEntitiesActivities().subscribe(data => this.entitiesActivities = data);
+    this.activitiesService.getProposals().subscribe(data => this.proposals = data);
+    this.activitiesService.getOtherEntities().subscribe(data => this.otherEntities = data);
   }
 
 

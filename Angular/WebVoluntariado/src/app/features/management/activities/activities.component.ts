@@ -1,41 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivitiesService } from '../../../services/activities.service';
 import { CommonModule } from '@angular/common';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
+import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 
 @Component({
     selector: 'app-management-activities',
     standalone: true,
-    imports: [CommonModule, AppCarrouselComponent],
+    imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent],
     templateUrl: './activities.component.html'
 })
-export class ManagementActivitiesComponent {
+export class ManagementActivitiesComponent implements OnInit {
 
-    upcomingActivities = [
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 1, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 3, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 2, image: '', customBackground: '#fff' }
-    ];
+    upcomingActivities: any[] = [];
+    pastActivities: any[] = [];
+    pendingActivities: any[] = [];
+    proposals: any[] = [];
 
-    pastActivities = [
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 5, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 5, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 5, image: '', customBackground: '#fff' }
-    ];
+    selectedActivity: any = null;
+    isModalOpen = false;
 
-    pendingActivities = [
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff' },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff' }
-    ];
+    private activitiesService = inject(ActivitiesService);
 
-    proposals = [
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff', showIcon: true },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff', showIcon: true },
-        { name: 'Nombre de la actividad', type: 'Entidad', slots: 5, filled: 0, image: '', customBackground: '#fff', showIcon: true }
-    ];
+    ngOnInit() {
+        this.activitiesService.getUpcomingActivities().subscribe(data => this.upcomingActivities = data);
+        this.activitiesService.getPastActivities().subscribe(data => this.pastActivities = data);
+        this.activitiesService.getPendingActivities().subscribe(data => this.pendingActivities = data);
+        this.activitiesService.getProposals().subscribe(data => this.proposals = data);
+    }
 
     openActivityModal(activity: any) {
-        console.log('Open modal for:', activity);
+        this.selectedActivity = activity;
+        this.isModalOpen = true;
+    }
+
+    closeActivityModal() {
+        this.isModalOpen = false;
+        this.selectedActivity = null;
+    }
+
+    onEditActivity() {
+        console.log('Edit activity:', this.selectedActivity);
+        this.closeActivityModal();
+    }
+
+    onDeleteActivity() {
+        console.log('Delete activity:', this.selectedActivity);
+        this.closeActivityModal();
     }
 }

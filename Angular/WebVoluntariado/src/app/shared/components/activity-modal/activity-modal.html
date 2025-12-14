@@ -5,14 +5,11 @@
     <div class="modal-body">
       <!-- Left side - Image -->
       <div class="modal-image">
-        <div
-          class="image-container"
-          [ngStyle]="{
+        <div class="image-container" [ngStyle]="{
             background: activity.image
               ? 'url(' + activity.image + ') center/cover'
               : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-          }"
-        ></div>
+          }"></div>
       </div>
 
       <!-- Right side - Content -->
@@ -47,10 +44,18 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="modal-buttons">
+        <!-- Student Buttons -->
+        <div class="modal-buttons text-center" *ngIf="mode === 'student'">
           <button type="button" class="btn btn-primary" (click)="onAction()">
             {{ getButtonLabel() }}
           </button>
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
+        </div>
+
+        <!-- Management Buttons -->
+        <div class="modal-buttons d-flex gap-2 justify-content-center" *ngIf="mode === 'management'">
+          <button type="button" class="btn btn-primary" (click)="onEdit()">Editar</button>
+          <button type="button" class="btn btn-primary" (click)="onDelete()">Eliminar</button>
           <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
         </div>
       </div>

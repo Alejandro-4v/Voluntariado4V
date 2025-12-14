@@ -12,9 +12,16 @@ export class ActivityModalComponent {
   @Input() isOpen = false;
   @Input() activity: any = null;
   @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
-  
+
+  // New input for mode
+  @Input() mode: 'student' | 'management' = 'student';
+
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();
+
+  // New outputs for management
+  @Output() edit = new EventEmitter<void>();
+  @Output() delete = new EventEmitter<void>();
 
   onClose() {
     this.close.emit();
@@ -22,6 +29,14 @@ export class ActivityModalComponent {
 
   onAction() {
     this.action.emit();
+  }
+
+  onEdit() {
+    this.edit.emit();
+  }
+
+  onDelete() {
+    this.delete.emit();
   }
 
   getRatingStars(rating: number | null): any[] {
