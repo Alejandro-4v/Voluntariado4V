@@ -30,7 +30,6 @@ class TipoActividadRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-
     public function add(TipoActividad $tipoActividad): void
     {
         $this->getEntityManager()->persist($tipoActividad);
@@ -44,7 +43,6 @@ class TipoActividadRepository extends ServiceEntityRepository
 
         $this->getEntityManager()->flush();
     }
-
 
     public function remove(TipoActividad $tipoActividad): void
     {

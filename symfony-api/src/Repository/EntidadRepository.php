@@ -16,28 +16,24 @@ class EntidadRepository extends ServiceEntityRepository
         parent::__construct($registry, Entidad::class);
     }
 
-    //    /**
-    //     * @return Entidad[] Returns an array of Entidad objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function add(Entidad $entidad): void
+    {
+        $this->getEntityManager()->persist($entidad);
 
-    //    public function findOneBySomeField($value): ?Entidad
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Entidad $entidad): void
+    {
+        $this->getEntityManager()->persist($entidad);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function remove(Entidad $entidad): void
+    {
+        $this->getEntityManager()->remove($entidad);
+
+        $this->getEntityManager()->flush();
+    }
 }

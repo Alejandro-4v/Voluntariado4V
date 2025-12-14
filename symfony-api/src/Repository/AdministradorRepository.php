@@ -16,28 +16,24 @@ class AdministradorRepository extends ServiceEntityRepository
         parent::__construct($registry, Administrador::class);
     }
 
-    //    /**
-    //     * @return Administrador[] Returns an array of Administrador objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function add(Administrador $administrador): void
+    {
+        $this->getEntityManager()->persist($administrador);
 
-    //    public function findOneBySomeField($value): ?Administrador
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Administrador $administrador): void
+    {
+        $this->getEntityManager()->persist($administrador);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function remove(Administrador $administrador): void
+    {
+        $this->getEntityManager()->remove($administrador);
+
+        $this->getEntityManager()->flush();
+    }
 }
