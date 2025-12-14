@@ -340,27 +340,31 @@ final class ActividadController extends AbstractController
         }
 
         /** @var DateTimeImmutable $inicio */
-        $inicio = null;
+        $inicio = $actividad->getInicio();
 
         /** @var DateTimeImmutable $fin */
-        $fin = null;
+        $fin = $actividad->getFin();
 
-        try {
-            /** @var DateTimeImmutable $inicio */
-            $inicio = new DateTimeImmutable($json['inicio']);
-        } catch (\Exception $e) {
-            return $this->json([
-                'error' => 'Invalid inicio datetime format'
-            ], Response::HTTP_BAD_REQUEST);
+        if (isset($json['inicio'])) {
+            try {
+                /** @var DateTimeImmutable $inicio */
+                $inicio = new DateTimeImmutable($json['inicio']);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'error' => 'Invalid inicio datetime format'
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
 
-        try {
-            /** @var DateTimeImmutable $fin */
-            $fin = new DateTimeImmutable($json['fin']);
-        } catch (\Exception $e) {
-            return $this->json([
-                'error' => 'Invalid fin datetime format'
-            ], Response::HTTP_BAD_REQUEST);
+        if (isset($json['fin'])) {
+            try {
+                /** @var DateTimeImmutable $fin */
+                $fin = new DateTimeImmutable($json['fin']);
+            } catch (\Exception $e) {
+                return $this->json([
+                    'error' => 'Invalid fin datetime format'
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         if ($inicio > $fin) {
@@ -475,7 +479,7 @@ final class ActividadController extends AbstractController
     public function delete(
         ActividadRepository $actividadRepository,
         int $id
-        ): JsonResponse {
+    ): JsonResponse {
         /** @var Actividad $actividad */
         $actividad = $actividadRepository->find($id);
 
