@@ -14,15 +14,15 @@ class TipoActividad
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_tipo_actividad', type: 'smallint')]
-    #[Groups(['tipo_actividad:read', 'actividad:read'])]
+    #[Groups(['tipoActividad:read', 'actividad:read'])]
     private ?int $idTipoActividad = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 50)]
-    #[Groups(['tipo_actividad:read', 'tipo_actividad:update', 'actividad:read'])]
+    #[Groups(['tipoActividad:read', 'tipoActividad:update', 'actividad:read'])]
     private string $descripcion;
 
     #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['tipo_actividad:read', 'tipo_actividad:update', 'actividad:read'])]
+    #[Groups(['tipoActividad:read', 'tipoActividad:update', 'actividad:read'])]
     private ?string $imagenUrl = null;
 
     #[ORM\ManyToMany(targetEntity: Actividad::class, inversedBy: 'tiposActividad')]
