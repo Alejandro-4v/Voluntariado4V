@@ -163,7 +163,7 @@ class Entidad
         return $this->perfilUrl;
     }
 
-    public function setPerfilUrl(string $perfilUrl): self
+    public function setPerfilUrl(?string $perfilUrl): self
     {
         $this->perfilUrl = $perfilUrl;
         return $this;
