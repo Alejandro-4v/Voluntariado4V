@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TipoActividadRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -15,16 +14,16 @@ class TipoActividad
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_tipo_actividad', type: 'smallint')]
-    #[Groups(['tipo_actividad:read'])]
+    #[Groups(['tipo_actividad:read', 'actividad:read'])]
     private ?int $idTipoActividad = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 50)]
-    #[Groups(['tipo_actividad:read', 'tipo_actividad:update'])]
+    #[Groups(['tipo_actividad:read', 'tipo_actividad:update', 'actividad:read'])]
     private string $descripcion;
 
     #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['tipo_actividad:read', 'tipo_actividad:update'])]
-    private ?string $imagen_url = null;
+    #[Groups(['tipo_actividad:read', 'tipo_actividad:update', 'actividad:read'])]
+    private ?string $imagenUrl = null;
 
     #[ORM\ManyToMany(targetEntity: Actividad::class, inversedBy: 'tiposActividad')]
     #[ORM\JoinTable(name: 'ACTIVIDAD_TIPO')]
@@ -50,12 +49,12 @@ class TipoActividad
 
     public function getImagenUrl(): string
     {
-        return $this->imagen_url;
+        return $this->imagenUrl;
     }
 
-    public function setImagenUrl(string $imagen_url): self
+    public function setImagenUrl(string $imagenUrl): self
     {
-        $this->imagen_url = $imagen_url;
+        $this->imagenUrl = $imagenUrl;
         return $this;
     }
 

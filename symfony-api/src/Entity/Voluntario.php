@@ -15,28 +15,28 @@ class Voluntario
 {
     #[ORM\Id]
     #[ORM\Column(name: 'nif', type: 'string', length: 10)]
-    #[Groups(['voluntario:read'])]
+    #[Groups(['voluntario:read', 'actividad:read'])]
     private ?string $nif = null;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 40)]
-    #[Groups(['voluntario:read'])]
+    #[Groups(['voluntario:read', 'actividad:read'])]
     private string $nombre;
 
     #[ORM\Column(name: 'apellido_1', type: 'string', length: 40)]
-    #[Groups(['voluntario:read'])]
+    #[Groups(['voluntario:read', 'actividad:read'])]
     private string $apellido1;
 
     #[ORM\Column(name: 'apellido_2', type: 'string', length: 40, nullable: true)]
-    #[Groups(['voluntario:read'])]
+    #[Groups(['voluntario:read', 'actividad:read'])]
     private ?string $apellido2 = null;
 
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'voluntarios')]
     #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: false)]
-    #[Groups(['voluntario:read'])]
+    #[Groups(['voluntario:read', 'actividad:read'])]
     private ?Grado $grado = null;
 
     #[ORM\Column(name: 'mail', type: 'string', length: 255)]
-    #[Groups(['voluntario:read', 'voluntario: login'])]
+    #[Groups(['voluntario:read', 'voluntario: login', 'actividad:read'])]
     private string $mail;
 
     #[ORM\Column(name: 'password_hash', type: 'string', length: 255)]
@@ -48,8 +48,8 @@ class Voluntario
     private string $estado = 'P';
 
     #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['voluntario:read'])]
-    private ?string $perfil_url = null;
+    #[Groups(['voluntario:read', 'actividad:read'])]
+    private ?string $perfilUrl = null;
 
     #[ORM\OneToMany(targetEntity: Disponibilidad::class, mappedBy: 'voluntario')]
     #[Groups(['voluntario:read'])]
@@ -158,26 +158,20 @@ class Voluntario
 
     public function getPerfilUrl(): string
     {
-        return $this->perfil_url;
+        return $this->perfilUrl;
     }
 
-    public function serPerfilUrl(string $perfil_url): self
+    public function serPerfilUrl(string $perfilUrl): self
     {
-        $this->perfil_url = $perfil_url;
+        $this->perfilUrl = $perfilUrl;
         return $this;
     }
 
-    /**
-     * @return Collection<int, Disponibilidad>
-     */
     public function getDisponibilidades(): Collection
     {
         return $this->disponibilidades;
     }
 
-    /**
-     * @return Collection<int, TipoActividad>
-     */
     public function getTiposActividad(): Collection
     {
         return $this->tiposActividad;

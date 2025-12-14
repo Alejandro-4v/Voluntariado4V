@@ -12,16 +12,16 @@ class Ods
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id_ods', type: 'smallint')]
-    #[Groups(['ods:read'])]
+    #[Groups(['ods:read', 'actividad:read'])]
     private ?int $idOds = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 255)]
-    #[Groups(['ods:read', 'ods:update'])]
+    #[Groups(['ods:read', 'ods:update', 'actividad:read'])]
     private string $descripcion;
 
     #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
-    #[Groups(['ods:read', 'ods:update'])]
-    private ?string $imagen_url = null;
+    #[Groups(['ods:read', 'ods:update', 'actividad:read'])]
+    private ?string $imagenUrl = null;
 
     public function setIdOds(int $idOds): self
     {
@@ -47,12 +47,12 @@ class Ods
 
     public function getImagenUrl(): string
     {
-        return $this->imagen_url;
+        return $this->imagenUrl;
     }
 
-    public function setImagenUrl(string $imagen_url): self
+    public function setImagenUrl(string $imagenUrl): self
     {
-        $this->imagen_url = $imagen_url;
+        $this->imagenUrl = $imagenUrl;
         return $this;
     }
 }

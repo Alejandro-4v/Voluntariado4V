@@ -16,23 +16,23 @@ class Entidad
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_entidad', type: 'smallint')]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private ?int $idEntidad = null;
 
     #[ORM\Column(name: 'cif', type: 'string', length: 10, unique: true, nullable: true)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private ?string $cif = null;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 50, unique: true)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $nombre;
 
     #[ORM\Column(name: 'nombre_responsable', type: 'string', length: 30)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $nombreResponsable;
 
     #[ORM\Column(name: 'apellidos_responsable', type: 'string', length: 40)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $apellidosResponsable;
 
     #[ORM\Column(name: 'fecha_registro', type: 'datetime_immutable')]
@@ -40,7 +40,7 @@ class Entidad
     private DateTimeImmutable $fechaRegistro;
 
     #[ORM\Column(name: 'contact_mail', type: 'string', length: 255)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $contactMail;
 
     #[ORM\Column(name: 'login_mail', type: 'string', length: 255, nullable: true)]
@@ -52,8 +52,8 @@ class Entidad
     private ?string $passwordHash = null;
 
     #[ORM\Column(name:'perfil_url', type: 'string', length:255, nullable: true)]
-    #[Groups(['entidad:read'])]
-    private ?string $perfil_url = null;
+    #[Groups(['entidad:read', 'actividad:read'])]
+    private ?string $perfilUrl = null;
 
 
     // Relación bidireccional: Una Entidad convoca muchas Actividades.
@@ -162,18 +162,15 @@ class Entidad
 
     public function getPerfilUrl(): string
     {
-        return $this->perfil_url;
+        return $this->perfilUrl;
     }
 
-    public function setPerfilUrl(string $perfil_url): self
+    public function setPerfilUrl(string $perfilUrl): self
     {
-        $this->perfil_url = $perfil_url;
+        $this->perfilUrl = $perfilUrl;
         return $this;
     }
-
-    /**
-     * @return Collection<int, Actividad>
-     */
+    
     public function getActividades(): Collection
     {
         return $this->actividades;

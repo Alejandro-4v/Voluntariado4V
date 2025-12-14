@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ActividadRepository::class)]
 #[ORM\Table(name: 'ACTIVIDAD')]
-#[ORM\Index(fields: ['nombre'], name: 'IX_ACTIVIDAD_nombre')] 
+#[ORM\Index(fields: ['nombre'], name: 'IX_ACTIVIDAD_nombre')]
 class Actividad
 {
     #[ORM\Id]
@@ -21,64 +21,65 @@ class Actividad
     private ?int $idActividad = null;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 50)]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private string $nombre;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 400, nullable: true)]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private ?string $descripcion = null;
 
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private string $estado = 'P';
 
     #[ORM\ManyToOne(targetEntity: Entidad::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(name: 'convoca', referencedColumnName: 'id_entidad', nullable: false)]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private ?Entidad $convoca = null;
 
     #[ORM\Column(name: 'inicio', type: 'datetime_immutable')]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private DateTimeImmutable $inicio;
 
     #[ORM\Column(name: 'fin', type: 'datetime_immutable')]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private DateTimeImmutable $fin;
 
-    #[ORM\Column(name:'imagen_url', type: 'string', length:255, nullable: true)]
-    #[Groups(['actividad:read'])]
-    private ?string $imagen_url = null;
+    #[ORM\Column(name: 'imagen_url', type: 'string', length: 255, nullable: true)]
+    #[Groups(['actividad:read', 'actividad:update'])]
+    private ?string $imagenUrl = null;
 
-
-    // Mapeo ManyToOne a GRADO (clave foránea 'grado')
-    // El campo 'grado' en la DB es un TINYINT, pero su valor semántico es el nivel.
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: false)]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private ?Grado $grado = null;
-    
-    // --- Relación ManyToMany con TIPO_ACTIVIDAD (Tabla puente ACTIVIDAD_TIPO) ---
-    // Esta es la parte "propietaria" de la relación
+
     #[ORM\ManyToMany(targetEntity: TipoActividad::class, inversedBy: 'actividades')]
-    #[ORM\JoinTable(name: 'ACTIVIDAD_TIPO')] // Nombre de la tabla puente
+    #[ORM\JoinTable(name: 'ACTIVIDAD_TIPO')]
     #[ORM\JoinColumn(name: 'id_actividad', referencedColumnName: 'id_actividad')]
     #[ORM\InverseJoinColumn(name: 'id_tipo_actividad', referencedColumnName: 'id_tipo_actividad')]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private Collection $tiposActividad;
-    
-    // --- Relación ManyToMany con ODS (Tabla puente ACTIVIDAD_ODS) ---
-    // Esta es la parte "propietaria" de la relación
+
     #[ORM\ManyToMany(targetEntity: Ods::class, inversedBy: 'actividades')]
-    #[ORM\JoinTable(name: 'ACTIVIDAD_ODS')] // Nombre de la tabla puente
+    #[ORM\JoinTable(name: 'ACTIVIDAD_ODS')]
     #[ORM\JoinColumn(name: 'id_actividad', referencedColumnName: 'id_actividad')]
     #[ORM\InverseJoinColumn(name: 'id_ods', referencedColumnName: 'id_ods')]
-    #[Groups(['actividad:read'])]
+    #[Groups(['actividad:read', 'actividad:update'])]
     private Collection $ods;
 
+    #[ORM\ManyToMany(targetEntity: Voluntario::class, inversedBy: 'actividades')]
+    #[ORM\JoinTable(name: 'ACTIVIDAD_VOLUNTARIO')]
+    #[ORM\JoinColumn(name: 'id_actividad', referencedColumnName: 'id_actividad')]
+    #[ORM\InverseJoinColumn(name: 'nif', referencedColumnName: 'nif')]
+    #[Groups(['actividad:read', 'actividad:update'])]
+    private Collection $voluntarios;
 
     public function __construct()
     {
-        // Inicializar las colecciones ManyToMany
         $this->tiposActividad = new ArrayCollection();
         $this->ods = new ArrayCollection();
+        $this->voluntarios = new ArrayCollection();
     }
 
     public function getIdActividad(): ?int
@@ -94,6 +95,7 @@ class Actividad
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
+
         return $this;
     }
 
@@ -105,31 +107,10 @@ class Actividad
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
+
         return $this;
     }
 
-    public function getInicio(): DateTimeImmutable
-    {
-        return $this->inicio;
-    }
-
-    public function setInicio(DateTimeImmutable $inicio): self
-    {
-        $this->inicio = $inicio;
-        return $this;
-    }
-
-    public function getFin(): DateTimeImmutable
-    {
-        return $this->fin;
-    }
-
-    public function setFin(DateTimeImmutable $fin): self
-    {
-        $this->fin = $fin;
-        return $this;
-    }
-    
     public function getEstado(): string
     {
         return $this->estado;
@@ -138,6 +119,7 @@ class Actividad
     public function setEstado(string $estado): self
     {
         $this->estado = $estado;
+
         return $this;
     }
 
@@ -149,9 +131,46 @@ class Actividad
     public function setConvoca(?Entidad $convoca): self
     {
         $this->convoca = $convoca;
+
         return $this;
     }
-    
+
+    public function getInicio(): DateTimeImmutable
+    {
+        return $this->inicio;
+    }
+
+    public function setInicio(DateTimeImmutable $inicio): self
+    {
+        $this->inicio = $inicio;
+
+        return $this;
+    }
+
+    public function getFin(): DateTimeImmutable
+    {
+        return $this->fin;
+    }
+
+    public function setFin(DateTimeImmutable $fin): self
+    {
+        $this->fin = $fin;
+
+        return $this;
+    }
+
+    public function getImagenUrl(): ?string
+    {
+        return $this->imagenUrl;
+    }
+
+    public function setImagenUrl(?string $imagenUrl): self
+    {
+        $this->imagenUrl = $imagenUrl;
+
+        return $this;
+    }
+
     public function getGrado(): ?Grado
     {
         return $this->grado;
@@ -160,23 +179,45 @@ class Actividad
     public function setGrado(?Grado $grado): self
     {
         $this->grado = $grado;
+
         return $this;
     }
 
-    /**
-     * @return Collection<int, TipoActividad>
-     */
     public function getTiposActividad(): Collection
     {
         return $this->tiposActividad;
     }
 
-    /**
-     * @return Collection<int, Ods>
-     */
+    public function setTiposActividad(Collection $tiposActividad): self
+    {
+        $this->tiposActividad = $tiposActividad;
+
+        return $this;
+    }
+
     public function getOds(): Collection
     {
         return $this->ods;
     }
-    
+
+    public function setOds(Collection $ods): self
+    {
+        $this->ods = $ods;
+
+        return $this;
+    }
+
+
+    public function getVoluntarios(): Collection
+    {
+        return $this->voluntarios;
+    }
+
+    public function setVoluntarios(Collection $voluntarios): self
+    {
+        $this->voluntarios = $voluntarios;
+
+        return $this;
+    }
+
 }
