@@ -1,0 +1,25 @@
+<div class="container-fluid py-4 ps-5 pe-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="h3 text-dark fw-bold">Voluntarios</h1>
+        <app-filter-sort [groupOptions]="groupOptions" [sortOptions]="sortOptions" (groupChange)="onGroupBy($event)"
+            (sortChange)="onSortBy($event)">
+        </app-filter-sort>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Details -->
+        <div class="col-md-4 mb-4">
+            @if (selectedVolunteer) {
+            <app-volunteer-detail [volunteer]="selectedVolunteer"></app-volunteer-detail>
+            }
+        </div>
+
+        <!-- Main List -->
+        <div class="col-md-8">
+            <app-volunteer-list [volunteers]="displayVolunteers" [selectedId]="selectedVolunteer?.id || null"
+                (select)="selectVolunteer($event)">
+            </app-volunteer-list>
+        </div>
+    </div>
+</div>

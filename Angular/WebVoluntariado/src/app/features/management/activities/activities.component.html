@@ -3,16 +3,9 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pe-5">
             <h1 class="h3 text-dark fw-bold">Actividades</h1>
-            <div class="d-flex gap-4">
-                <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center gap-2"
-                    style="font-size: 1.1rem;">
-                    <i class="bi bi-grid"></i> Agrupar por
-                </button>
-                <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center gap-2"
-                    style="font-size: 1.1rem;">
-                    <i class="bi bi-filter-left"></i> Ordenar por
-                </button>
-            </div>
+            <app-filter-sort [groupOptions]="groupOptions" [sortOptions]="sortOptions" (groupChange)="onGroupBy($event)"
+                (sortChange)="onSortBy($event)">
+            </app-filter-sort>
         </div>
 
         <!-- Próximas actividades -->
