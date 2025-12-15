@@ -1,0 +1,42 @@
+<div class="bg-white rounded shadow-sm">
+    <div class="list-group list-group-flush">
+        <!-- Header Row -->
+        <div class="list-group-item bg-transparent fw-bold d-flex align-items-center py-3 border-bottom-2">
+            <!-- Dynamic Columns -->
+            @for (col of columns; track col.field) {
+            <div class="col">{{ col.header }}</div>
+            }
+            <!-- Action Column Placeholder -->
+            <div class="col-2 text-end"></div>
+        </div>
+
+        <!-- Items -->
+        @for (item of items; track item.id) {
+        <div class="list-group-item action-item d-flex align-items-center py-3 border-bottom pointer"
+            [class.bg-light]="selectedId === item.id" (click)="onSelect(item)">
+
+            <!-- Dynamic Cells -->
+            @for (col of columns; track col.field) {
+            <div class="col" [class.fw-medium]="$first" [class.text-muted]="!$first">
+                @if (col.pipe === 'date') {
+                {{ item[col.field] | date:'dd/MM/yyyy' }}
+                } @else {
+                {{ item[col.field] }}
+                }
+            </div>
+            }
+
+            <div class="col-2 text-end">
+                <button class="btn btn-sm btn-primary rounded-pill px-3"
+                    style="background-color: #0d47a1; border: none;">
+                    Contacto
+                </button>
+            </div>
+        </div>
+        } @empty {
+        <div class="list-group-item py-4 text-center text-muted">
+            No hay elementos para mostrar.
+        </div>
+        }
+    </div>
+</div>

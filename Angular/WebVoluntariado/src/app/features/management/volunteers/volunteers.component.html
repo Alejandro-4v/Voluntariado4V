@@ -11,15 +11,16 @@
         <!-- Sidebar Details -->
         <div class="col-md-4 mb-4">
             @if (selectedVolunteer) {
-            <app-volunteer-detail [volunteer]="selectedVolunteer"></app-volunteer-detail>
+            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+            </app-generic-detail>
             }
         </div>
 
         <!-- Main List -->
         <div class="col-md-8">
-            <app-volunteer-list [volunteers]="displayVolunteers" [selectedId]="selectedVolunteer?.id || null"
-                (select)="selectVolunteer($event)">
-            </app-volunteer-list>
+            <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
+                [selectedId]="selectedVolunteer?.id || null" (select)="selectVolunteer($event)">
+            </app-generic-list>
         </div>
     </div>
 </div>

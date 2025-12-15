@@ -2,13 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VolunteersService, Volunteer } from '../../../services/volunteers.service';
 import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
-import { VolunteerListComponent } from './components/volunteer-list/volunteer-list.component';
-import { VolunteerDetailComponent } from './components/volunteer-detail/volunteer-detail.component';
+import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
+import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
 
 @Component({
     selector: 'app-management-volunteers',
     standalone: true,
-    imports: [CommonModule, FilterSortComponent, VolunteerListComponent, VolunteerDetailComponent],
+    imports: [CommonModule, FilterSortComponent, GenericListComponent, GenericDetailComponent],
     templateUrl: './volunteers.component.html',
     styleUrls: ['./volunteers.component.scss']
 })
@@ -21,6 +21,28 @@ export class ManagementVolunteersComponent implements OnInit {
     sortBy: string = '';
     groupBy: string = '';
 
+    private volunteersService = inject(VolunteersService);
+
+    // Configuration for Generic List
+    listColumns: ColumnConfig[] = [
+        { header: 'Nombre voluntario', field: 'name' },
+        { header: 'Fecha de nacimiento', field: 'birthDate', pipe: 'date' },
+        { header: 'Grupo', field: 'group' }
+    ];
+
+    // Configuration for Generic Detail
+    detailConfig: DetailConfig = {
+        imageField: 'image',
+        titleField: 'name',
+        subtitles: [
+            { label: 'Fecha de nacimiento', field: 'birthDate', pipe: 'date' },
+            { label: 'Grupo', field: 'group' },
+            { label: 'Curso actual', field: 'course' }
+        ],
+        listField: 'interests',
+        listLabel: 'Intereses'
+    };
+
     sortOptions = [
         { label: 'Nombre', value: 'name' },
         { label: 'Fecha de nacimiento', value: 'date' }
@@ -30,8 +52,6 @@ export class ManagementVolunteersComponent implements OnInit {
         { label: 'Grupo', value: 'group' },
         { label: 'Ninguno', value: '' }
     ];
-
-    private volunteersService = inject(VolunteersService);
 
     ngOnInit() {
         this.volunteersService.getVolunteers().subscribe(data => {
