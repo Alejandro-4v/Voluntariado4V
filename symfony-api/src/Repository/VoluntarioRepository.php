@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Voluntario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Voluntario;
 
 /**
  * @extends ServiceEntityRepository<Voluntario>
@@ -16,28 +16,24 @@ class VoluntarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Voluntario::class);
     }
 
-    //    /**
-    //     * @return Voluntario[] Returns an array of Voluntario objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+public function add(Voluntario $voluntario): void
+    {
+        $this->getEntityManager()->persist($voluntario);
 
-    //    public function findOneBySomeField($value): ?Voluntario
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Voluntario $voluntario): void
+    {
+        $this->getEntityManager()->persist($voluntario);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function remove(Voluntario $voluntario): void
+    {
+        $this->getEntityManager()->remove($voluntario);
+
+        $this->getEntityManager()->flush();
+    }
 }

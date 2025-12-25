@@ -16,23 +16,23 @@ class Entidad
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_entidad', type: 'smallint')]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private ?int $idEntidad = null;
 
     #[ORM\Column(name: 'cif', type: 'string', length: 10, unique: true, nullable: true)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private ?string $cif = null;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 50, unique: true)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $nombre;
 
     #[ORM\Column(name: 'nombre_responsable', type: 'string', length: 30)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $nombreResponsable;
 
     #[ORM\Column(name: 'apellidos_responsable', type: 'string', length: 40)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $apellidosResponsable;
 
     #[ORM\Column(name: 'fecha_registro', type: 'datetime_immutable')]
@@ -40,7 +40,7 @@ class Entidad
     private DateTimeImmutable $fechaRegistro;
 
     #[ORM\Column(name: 'contact_mail', type: 'string', length: 255)]
-    #[Groups(['entidad:read'])]
+    #[Groups(['entidad:read', 'actividad:read'])]
     private string $contactMail;
 
     #[ORM\Column(name: 'login_mail', type: 'string', length: 255, nullable: true)]
@@ -51,7 +51,10 @@ class Entidad
     #[Groups(['entidad:read', 'entidad:login'])]
     private ?string $passwordHash = null;
 
-    // Relación bidireccional: Una Entidad convoca muchas Actividades.
+    #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
+    #[Groups(['entidad:read', 'actividad:read'])]
+    private ?string $perfilUrl = null;
+
     #[ORM\OneToMany(targetEntity: Actividad::class, mappedBy: 'convoca')]
     #[Groups(['entidad:read'])]
     private Collection $actividades;
@@ -155,12 +158,26 @@ class Entidad
         return $this;
     }
 
-    /**
-     * @return Collection<int, Actividad>
-     */
+    public function getPerfilUrl(): string
+    {
+        return $this->perfilUrl;
+    }
+
+    public function setPerfilUrl(?string $perfilUrl): self
+    {
+        $this->perfilUrl = $perfilUrl;
+        return $this;
+    }
+
     public function getActividades(): Collection
     {
         return $this->actividades;
+    }
+
+    public function setActividades(Collection $actividades): self
+    {
+        $this->actividades = $actividades;
+        return $this;
     }
 
 }

@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Ods;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Ods;
 
 /**
  * @extends ServiceEntityRepository<Ods>
@@ -16,28 +16,24 @@ class OdsRepository extends ServiceEntityRepository
         parent::__construct($registry, Ods::class);
     }
 
-    //    /**
-    //     * @return Ods[] Returns an array of Ods objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function add(Ods $entity): void
+    {
+        $this->getEntityManager()->persist($entity);
 
-    //    public function findOneBySomeField($value): ?Ods
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Ods $entity): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function remove(Ods $entity): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        $this->getEntityManager()->flush();
+    }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Grado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Grado;
 
 /**
  * @extends ServiceEntityRepository<Grado>
@@ -16,28 +16,27 @@ class GradoRepository extends ServiceEntityRepository
         parent::__construct($registry, Grado::class);
     }
 
-    //    /**
-    //     * @return Grado[] Returns an array of Grado objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('g.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function add(Grado $grado): void
+    {
+        $this->getEntityManager()->persist($grado);
 
-    //    public function findOneBySomeField($value): ?Grado
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Grado $grado): void
+    {
+        $this->getEntityManager()->persist($grado);
+
+        $this->getEntityManager()->flush();
+    }
+
+
+    public function remove(Grado $grado): void
+    {
+        $this->getEntityManager()->remove($grado);
+
+        $this->getEntityManager()->flush();
+    }
+
+
 }

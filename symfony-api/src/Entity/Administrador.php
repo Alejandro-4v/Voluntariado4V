@@ -32,6 +32,10 @@ class Administrador
     #[Groups(['administrador:read'])]
     private ?string $apellido2 = null;
 
+    #[ORM\Column(name: 'perfil_url', type: 'string', length: 255, nullable: true)]
+    #[Groups(['administrador:read'])]
+    private ?string $perfilUrl = null;
+
     public function getLoginMail(): ?string
     {
         return $this->loginMail;
@@ -84,6 +88,17 @@ class Administrador
     public function setApellido2(?string $apellido2): self
     {
         $this->apellido2 = $apellido2;
+        return $this;
+    }
+
+    public function getPerfilUrl(): string
+    {
+        return $this->perfilUrl;
+    }
+
+    public function setPerfilUrl(string $perfilUrl): self
+    {
+        $this->perfilUrl = $perfilUrl;
         return $this;
     }
 

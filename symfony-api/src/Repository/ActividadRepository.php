@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Actividad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Actividad;
 
 /**
  * @extends ServiceEntityRepository<Actividad>
@@ -16,28 +16,25 @@ class ActividadRepository extends ServiceEntityRepository
         parent::__construct($registry, Actividad::class);
     }
 
-    //    /**
-    //     * @return Actividad[] Returns an array of Actividad objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function add(Actividad $actividad): void
+    {
+        $this->getEntityManager()->persist($actividad);
 
-    //    public function findOneBySomeField($value): ?Actividad
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $this->getEntityManager()->flush();
+    }
+
+    public function update(Actividad $actividad): void
+    {
+        $this->getEntityManager()->persist($actividad);
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function remove(Actividad $actividad): void
+    {
+        $this->getEntityManager()->remove($actividad);
+
+        $this->getEntityManager()->flush();
+    }
+
 }

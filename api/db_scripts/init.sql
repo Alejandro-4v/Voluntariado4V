@@ -20,23 +20,24 @@ CREATE TABLE
         fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         contact_mail VARCHAR(255) NOT NULL,
         login_mail VARCHAR(255),
-        password_hash VARCHAR(255)
+        password_hash VARCHAR(255),
+        perfil_url VARCHAR(255)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
-
-CREATE UNIQUE INDEX IX_ENTIDAD_cif ON ENTIDAD (cif);
 
 CREATE UNIQUE INDEX IX_ENTIDAD_nombre_entidad ON ENTIDAD (nombre);
 
 CREATE TABLE
     TIPO_ACTIVIDAD (
         id_tipo_actividad TINYINT AUTO_INCREMENT PRIMARY KEY,
-        descripcion VARCHAR(20) NOT NULL
+        descripcion VARCHAR(50) NOT NULL,
+        imagen_url VARCHAR(255)
     );
 
 CREATE TABLE
     ODS (
         id_ods TINYINT PRIMARY KEY,
-        descripcion VARCHAR(50) NOT NULL
+        descripcion VARCHAR(50) NOT NULL,
+        imagen_url VARCHAR(255)
     );
 
 CREATE TABLE
@@ -51,7 +52,8 @@ CREATE TABLE
         grado TINYINT NOT NULL,
         FOREIGN KEY (convoca) REFERENCES ENTIDAD (id_entidad),
         FOREIGN KEY (grado) REFERENCES GRADO (id_grado),
-        CONSTRAINT CK_ACTIVIDAD_inicio_anterior_al_fin CHECK (inicio < fin)
+        CONSTRAINT CK_ACTIVIDAD_inicio_anterior_al_fin CHECK (inicio < fin),
+        imagen_url VARCHAR(255)
     );
 
 CREATE INDEX IX_ACTIVIDAD_nombre ON ACTIVIDAD (nombre);
@@ -86,8 +88,9 @@ CREATE TABLE
         grado TINYINT NOT NULL,
         mail VARCHAR(255) NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
-        estado ENUM ('A', 'P', 'R', 'I') NOT NULL DEFAULT 'P'
-        FOREIGN KEY (grado) REFERENCES GRADO (id_grado)
+        estado ENUM ('A', 'P', 'R', 'I') NOT NULL DEFAULT 'P',
+        FOREIGN KEY (grado) REFERENCES GRADO (id_grado),
+        perfil_url VARCHAR(255)
     );
 
 CREATE INDEX IX_VOLUNTARIO_nombre_completo ON VOLUNTARIO (nombre, apellido_1, apellido_2);
@@ -116,7 +119,8 @@ CREATE TABLE
         password_hash VARCHAR(255) NOT NULL,
         nombre VARCHAR(40) NOT NULL,
         apellido_1 VARCHAR(40) NOT NULL,
-        apellido_2 VARCHAR(40)
+        apellido_2 VARCHAR(40),
+        perfil_url VARCHAR(255)
     );
 
 CREATE TABLE
@@ -144,6 +148,15 @@ CREATE TABLE
         PRIMARY KEY (id_actividad, id_ods),
         FOREIGN KEY (id_actividad) REFERENCES ACTIVIDAD (id_actividad),
         FOREIGN KEY (id_ods) REFERENCES ODS (id_ods)
+    );
+
+CREATE TABLE 
+    ACTIVIDAD_VOLUNTARIO (
+        id_actividad INT NOT NULL,
+        nif CHAR(10) NOT NULL,
+        PRIMARY KEY (id_actividad, nif),
+        FOREIGN KEY (id_actividad) REFERENCES ACTIVIDAD (id_actividad),
+        FOREIGN KEY (nif) REFERENCES VOLUNTARIO (nif)
     );
 
 CREATE TABLE

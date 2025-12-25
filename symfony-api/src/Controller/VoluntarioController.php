@@ -8,12 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class VoluntarioController extends AbstractController
 {
-    #[Route('/api/voluntario', name: 'app_api_voluntario')]
+    #[Route('/voluntario', name: 'app_api_voluntario')]
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/VoluntarioController.php',
+            'path' => 'src/Controller/VoluntarioController.php',
         ]);
     }
 }
