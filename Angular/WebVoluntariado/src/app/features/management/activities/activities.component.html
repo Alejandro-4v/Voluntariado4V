@@ -1,37 +1,69 @@
-<div class="management-activities-container">
-    <div class="container-fluid py-4 ps-5">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-5 pe-5">
-            <h1 class="h3 text-dark fw-bold">Actividades</h1>
-            <app-filter-sort [groupOptions]="groupOptions" [sortOptions]="sortOptions" (groupChange)="onGroupBy($event)"
-                (sortChange)="onSortBy($event)">
-            </app-filter-sort>
+<div class="container-fluid min-vh-100 d-flex flex-column align-items-center py-5 page-container">
+
+    <!-- Search Card -->
+    <div class="card p-5 m-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h2 class="text-secondary small mb-1">Cuatrovientos Voluntariado - Entidades</h2>
+                <h1 class="display-5 fw-bold text-dark">Buscar Actividad</h1>
+            </div>
+            <div>
+                <img src="assets/images/logo-cuatrovientos.png" alt="Logo" class="logo-img"
+                    style="height: 60px; width: auto;">
+            </div>
         </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Tipo de Actividad</label>
+                <select class="form-select form-select-lg bg-light">
+                    <option selected>Tipos...</option>
+                    <option value="1">Voluntariado</option>
+                    <option value="2">Formación</option>
+                    <option value="3">Ocio</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Fecha de Actividad</label>
+                <input type="text" class="form-control form-control-lg bg-light"
+                    placeholder="15/10/2023 a las 10:00...">
+            </div>
+        </div>
+
+        <div class="d-flex gap-3 pt-2">
+            <button class="btn btn-outline-secondary btn-lg flex-grow-1">Limpiar</button>
+            <button class="btn btn-primary btn-lg flex-grow-1 text-white"
+                style="background-color: #0d3c83;">Buscar</button>
+        </div>
+    </div>
+
+    <!-- Results Sections -->
+    <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
 
         <!-- Próximas actividades -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
+            <h2 class="h5 fw-normal text-white mb-4 ps-2">Próximas actividades</h2>
             <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Actividades pasadas -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
+            <h2 class="h5 fw-normal text-white mb-4 ps-2">Actividades pasadas</h2>
             <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Actividades pendiente de aprobación -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
+            <h2 class="h5 fw-normal text-white mb-4 ps-2">Actividades pendiente de aprobación</h2>
             <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Propuestas desde Cuatrovientos -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+            <h2 class="h5 fw-normal text-white mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
             <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
