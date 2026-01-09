@@ -1,0 +1,43 @@
+<div class="management-activities-container">
+    <div class="container-fluid py-4 ps-5">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5 pe-5">
+            <h1 class="h3 text-dark fw-bold">Actividades</h1>
+            <app-filter-sort [groupOptions]="groupOptions" [sortOptions]="sortOptions" (groupChange)="onGroupBy($event)"
+                (sortChange)="onSortBy($event)">
+            </app-filter-sort>
+        </div>
+
+        <!-- Próximas actividades -->
+        <section class="mb-5">
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
+            <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
+            </app-carrousel>
+        </section>
+
+        <!-- Actividades pasadas -->
+        <section class="mb-5">
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
+            <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
+            </app-carrousel>
+        </section>
+
+        <!-- Actividades pendiente de aprobación -->
+        <section class="mb-5">
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
+            <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
+            </app-carrousel>
+        </section>
+
+        <!-- Propuestas desde Cuatrovientos -->
+        <section class="mb-5">
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+            <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
+            </app-carrousel>
+        </section>
+    </div>
+
+    <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" mode="management"
+        (close)="closeActivityModal()" (edit)="onEditActivity()" (delete)="onDeleteActivity()">
+    </app-activity-modal>
+</div>

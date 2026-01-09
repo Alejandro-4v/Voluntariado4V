@@ -64,6 +64,12 @@ body, html {
   transform: translateY(-1px);
 }
 
+.btn-primary-cv.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+}
+
 /* 6. Enlaces */
 a {
   color: var(--cv-blue);
@@ -71,4 +77,150 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+
+/* ===== DASHBOARD STYLES ===== */
+
+/* Card circular buttons */
+.btn-outline-secondary.rounded-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Responsive gap utility */
+.gap-3 {
+  gap: 1rem !important;
+}
+
+/* Smooth overflow scroll */
+.overflow-x-auto {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  
+  /* Carousel scrollbar styling */
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #999;
+    }
+  }
+}
+
+/* Dashboard wrapper and content */
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.dashboard-content {
+  flex: 1;
+  background-color: white;
+  padding-bottom: 3rem;
+}
+
+/* Card animations */
+@keyframes gradient-float {
+  0%, 100% {
+    transform: translateY(0px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Cards specific styles */
+.card-activity,
+.card-proposal,
+.card-entity {
+  min-width: 280px;
+  height: auto;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    animation: gradient-float 0.6s ease-in-out;
+  }
+}
+
+.card-activity {
+  .card-img-top {
+    background-size: cover;
+    background-position: center;
+  }
+}
+
+.card-proposal {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-entity {
+  .entity-logo {
+    background-size: cover;
+    background-position: center;
+  }
+}
+
+/* Navbar custom styles */
+.navbar {
+  border-bottom: 1px solid #e9ecef;
+  
+  .navbar-brand {
+    color: var(--cv-blue) !important;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+  }
+}
+.carousel-width {
+  width: 80%; /* ancho fijo */
+}
+
+.card-width {
+  width: calc((100% - 2 * 0.5rem) / 3); /* 3 cards con gap = 0.5rem (8px) */
+}
+
+.hand-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin-top: -24px;   // lo sube sobre la imagen
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+app-past-activities .carrousel-track {
+  overflow-x: auto !important;
+  white-space: nowrap;
 }

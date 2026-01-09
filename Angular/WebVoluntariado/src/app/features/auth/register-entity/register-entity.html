@@ -1,5 +1,5 @@
 <div class="auth-card animate__animated animate__fadeInUp">
-  
+
   <div class="d-flex justify-content-between align-items-start mb-3">
     <div>
       <small class="text-muted fw-bold" style="font-size: 0.8rem;">Cuatrovientos Voluntariado - Entidades</small>
@@ -10,17 +10,14 @@
 
   <form [formGroup]="entityForm" (ngSubmit)="onSubmit()">
     <div class="row g-4">
-      
+
       <div class="col-12 col-md-6">
         <div class="mb-3">
           <label class="form-label">Razón social o nombre de la organización</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            formControlName="orgName" 
+          <input type="text" class="form-control" formControlName="orgName"
             placeholder="Razón social o nombre de la organización"
             [class.is-invalid]="entityForm.get('orgName')?.invalid && (entityForm.get('orgName')?.dirty || entityForm.get('orgName')?.touched)">
-          
+
           <div class="invalid-feedback" *ngIf="entityForm.get('orgName')?.errors?.['required']">
             El nombre de la organización es obligatorio.
           </div>
@@ -31,13 +28,9 @@
 
         <div class="mb-0">
           <label class="form-label">Correo electrónico</label>
-          <input 
-            type="email" 
-            class="form-control" 
-            formControlName="email" 
-            placeholder="entidad@entidad.tld"
+          <input type="email" class="form-control" formControlName="email" placeholder="entidad@entidad.tld"
             [class.is-invalid]="entityForm.get('email')?.invalid && (entityForm.get('email')?.dirty || entityForm.get('email')?.touched)">
-          
+
           <div class="invalid-feedback" *ngIf="entityForm.get('email')?.errors?.['required']">
             El correo es obligatorio.
           </div>
@@ -49,13 +42,10 @@
 
       <div class="col-12 col-md-6 d-flex flex-column">
         <label class="form-label">Mensaje</label>
-        <textarea 
-          class="form-control flex-grow-1" 
-          formControlName="message" 
-          style="min-height: 138px; resize: none;" 
+        <textarea class="form-control flex-grow-1" formControlName="message" style="min-height: 138px; resize: none;"
           placeholder="Tu mensaje"
           [class.is-invalid]="entityForm.get('message')?.invalid && (entityForm.get('message')?.dirty || entityForm.get('message')?.touched)"></textarea>
-        
+
         <div class="invalid-feedback" *ngIf="entityForm.get('message')?.errors?.['required']">
           El mensaje es obligatorio.
         </div>
@@ -70,7 +60,7 @@
       <div class="row align-items-center">
         <div class="col-6">
           <small class="text-muted">¿Ya tienes cuenta?</small><br>
-          <a routerLink="/login" class="small fw-bold">Inicia sesión</a>
+          <a routerLink="/auth/iniciar-sesion" class="small fw-bold">Inicia sesión</a>
         </div>
         <div class="col-6 text-end">
           <button type="submit" class="btn btn-primary-cv px-5">

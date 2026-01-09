@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router'; // Importante
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
@@ -8,6 +9,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     // Añadimos withComponentInputBinding() para que los datos del router lleguen a los @Input
-    provideRouter(routes, withComponentInputBinding()) 
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withFetch())
   ]
 };

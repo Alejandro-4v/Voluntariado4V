@@ -1,0 +1,64 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()" *ngIf="activity">
+    <button class="modal-close" (click)="onClose()">×</button>
+
+    <div class="modal-body">
+      <!-- Left side - Image -->
+      <div class="modal-image">
+        <div class="image-container" [ngStyle]="{
+            background: activity.image
+              ? 'url(' + activity.image + ') center/cover'
+              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+          }"></div>
+      </div>
+
+      <!-- Right side - Content -->
+      <div class="modal-info">
+        <h2 class="modal-title">{{ activity.name }} - {{ activity.entity }}</h2>
+
+        <!-- Date and Time -->
+        <div class="info-section">
+          <h3 class="info-label">Fecha y hora</h3>
+          <div class="info-row">
+            <span class="date">{{ activity.date | date : 'dd/MM/yyyy' }}</span>
+            <span class="time" *ngIf="activity.time">{{ activity.time }}</span>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="info-section">
+          <h3 class="info-label">Lugar</h3>
+          <p class="info-text">{{ activity.location || 'Ubicación no especificada' }}</p>
+        </div>
+
+        <!-- Slots -->
+        <div class="info-section">
+          <h3 class="info-label">Plazas habilitadas / disponibles</h3>
+          <p class="info-text">{{ activity.slots }} / {{ activity.slots }}</p>
+        </div>
+
+        <!-- Description -->
+        <div class="info-section">
+          <h3 class="info-label">Descripción de la actividad</h3>
+          <p class="info-text">{{ activity.description || 'Sin descripción disponible' }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <!-- Student Buttons -->
+        <div class="modal-buttons text-center" *ngIf="mode === 'student'">
+          <button type="button" class="btn btn-primary" (click)="onAction()">
+            {{ getButtonLabel() }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
+        </div>
+
+        <!-- Management Buttons -->
+        <div class="modal-buttons d-flex gap-2 justify-content-center" *ngIf="mode === 'management'">
+          <button type="button" class="btn btn-primary" (click)="onEdit()">Editar</button>
+          <button type="button" class="btn btn-primary" (click)="onDelete()">Eliminar</button>
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

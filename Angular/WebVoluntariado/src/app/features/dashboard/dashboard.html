@@ -1,0 +1,59 @@
+<div class="dashboard-wrapper min-vh-100 bg-light">
+
+
+  <!-- Activity Modal -->
+  <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" [buttonType]="'participar'"
+    (close)="closeActivityModal()" (action)="onActivityAction()">
+  </app-activity-modal>
+
+  <!-- Main content -->
+  <main class="dashboard-content bg-white py-5">
+    <div class="container-lg">
+
+      <!-- Main title -->
+      <h1 class="fs-4 fw-bold mb-5 text-dark">
+        Nuevas actividades de entidades en las que participas
+      </h1>
+
+      <!-- Activities by entity -->
+      <ng-container *ngFor="let entity of entitiesActivities">
+        <section class="mb-5">
+
+          <h2 class="fs-6 fw-bold mb-4 text-dark">
+            Nuevas actividades desde {{ entity.entity }}
+          </h2>
+
+          <!-- Carrusel reutilizable -->
+          <app-carrousel [items]="entity.activities" (cardClick)="openActivityModal($event)">
+          </app-carrousel>
+
+        </section>
+      </ng-container>
+
+      <!-- Proposals -->
+      <section class="mb-5">
+
+        <h2 class="fs-6 fw-bold mb-4 text-dark">
+          Propuestas desde Cuatrovientos
+        </h2>
+
+        <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+
+      </section>
+
+      <!-- Other entities -->
+      <section class="mb-5">
+
+        <h2 class="fs-6 fw-bold mb-4 text-dark">
+          Otras entidades que puedan ser de tu interés
+        </h2>
+
+        <app-carrousel [items]="otherEntities" cardType="entity" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+
+      </section>
+
+    </div>
+  </main>
+</div>

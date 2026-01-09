@@ -24,7 +24,7 @@ export class RegisterEntityComponent {
     if (this.entityForm.valid) {
       console.log('REGISTRO ENTIDAD ENVIADO:', this.entityForm.value);
       // REDIRECCIÓN
-      this.router.navigate(['/request-sent']);
+      this.router.navigate(['/auth/solicitud-enviada']);
     } else {
       this.entityForm.markAllAsTouched();
     }
