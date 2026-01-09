@@ -5,43 +5,38 @@ networks:
     driver: bridge
 
 services:
-  p-mysql:
-    image: mysql:8.1
-    container_name: p-mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: VOLUNTARIADO_CUATROVIENTOS
-      MYSQL_USER: 4v
-      MYSQL_PASSWORD: 4v
-    volumes:
-      - ./docker/mysql:/var/lib/mysql
-    profiles:
-      - "api"
-    networks:
-      - api
-
-  p-apache-php:
-    build: ./docker/images/p-apache-php
-    container_name: p-apache-php
+  php:
+    build: ./docker/images/php
+    container_name: php
     ports:
       - "80:80"
       - "8000:8000"
       - "9003:9003"
     volumes:
-      - ./symfony-api/:/var/www/html/voluntariado-cuatrovientos
-      - ./docker/logs/apache/:/var/log/apache2
-    environment:
-      - APACHE_RUN_USER=www-data
-      - APACHE_RUN_GROUP=www-data
-      - APACHE_LOG_DIR=/var/log/apache2
-      - APACHE_PID_FILE=/var/run/apache2/apache2.pid
-      - APACHE_RUN_DIR=/var/run/apache2
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - ./symfony-api:/api
+      - ./docker/apache_logs/:/var/log/apache2/error.log
     depends_on:
-      - p-mysql
+      - mysql
+    profiles:
+      - "api"
+    networks:
+      - api
+    working_dir: /api
+    stdin_open: true
+    tty: true
+
+  mysql:
+    image: mysql:8.1
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: API
+      MYSQL_USER: api
+      MYSQL_PASSWORD: api123
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
     profiles:
       - "api"
     networks:
