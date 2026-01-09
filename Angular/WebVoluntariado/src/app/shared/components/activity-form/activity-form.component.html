@@ -1,0 +1,98 @@
+<div class="card p-5 m-4 shadow-lg rounded-4 activity-card">
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h2 class="text-secondary small mb-1">Cuatrovientos Voluntariado - Administrador</h2>
+            <h1 class="display-5 fw-bold text-dark">{{ title }}</h1>
+        </div>
+        <div>
+            <!-- Logo placeholder -->
+            <img src="assets/images/logo-cuatrovientos.png" alt="Logo" class="logo-img"
+                style="height: 60px; width: auto;">
+        </div>
+    </div>
+
+    <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+
+        <!-- Row 1: Name and Slots -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label fw-bold">Nombre de la Actividad</label>
+                <input type="text" id="name" class="form-control form-control-lg bg-light" formControlName="name"
+                    placeholder="Nombre de la Actividad">
+            </div>
+            <div class="col-md-6">
+                <label for="slots" class="form-label fw-bold">Numero de Plazas</label>
+                <input type="text" id="slots" class="form-control form-control-lg bg-light" formControlName="slots"
+                    placeholder='e.g. "5 personas"'>
+            </div>
+        </div>
+
+        <!-- Row 2: Description and Entity -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label for="description" class="form-label fw-bold">Descripción de la actividad</label>
+                <textarea id="description" class="form-control bg-light" formControlName="description" rows="5"
+                    placeholder="Descripción breve con un listado de tareas"></textarea>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="entity" class="form-label fw-bold">Entidad</label>
+                    <select id="entity" class="form-select form-select-lg bg-light" formControlName="entity">
+                        <option value="" disabled selected>Selecciona una entidad</option>
+                        <option *ngFor="let ent of entities" [value]="ent">{{ ent }}</option>
+                    </select>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="mb-0">
+                    <label class="form-label fw-bold">Imagen de la actividad</label>
+                    <div class="upload-area bg-secondary bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center p-3 cursor-pointer"
+                        (click)="triggerFileInput()">
+                        <input type="file" id="activityImage" class="d-none" (change)="onFileSelected($event)"
+                            accept="image/*">
+                        <span class="text-primary fw-bold text-decoration-underline me-2">Añade una imagen</span>
+                        <i class="bi bi-image text-primary fs-5"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Date/Time and Image Preview -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <!-- Date -->
+                <div class="mb-3">
+                    <label for="date" class="form-label fw-bold">Fecha y Hora</label>
+                    <input type="datetime-local" id="date" class="form-control form-control-lg bg-light"
+                        formControlName="date">
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label for="location" class="form-label fw-bold">Lugar / Ubicación</label>
+                    <input type="text" id="location" class="form-control form-control-lg bg-light"
+                        formControlName="location" placeholder="Polideportivo Municipal...">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Imagen seleccionada</label>
+                <div class="image-preview-container rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
+                    style="height: 140px;">
+                    <img *ngIf="selectedImage" [src]="selectedImage" alt="Preview" class="w-100 h-100 object-fit-cover">
+                    <span *ngIf="!selectedImage" class="text-muted">Sin imagen seleccionada</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-between gap-3 pt-2">
+            <button type="button" class="btn btn-outline-secondary btn-lg flex-grow-1" (click)="onSaveDraft()">Guardar
+                como borrador</button>
+            <button type="button" class="btn btn-outline-primary btn-lg flex-grow-1" (click)="onPreview()">Previsualizar
+                Actividad</button>
+            <button type="submit" class="btn btn-primary btn-lg flex-grow-1 text-white">{{ submitButtonLabel }}</button>
+        </div>
+
+    </form>
+</div>

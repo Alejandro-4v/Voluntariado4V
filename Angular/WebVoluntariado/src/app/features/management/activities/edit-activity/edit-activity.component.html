@@ -1,0 +1,10 @@
+<div
+    class="container-fluid min-vh-100 d-flex flex-column align-items-center justify-content-center py-5 page-container">
+    @if (activityData) {
+    <app-activity-form mode="edit" [initialData]="activityData" (save)="onSave($event)" (draft)="onDraft($event)"
+        (previewAction)="onPreview($event)">
+    </app-activity-form>
+    } @else {
+    <p class="text-white">Cargando...</p>
+    }
+</div>
