@@ -1,15 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivitiesService } from '../../../services/activities.service';
+import { VolunteersService } from '../../../services/volunteers.service';
+import { EntitiesService } from '../../../services/entities.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
-    selector: 'app-management-home',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
-    <main class="container-fluid py-4">
-        <h1 class="h3 mb-4 text-gray-800">Panel de Gestión</h1>
-        <p>Bienvenido al área de gestión.</p>
-    </main>
-  `
+  selector: 'app-management-home',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './management-home.component.html',
+  styleUrls: ['./management-home.component.scss']
 })
-export class ManagementHomeComponent { }
+export class ManagementHomeComponent implements OnInit {
+  private activitiesService = inject(ActivitiesService);
+  private volunteersService = inject(VolunteersService);
+  private entitiesService = inject(EntitiesService);
+
+  stats = {
+    totalVolunteers: 0,
+    activeActivities: 0,
+    totalEntities: 0,
+    pendingApprovals: 0
+  };
+
+  recentActivities: any[] = [];
+  isLoading = true;
+
+  ngOnInit() {
+    this.loadDashboardData();
+  }
+
+  private loadDashboardData() {
+    forkJoin({
+      volunteers: this.volunteersService.getVolunteers(),
+      upcoming: this.activitiesService.getUpcomingActivities(),
+      pending: this.activitiesService.getPendingActivities(),
+      entities: this.entitiesService.getEntities()
+    }).subscribe({
+      next: (data) => {
+        this.stats.totalVolunteers = data.volunteers.length;
+        this.stats.activeActivities = data.upcoming.length;
+        this.stats.pendingApprovals = data.pending.length;
+        this.stats.totalEntities = data.entities.length;
+
+        // Mock recent activity log based on fetched data
+        this.recentActivities = [
+          {
+            action: 'Nueva solicitud de voluntariado',
+            user: data.volunteers[0]?.name || 'Usuario',
+            time: 'Hace 2 horas',
+            type: 'info'
+          },
+          {
+            action: 'Actividad creada',
+            user: 'Administrador',
+            target: data.upcoming[0]?.name || 'Actividad',
+            time: 'Hace 5 horas',
+            type: 'success'
+          },
+          {
+            action: 'Entidad registrada',
+            user: data.entities[0]?.name || 'Entidad',
+            time: 'Ayer',
+            type: 'primary'
+          }
+        ];
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading dashboard data', err);
+        this.isLoading = false;
+      }
+    });
+  }
+}
