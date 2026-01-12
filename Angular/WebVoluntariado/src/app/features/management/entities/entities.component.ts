@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EntitiesService, Entity } from '../../../services/entities.service';
+import { EntitiesService } from '../../../services/entities.service';
+import { Entidad } from '../../../models/entidad.model';
 import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
@@ -14,9 +15,9 @@ import { GenericDetailComponent, DetailConfig } from '../../../shared/components
 })
 export class ManagementEntitiesComponent implements OnInit {
 
-    entities: Entity[] = [];
-    displayEntities: Entity[] = [];
-    selectedEntity: Entity | null = null;
+    entities: Entidad[] = [];
+    displayEntities: Entidad[] = [];
+    selectedEntity: Entidad | null = null;
 
     sortBy: string = '';
     groupBy: string = '';
@@ -25,35 +26,36 @@ export class ManagementEntitiesComponent implements OnInit {
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
-        { header: 'Nombre Entidad', field: 'name' },
-        { header: 'Fecha de Inscripción', field: 'registrationDate', pipe: 'date' },
-        { header: 'Responsable', field: 'responsible' }
+        { header: 'Nombre Entidad', field: 'nombre' },
+        { header: 'Fecha de Inscripción', field: 'fechaRegistro', pipe: 'date' },
+        { header: 'Responsable', field: 'nombreResponsable' }
     ];
 
     // Configuration for Generic Detail
     detailConfig: DetailConfig = {
-        imageField: 'image',
-        titleField: 'name',
+        imageField: 'perfilUrl',
+        titleField: 'nombre',
         subtitles: [
-            { label: 'Fecha de inscripción', field: 'registrationDate', pipe: 'date' },
-            { label: 'Responsable', field: 'responsible' }
+            { label: 'Fecha de inscripción', field: 'fechaRegistro', pipe: 'date' },
+            { label: 'Responsable', field: 'nombreResponsable' },
+            { label: 'Email', field: 'contactMail' }
         ],
-        listField: 'types',
-        listLabel: 'Tipos de actividades'
+        listField: 'actividades', // This might need adjustment in GenericDetailComponent to handle objects
+        listLabel: 'Actividades'
     };
 
     sortOptions = [
-        { label: 'Nombre', value: 'name' },
-        { label: 'Fecha de inscripción', value: 'date' }
+        { label: 'Nombre', value: 'nombre' },
+        { label: 'Fecha de inscripción', value: 'fechaRegistro' }
     ];
 
     groupOptions = [
-        { label: 'Responsable', value: 'responsible' },
+        { label: 'Responsable', value: 'nombreResponsable' },
         { label: 'Ninguno', value: '' }
     ];
 
     ngOnInit() {
-        this.entitiesService.getEntities().subscribe(data => {
+        this.entitiesService.getAll().subscribe(data => {
             this.entities = data;
             this.displayEntities = [...this.entities];
             if (this.entities.length > 0) {
@@ -62,7 +64,7 @@ export class ManagementEntitiesComponent implements OnInit {
         });
     }
 
-    selectEntity(entity: Entity) {
+    selectEntity(entity: Entidad) {
         this.selectedEntity = entity;
     }
 
@@ -81,16 +83,16 @@ export class ManagementEntitiesComponent implements OnInit {
 
         temp.sort((a, b) => {
             // 1. Primary Sort: Grouping
-            if (this.groupBy === 'responsible') {
-                const groupCompare = (a.responsible || '').localeCompare(b.responsible || '');
+            if (this.groupBy === 'nombreResponsable') {
+                const groupCompare = (a.nombreResponsable || '').localeCompare(b.nombreResponsable || '');
                 if (groupCompare !== 0) return groupCompare;
             }
 
             // 2. Secondary Sort: Sorting
-            if (this.sortBy === 'name') {
-                return a.name.localeCompare(b.name);
-            } else if (this.sortBy === 'date') {
-                return new Date(a.registrationDate).getTime() - new Date(b.registrationDate).getTime();
+            if (this.sortBy === 'nombre') {
+                return a.nombre.localeCompare(b.nombre);
+            } else if (this.sortBy === 'fechaRegistro') {
+                return new Date(a.fechaRegistro).getTime() - new Date(b.fechaRegistro).getTime();
             }
 
             return 0;

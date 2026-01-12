@@ -33,35 +33,39 @@ export class ManagementHomeComponent implements OnInit {
 
   private loadDashboardData() {
     forkJoin({
-      volunteers: this.volunteersService.getVolunteers(),
-      upcoming: this.activitiesService.getUpcomingActivities(),
-      pending: this.activitiesService.getPendingActivities(),
-      entities: this.entitiesService.getEntities()
+      volunteers: this.volunteersService.getAll(),
+      activities: this.activitiesService.getAll(),
+      entities: this.entitiesService.getAll()
     }).subscribe({
       next: (data) => {
         this.stats.totalVolunteers = data.volunteers.length;
-        this.stats.activeActivities = data.upcoming.length;
-        this.stats.pendingApprovals = data.pending.length;
+
+        // Filter activities
+        const activeActivities = data.activities.filter(a => a.estado === 'A');
+        const pendingActivities = data.activities.filter(a => a.estado === 'P');
+
+        this.stats.activeActivities = activeActivities.length;
+        this.stats.pendingApprovals = pendingActivities.length;
         this.stats.totalEntities = data.entities.length;
 
         // Mock recent activity log based on fetched data
         this.recentActivities = [
           {
             action: 'Nueva solicitud de voluntariado',
-            user: data.volunteers[0]?.name || 'Usuario',
+            user: data.volunteers[0]?.nombre || 'Usuario',
             time: 'Hace 2 horas',
             type: 'info'
           },
           {
             action: 'Actividad creada',
             user: 'Administrador',
-            target: data.upcoming[0]?.name || 'Actividad',
+            target: activeActivities[0]?.nombre || 'Actividad',
             time: 'Hace 5 horas',
             type: 'success'
           },
           {
             action: 'Entidad registrada',
-            user: data.entities[0]?.name || 'Entidad',
+            user: data.entities[0]?.nombre || 'Entidad',
             time: 'Ayer',
             type: 'primary'
           }
