@@ -18,19 +18,22 @@
     <div class="flex-shrink-0 card-width" *ngFor="let item of items; let i = index" [ngSwitch]="cardType">
 
       <!-- Activity Card -->
-      <activity-card *ngSwitchCase="'activity'" [name]="item.name" [type]="item.type || item.entity || 'N/A'"
-        [slots]="item.slots || 0" [filled]="item.filled || 0" [image]="item.image || ''"
+      <activity-card *ngSwitchCase="'activity'" [name]="item.nombre || item.name"
+        [type]="item.tiposActividad?.[0]?.descripcion || item.type || item.entity || 'N/A'" [slots]="item.slots || 0"
+        [filled]="item.voluntarios?.length || item.filled || 0" [image]="item.imagenUrl || item.image || ''"
         [showIcon]="item.showIcon !== false" [imageFit]="item.imageFit || 'cover'"
         [customBackground]="item.customBackground" (cardClick)="onActivityClick(item)">
       </activity-card>
 
       <!-- Proposal Card -->
-      <proposal-card *ngSwitchCase="'proposal'" [name]="item.name" [slots]="item.slots || 0"
-        [filled]="item.filled || 0" (cardClick)="onActivityClick(item)">
+      <proposal-card *ngSwitchCase="'proposal'" [name]="item.nombre || item.name" [slots]="item.slots || 0"
+        [filled]="item.voluntarios?.length || item.filled || 0" (cardClick)="onActivityClick(item)">
       </proposal-card>
 
       <!-- Entity Card -->
-      <entity-card *ngSwitchCase="'entity'" [name]="item.name" [type]="item.type || 'N/A'" [image]="item.image" (cardClick)="onActivityClick(item)">
+      <entity-card *ngSwitchCase="'entity'" [name]="item.nombre || item.name"
+        [type]="item.actividades?.length + ' actividades' || item.type || 'N/A'" [image]="item.perfilUrl || item.image"
+        (cardClick)="onActivityClick(item)">
       </entity-card>
 
     </div>
