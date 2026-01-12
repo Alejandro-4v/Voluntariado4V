@@ -13,8 +13,7 @@ services:
       - "8000:8000"
       - "9003:9003"
     volumes:
-      - ./symfony-api:/api
-      - ./docker/apache_logs/:/var/log/apache2/error.log
+      - ./api:/api
     depends_on:
       - mysql
     profiles:

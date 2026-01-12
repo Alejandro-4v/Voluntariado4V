@@ -30,6 +30,7 @@ shell:
 start:
 	@echo "$(BLUE)Starting server$(RESET)"
 	docker exec php symfony server:start --daemon --allow-all-ip
+	@echo "$(BLUE)Display the logs using make log$(RESET)"
 
 log: start
 	@echo "$(BLUE)Starting server$(RESET)"
