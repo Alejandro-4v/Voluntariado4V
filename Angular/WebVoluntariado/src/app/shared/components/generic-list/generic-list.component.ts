@@ -17,7 +17,8 @@ export interface ColumnConfig {
 export class GenericListComponent {
     @Input() items: any[] = [];
     @Input() columns: ColumnConfig[] = [];
-    @Input() selectedId: number | null = null;
+    @Input() selectedId: number | string | null = null;
+    @Input() keyField: string = 'id';
     @Output() select = new EventEmitter<any>();
 
     onSelect(item: any) {

@@ -11,9 +11,9 @@
         </div>
 
         <!-- Items -->
-        @for (item of items; track item.id) {
+        @for (item of items; track item[keyField]) {
         <div class="list-group-item action-item d-flex align-items-center py-3 border-bottom pointer"
-            [class.bg-light]="selectedId === item.id" (click)="onSelect(item)">
+            [class.bg-light]="selectedId === item[keyField]" (click)="onSelect(item)">
 
             <!-- Dynamic Cells -->
             @for (col of columns; track col.field) {
