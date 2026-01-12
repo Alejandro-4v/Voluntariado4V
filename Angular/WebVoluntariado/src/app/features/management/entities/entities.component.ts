@@ -79,17 +79,22 @@ export class ManagementEntitiesComponent implements OnInit {
     applyFilters() {
         let temp = [...this.entities];
 
-        // Sorting
-        if (this.sortBy === 'name') {
-            temp.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (this.sortBy === 'date') {
-            temp.sort((a, b) => new Date(a.registrationDate).getTime() - new Date(b.registrationDate).getTime());
-        }
+        temp.sort((a, b) => {
+            // 1. Primary Sort: Grouping
+            if (this.groupBy === 'responsible') {
+                const groupCompare = (a.responsible || '').localeCompare(b.responsible || '');
+                if (groupCompare !== 0) return groupCompare;
+            }
 
-        // Grouping
-        if (this.groupBy === 'responsible') {
-            temp.sort((a, b) => a.responsible.localeCompare(b.responsible));
-        }
+            // 2. Secondary Sort: Sorting
+            if (this.sortBy === 'name') {
+                return a.name.localeCompare(b.name);
+            } else if (this.sortBy === 'date') {
+                return new Date(a.registrationDate).getTime() - new Date(b.registrationDate).getTime();
+            }
+
+            return 0;
+        });
 
         this.displayEntities = temp;
     }

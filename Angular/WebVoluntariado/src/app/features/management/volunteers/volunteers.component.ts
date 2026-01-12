@@ -80,17 +80,22 @@ export class ManagementVolunteersComponent implements OnInit {
     applyFilters() {
         let temp = [...this.volunteers];
 
-        // Sorting
-        if (this.sortBy === 'name') {
-            temp.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (this.sortBy === 'date') {
-            temp.sort((a, b) => new Date(a.birthDate).getTime() - new Date(b.birthDate).getTime());
-        }
+        temp.sort((a, b) => {
+            // 1. Primary Sort: Grouping
+            if (this.groupBy === 'group') {
+                const groupCompare = (a.group || '').localeCompare(b.group || '');
+                if (groupCompare !== 0) return groupCompare;
+            }
 
-        // Grouping
-        if (this.groupBy === 'group') {
-            temp.sort((a, b) => a.group.localeCompare(b.group));
-        }
+            // 2. Secondary Sort: Sorting
+            if (this.sortBy === 'name') {
+                return a.name.localeCompare(b.name);
+            } else if (this.sortBy === 'date') {
+                return new Date(a.birthDate).getTime() - new Date(b.birthDate).getTime();
+            }
+
+            return 0;
+        });
 
         this.displayVolunteers = temp;
     }
