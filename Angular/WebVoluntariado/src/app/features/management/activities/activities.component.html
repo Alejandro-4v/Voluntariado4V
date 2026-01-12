@@ -16,8 +16,8 @@
         <div class="row g-3 mb-4">
             <div class="col-md-6">
                 <label class="form-label fw-bold">Tipo de Actividad</label>
-                <select class="form-select form-select-lg bg-light">
-                    <option selected>Tipos...</option>
+                <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedType">
+                    <option selected value="">Tipos...</option>
                     <option value="1">Voluntariado</option>
                     <option value="2">Formación</option>
                     <option value="3">Ocio</option>
@@ -25,21 +25,22 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label fw-bold">Fecha de Actividad</label>
-                <input type="text" class="form-control form-control-lg bg-light"
-                    placeholder="15/10/2023 a las 10:00...">
+                <input type="date" class="form-control form-control-lg bg-light" [(ngModel)]="selectedDate">
             </div>
         </div>
 
         <div class="d-flex gap-3 pt-2">
-            <button class="btn btn-outline-secondary btn-lg flex-grow-1">Limpiar</button>
-            <button class="btn btn-primary btn-lg flex-grow-1 text-white"
-                style="background-color: #0d3c83;">Buscar</button>
+            <button class="btn btn-outline-secondary btn-lg flex-grow-1" (click)="onClear()">Limpiar</button>
+            <button class="btn btn-outline-primary btn-lg flex-grow-1" (click)="onViewAll()">Ver Todas</button>
+            <button class="btn btn-primary btn-lg flex-grow-1 text-white" style="background-color: #0d3c83;"
+                (click)="onSearch()">Buscar</button>
         </div>
     </div>
 
     <!-- Results Sections -->
     <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
 
+        @if (!isSearchActive) {
         <!-- Próximas actividades -->
         <section class="mb-5">
             <h2 class="h5 fw-normal text-white mb-4 ps-2">Próximas actividades</h2>
@@ -67,7 +68,32 @@
             <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
+        } @else {
+        <!-- Grid View for Search Results -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
+                <h2 class="h5 fw-normal text-white mb-0">Resultados de búsqueda ({{ filteredActivities.length }})</h2>
+                <button class="btn btn-sm btn-outline-light" (click)="onClear()">Volver a la vista general</button>
+            </div>
+
+            <div class="row g-4">
+                @for (item of filteredActivities; track item) {
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                    <activity-card [name]="item.nombre" [type]="item.tiposActividad?.[0]?.descripcion || 'N/A'"
+                        [slots]="item.plazasTotales || 0" [filled]="item.plazasOcupadas || 0"
+                        [image]="item.imagenUrl || ''" (cardClick)="openActivityModal(item)">
+                    </activity-card>
+                </div>
+                } @empty {
+                <div class="col-12 text-center py-5">
+                    <p class="text-white h5">No se encontraron actividades.</p>
+                </div>
+                }
+            </div>
+        </section>
+        }
     </div>
+
 
     <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" mode="management"
         (close)="closeActivityModal()" (edit)="onEditActivity()" (delete)="onDeleteActivity()">
