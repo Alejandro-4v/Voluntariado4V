@@ -20,7 +20,7 @@ export class EntitiesService {
             nombreResponsable: 'Pedro Gómez',
             contactMail: 'contacto@cruzroja.es',
             perfilUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=CruzRoja',
-            actividades: [{}, {}] // 2 actividades
+            actividades: [{ nombre: 'Recogida de Ropa' }, { nombre: 'Apoyo Escolar' }] // 2 actividades
         },
         {
             idEntidad: 2,
@@ -29,7 +29,7 @@ export class EntitiesService {
             nombreResponsable: 'Laura Díaz',
             contactMail: 'info@solera.es',
             perfilUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=Solera',
-            actividades: [{}, {}, {}] // 3 actividades
+            actividades: [{ nombre: 'Acompañamiento' }, { nombre: 'Paseos' }, { nombre: 'Lectura' }] // 3 actividades
         },
         {
             idEntidad: 3,
@@ -38,7 +38,7 @@ export class EntitiesService {
             nombreResponsable: 'Miguel Ángel',
             contactMail: 'banco@alimentos.es',
             perfilUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=Banco',
-            actividades: [{}] // 1 actividad
+            actividades: [{ nombre: 'Gran Recogida' }] // 1 actividad
         },
         {
             idEntidad: 4,
@@ -56,7 +56,7 @@ export class EntitiesService {
             nombreResponsable: 'Javier Martín',
             contactMail: 'adopciones@protectora.es',
             perfilUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=Protectora',
-            actividades: [{}, {}]
+            actividades: [{ nombre: 'Paseo de Perros' }, { nombre: 'Limpieza' }]
         }
     ];
 

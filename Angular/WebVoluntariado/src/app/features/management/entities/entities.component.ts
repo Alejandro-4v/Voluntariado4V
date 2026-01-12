@@ -41,7 +41,8 @@ export class ManagementEntitiesComponent implements OnInit {
             { label: 'Email', field: 'contactMail' }
         ],
         listField: 'actividades', // This might need adjustment in GenericDetailComponent to handle objects
-        listLabel: 'Actividades'
+        listLabel: 'Actividades',
+        listDisplayField: 'nombre'
     };
 
     sortOptions = [
