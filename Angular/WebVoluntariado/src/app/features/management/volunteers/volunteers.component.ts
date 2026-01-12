@@ -26,9 +26,13 @@ export class ManagementVolunteersComponent implements OnInit {
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
+        { header: 'NIF', field: 'nif' },
         { header: 'Nombre', field: 'nombre' },
-        { header: 'Apellido', field: 'apellido1' },
-        { header: 'Grado', field: 'grado.descripcion' }
+        { header: 'Apellido 1', field: 'apellido1' },
+        { header: 'Apellido 2', field: 'apellido2' },
+        { header: 'Grado', field: 'grado.descripcion' },
+        { header: 'Email', field: 'mail' },
+        { header: 'Estado', field: 'estado' }
     ];
 
     // Configuration for Generic Detail
@@ -36,9 +40,12 @@ export class ManagementVolunteersComponent implements OnInit {
         imageField: 'perfilUrl',
         titleField: 'nombre',
         subtitles: [
-            { label: 'Apellidos', field: 'apellido1' },
+            { label: 'NIF', field: 'nif' },
+            { label: 'Apellido 1', field: 'apellido1' },
+            { label: 'Apellido 2', field: 'apellido2' },
             { label: 'Grado', field: 'grado.descripcion' },
-            { label: 'Email', field: 'mail' }
+            { label: 'Email', field: 'mail' },
+            { label: 'Estado', field: 'estado' }
         ],
         listField: 'tiposActividad',
         listLabel: 'Intereses'
