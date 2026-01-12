@@ -21,79 +21,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/llSortFilters"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/bg_sort_border"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#0F3B82"
-            android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:text="Ordenar por fecha"
-            android:textColor="#FFFFFF"
-            android:textSize="11sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:text="Ordenar por entidad"
-            android:textColor="#333333"
-            android:textSize="11sp" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvActividades"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/llBottomTabs"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llSortFilters"
-        tools:listitem="@layout/item_actividad" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-    <LinearLayout
-        android:id="@+id/llBottomTabs"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_pill_gray"
-            android:gravity="center"
-            android:text="Proximas"
-            android:textColor="#333333"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="Pasadas"
-            android:textColor="#333333"
-            android:textStyle="bold" />
-    </LinearLayout>
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_actividades" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
