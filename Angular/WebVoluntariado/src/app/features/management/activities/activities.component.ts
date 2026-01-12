@@ -29,21 +29,20 @@ export class ManagementActivitiesComponent implements OnInit {
     private allProposals: any[] = [];
 
     ngOnInit() {
-        this.activitiesService.getUpcomingActivities().subscribe(data => {
-            this.allUpcoming = data;
-            this.upcomingActivities = [...data];
-        });
-        this.activitiesService.getPastActivities().subscribe(data => {
-            this.allPast = data;
-            this.pastActivities = [...data];
-        });
-        this.activitiesService.getPendingActivities().subscribe(data => {
-            this.allPending = data;
-            this.pendingActivities = [...data];
-        });
-        this.activitiesService.getProposals().subscribe(data => {
-            this.allProposals = data;
-            this.proposals = [...data];
+        this.activitiesService.getAll().subscribe(data => {
+            // Filter activities based on state
+            this.allUpcoming = data.filter(a => a.estado === 'A');
+            this.upcomingActivities = [...this.allUpcoming];
+
+            this.allPast = data.filter(a => a.estado === 'F');
+            this.pastActivities = [...this.allPast];
+
+            this.allPending = data.filter(a => a.estado === 'P');
+            this.pendingActivities = [...this.allPending];
+
+            // Assuming proposals are also pending or another state, for now using pending
+            this.allProposals = []; // Or filter differently if needed
+            this.proposals = [];
         });
     }
 

@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VolunteersService, Volunteer } from '../../../services/volunteers.service';
+import { VolunteersService } from '../../../services/volunteers.service';
+import { Voluntario } from '../../../models/voluntario.model';
 import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
@@ -14,9 +15,9 @@ import { GenericDetailComponent, DetailConfig } from '../../../shared/components
 })
 export class ManagementVolunteersComponent implements OnInit {
 
-    volunteers: Volunteer[] = [];
-    displayVolunteers: Volunteer[] = [];
-    selectedVolunteer: Volunteer | null = null;
+    volunteers: Voluntario[] = [];
+    displayVolunteers: Voluntario[] = [];
+    selectedVolunteer: Voluntario | null = null;
 
     sortBy: string = '';
     groupBy: string = '';
@@ -25,36 +26,36 @@ export class ManagementVolunteersComponent implements OnInit {
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
-        { header: 'Nombre voluntario', field: 'name' },
-        { header: 'Fecha de nacimiento', field: 'birthDate', pipe: 'date' },
-        { header: 'Grupo', field: 'group' }
+        { header: 'Nombre', field: 'nombre' },
+        { header: 'Apellido', field: 'apellido1' },
+        { header: 'Grado', field: 'grado.descripcion' }
     ];
 
     // Configuration for Generic Detail
     detailConfig: DetailConfig = {
-        imageField: 'image',
-        titleField: 'name',
+        imageField: 'perfilUrl',
+        titleField: 'nombre',
         subtitles: [
-            { label: 'Fecha de nacimiento', field: 'birthDate', pipe: 'date' },
-            { label: 'Grupo', field: 'group' },
-            { label: 'Curso actual', field: 'course' }
+            { label: 'Apellidos', field: 'apellido1' },
+            { label: 'Grado', field: 'grado.descripcion' },
+            { label: 'Email', field: 'mail' }
         ],
-        listField: 'interests',
+        listField: 'tiposActividad',
         listLabel: 'Intereses'
     };
 
     sortOptions = [
-        { label: 'Nombre', value: 'name' },
-        { label: 'Fecha de nacimiento', value: 'date' }
+        { label: 'Nombre', value: 'nombre' },
+        { label: 'Apellido', value: 'apellido1' }
     ];
 
     groupOptions = [
-        { label: 'Grupo', value: 'group' },
+        { label: 'Grado', value: 'grado.descripcion' },
         { label: 'Ninguno', value: '' }
     ];
 
     ngOnInit() {
-        this.volunteersService.getVolunteers().subscribe(data => {
+        this.volunteersService.getAll().subscribe(data => {
             this.volunteers = data;
             this.displayVolunteers = [...this.volunteers];
             if (this.volunteers.length > 0) {
@@ -63,7 +64,7 @@ export class ManagementVolunteersComponent implements OnInit {
         });
     }
 
-    selectVolunteer(volunteer: Volunteer) {
+    selectVolunteer(volunteer: Voluntario) {
         this.selectedVolunteer = volunteer;
     }
 
@@ -82,16 +83,18 @@ export class ManagementVolunteersComponent implements OnInit {
 
         temp.sort((a, b) => {
             // 1. Primary Sort: Grouping
-            if (this.groupBy === 'group') {
-                const groupCompare = (a.group || '').localeCompare(b.group || '');
+            if (this.groupBy === 'grado.descripcion') {
+                const groupA = a.grado?.descripcion || '';
+                const groupB = b.grado?.descripcion || '';
+                const groupCompare = groupA.localeCompare(groupB);
                 if (groupCompare !== 0) return groupCompare;
             }
 
             // 2. Secondary Sort: Sorting
-            if (this.sortBy === 'name') {
-                return a.name.localeCompare(b.name);
-            } else if (this.sortBy === 'date') {
-                return new Date(a.birthDate).getTime() - new Date(b.birthDate).getTime();
+            if (this.sortBy === 'nombre') {
+                return a.nombre.localeCompare(b.nombre);
+            } else if (this.sortBy === 'apellido1') {
+                return a.apellido1.localeCompare(b.apellido1);
             }
 
             return 0;
