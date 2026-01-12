@@ -1,55 +1,60 @@
 package com.example.aplicacionmovilvoluntaridado;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class ActividadesActivity extends AppCompatActivity {
 
-    // [cite: 173] Declaramos la lista y el RecyclerView
-    ArrayList<Actividad> dataList;
-    RecyclerView recyclerView;
+    // Eliminamos RecyclerView y ArrayList de aquí.
+    // La actividad solo coordina los fragments.
+    BottomNavigationView bottomNavigation;
+    ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_actividades); // El XML que hicimos antes
+        setContentView(R.layout.activity_actividades);
 
-        // [cite: 176] Buscamos el RecyclerView por ID
-        recyclerView = findViewById(R.id.rvActividades);
+        bottomNavigation = findViewById(R.id.bottomNavigation);
+        viewPager = findViewById(R.id.viewPager);
 
-        // [cite: 184] Definimos el LayoutManager (Vertical)
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        // Inicializamos y cargamos datos de prueba (Simulando la imagen)
-        dataList = new ArrayList<>();
-        cargarDatos();
+        ActividadesPagerAdapter pagerAdapter = new ActividadesPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
 
-        // [cite: 241] Instanciamos el adaptador pasándole la lista Y el Listener anónimo
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(dataList, new RecyclerDataAdapter.OnItemClickListener() {
+        // [cite: 400] Configurar listener del menú
+        bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(Actividad actividad, int position) {
-                // [cite: 244] Acción al hacer click (ej: mostrar Toast)
-                Toast.makeText(ActividadesActivity.this,
-                        "Seleccionado: " + actividad.getNombre(),
-                        Toast.LENGTH_SHORT).show();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.nav_proximas) {
+                    viewPager.setCurrentItem(0, true);
+                    return true;
+                } else if (menuItem.getItemId() == R.id.nav_pasadas) {
+                    viewPager.setCurrentItem(1, true);
+                    return true;
+                }
+                return false;
             }
         });
 
-        // [cite: 192] Asignamos el adaptador al Recycler
-        recyclerView.setAdapter(adapter);
-    }
-
-    private void cargarDatos() {
-        // Creamos datos dummy como en la imagen
-        dataList.add(new Actividad("Recogida de alimentos", "Banco de Alimentos", "Pamplona - 12/10/2023"));
-        dataList.add(new Actividad("Acompañamiento mayores", "Cruz Roja", "Burlada - 15/10/2023"));
-        dataList.add(new Actividad("Limpieza del río", "Ayuntamiento", "Arga - 20/10/2023"));
-        dataList.add(new Actividad("Apoyo escolar", "Asoc. Vecinos", "Rochapea - 22/10/2023"));
-        dataList.add(new Actividad("Torneo benéfico", "Cuatrovientos", "Instituto - 25/10/2023"));
-        dataList.add(new Actividad("Recogida de ropa", "Cáritas", "Centro - 01/11/2023"));
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch (position) {
+                    case 0:
+                        bottomNavigation.setSelectedItemId(R.id.nav_proximas);
+                        break;
+                    case 1:
+                        bottomNavigation.setSelectedItemId(R.id.nav_pasadas);
+                        break;
+                }
+            }
+        });
     }
 }
