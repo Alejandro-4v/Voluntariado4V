@@ -13,6 +13,7 @@ export interface DetailConfig {
     subtitles: DetailField[]; // Use for rows (label above, value below) or key-value pairs
     listField?: string;
     listLabel?: string;
+    listDisplayField?: string; // Field to display for list items (e.g., 'descripcion')
 }
 
 @Component({

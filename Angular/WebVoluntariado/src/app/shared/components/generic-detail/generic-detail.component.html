@@ -28,7 +28,7 @@
             <span class="fw-bold small d-block mb-2">{{ config.listLabel }}</span>
             <ul class="list-unstyled">
                 @for (listItem of item[config.listField]; track listItem) {
-                <li>• {{ listItem }}</li>
+                <li>• {{ config.listDisplayField ? listItem[config.listDisplayField] : listItem }}</li>
                 }
             </ul>
         </div>

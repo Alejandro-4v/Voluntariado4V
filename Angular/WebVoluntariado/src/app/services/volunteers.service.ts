@@ -20,6 +20,7 @@ export class VolunteersService {
             apellido2: 'García',
             grado: { descripcion: '2º DAM' },
             mail: 'juan.perez@cuatrovientos.org',
+            estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Juan',
             tiposActividad: [{ descripcion: 'Tecnología' }, { descripcion: 'Medio Ambiente' }]
         },
@@ -30,6 +31,7 @@ export class VolunteersService {
             apellido2: 'Martínez',
             grado: { descripcion: '1º SMR' },
             mail: 'ana.lopez@cuatrovientos.org',
+            estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ana',
             tiposActividad: [{ descripcion: 'Social' }]
         },
@@ -40,6 +42,7 @@ export class VolunteersService {
             apellido2: 'Sánchez',
             grado: { descripcion: '2º Administración' },
             mail: 'carlos.ruiz@cuatrovientos.org',
+            estado: 'Inactivo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos',
             tiposActividad: [{ descripcion: 'Deporte' }, { descripcion: 'Educación' }]
         },
@@ -50,6 +53,7 @@ export class VolunteersService {
             apellido2: 'Fernández',
             grado: { descripcion: '1º Marketing' },
             mail: 'maria.gonzalez@cuatrovientos.org',
+            estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria',
             tiposActividad: [{ descripcion: 'Arte' }]
         },
@@ -60,6 +64,7 @@ export class VolunteersService {
             apellido2: 'Jiménez',
             grado: { descripcion: '2º DAM' },
             mail: 'luis.rodriguez@cuatrovientos.org',
+            estado: 'Pendiente',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Luis',
             tiposActividad: [{ descripcion: 'Tecnología' }]
         }

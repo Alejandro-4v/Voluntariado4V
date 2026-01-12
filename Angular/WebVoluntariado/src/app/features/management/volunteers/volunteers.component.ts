@@ -48,7 +48,8 @@ export class ManagementVolunteersComponent implements OnInit {
             { label: 'Estado', field: 'estado' }
         ],
         listField: 'tiposActividad',
-        listLabel: 'Intereses'
+        listLabel: 'Intereses',
+        listDisplayField: 'descripcion'
     };
 
     sortOptions = [
