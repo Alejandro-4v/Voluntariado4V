@@ -26,13 +26,13 @@ export class ManagementVolunteersComponent implements OnInit {
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
-        { header: 'NIF', field: 'nif' },
-        { header: 'Nombre', field: 'nombre' },
-        { header: 'Apellido 1', field: 'apellido1' },
-        { header: 'Apellido 2', field: 'apellido2' },
-        { header: 'Grado', field: 'grado.descripcion' },
-        { header: 'Email', field: 'mail' },
-        { header: 'Estado', field: 'estado' }
+        { header: 'NIF', field: 'nif', className: 'col-1' },
+        { header: 'Nombre', field: 'nombre', className: 'col-1' },
+        { header: 'Apellido 1', field: 'apellido1', className: 'col-1' },
+        { header: 'Apellido 2', field: 'apellido2', className: 'col-1' },
+        { header: 'Grado', field: 'grado.descripcion', className: 'col-2' },
+        { header: 'Email', field: 'mail', className: 'col-3 text-truncate' },
+        { header: 'Estado', field: 'estado', className: 'col-1' }
     ];
 
     // Configuration for Generic Detail

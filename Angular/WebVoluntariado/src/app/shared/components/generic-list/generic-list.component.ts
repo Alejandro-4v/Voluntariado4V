@@ -5,6 +5,7 @@ export interface ColumnConfig {
     header: string;
     field: string;
     pipe?: 'date';
+    className?: string; // Bootstrap classes like 'col-2', 'col-md-3'
 }
 
 @Component({
@@ -23,5 +24,9 @@ export class GenericListComponent {
 
     onSelect(item: any) {
         this.select.emit(item);
+    }
+
+    getFieldValue(item: any, field: string): any {
+        return field.split('.').reduce((obj, key) => obj?.[key], item);
     }
 }

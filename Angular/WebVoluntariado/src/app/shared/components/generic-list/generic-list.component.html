@@ -4,7 +4,7 @@
         <div class="list-group-item bg-transparent fw-bold d-flex align-items-center py-3 border-bottom-2">
             <!-- Dynamic Columns -->
             @for (col of columns; track col.field) {
-            <div class="col">{{ col.header }}</div>
+            <div [class]="col.className || 'col'">{{ col.header }}</div>
             }
             <!-- Action Column Placeholder -->
             <div class="col-2 text-end"></div>
@@ -17,11 +17,11 @@
 
             <!-- Dynamic Cells -->
             @for (col of columns; track col.field) {
-            <div class="col" [class.fw-medium]="$first" [class.text-muted]="!$first">
+            <div [class]="col.className || 'col'" [class.fw-medium]="$first" [class.text-muted]="!$first">
                 @if (col.pipe === 'date') {
-                {{ item[col.field] | date:'dd/MM/yyyy' }}
+                {{ getFieldValue(item, col.field) | date:'dd/MM/yyyy' }}
                 } @else {
-                {{ item[col.field] }}
+                {{ getFieldValue(item, col.field) }}
                 }
             </div>
             }
