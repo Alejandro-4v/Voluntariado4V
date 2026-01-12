@@ -6,6 +6,7 @@ import { AuthService, User } from '../../services/auth.service';
 import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
 import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
 import { ActivitiesService } from '../../services/activities.service';
+import { EntitiesService } from '../../services/entities.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,7 @@ export class DashboardComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private activitiesService = inject(ActivitiesService);
+  private entitiesService = inject(EntitiesService);
 
   currentUser: User | null = null;
   selectedActivity: any = null;
@@ -30,6 +32,7 @@ export class DashboardComponent implements OnInit {
 
   // Actividades pasadas por usuario
   pastActivitiesByUser: { [userId: number]: any[] } = {
+    // ... (keep existing mock data for past activities for now as API doesn't seem to have user-specific past activities endpoint easily accessible without logic)
     1: [ // Iryna Pavlenko
       { name: 'Actividad de jardín', type: 'Jardinería', slots: 5, filled: 5, image: '', entity: 'Amabir', date: '2024-10-15', rating: 5 },
       { name: 'Taller de manualidades', type: 'Manualidades', slots: 5, filled: 5, image: '', entity: 'Amabir', date: '2024-09-20', rating: 4 },
@@ -59,9 +62,28 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/auth/iniciar-sesion']);
     }
 
-    this.activitiesService.getEntitiesActivities().subscribe(data => this.entitiesActivities = data);
-    this.activitiesService.getProposals().subscribe(data => this.proposals = data);
-    this.activitiesService.getOtherEntities().subscribe(data => this.otherEntities = data);
+    this.activitiesService.getAll().subscribe(data => {
+      // Group by entity
+      const grouped = data.reduce((acc, curr) => {
+        const entityName = curr.convoca?.nombre || 'Desconocido';
+        if (!acc[entityName]) {
+          acc[entityName] = [];
+        }
+        acc[entityName].push(curr);
+        return acc;
+      }, {} as any);
+
+      this.entitiesActivities = Object.keys(grouped).map(key => ({
+        entity: key,
+        activities: grouped[key]
+      }));
+
+      this.proposals = data.filter(a => a.estado === 'P'); // Pending as proposals
+    });
+
+    this.entitiesService.getAll().subscribe(data => {
+      this.otherEntities = data;
+    });
   }
 
 
