@@ -39,6 +39,26 @@
           <p class="info-text">{{ activity.filled || activity.voluntarios?.length || 0 }} / {{ activity.slots }}</p>
         </div>
 
+        <!-- Tipos de Actividad -->
+        <div class="info-section" *ngIf="activity.tiposActividad?.length">
+          <h3 class="info-label">Tipos de Actividad</h3>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-primary rounded-pill" *ngFor="let tipo of activity.tiposActividad">
+              {{ tipo.descripcion }}
+            </span>
+          </div>
+        </div>
+
+        <!-- ODS -->
+        <div class="info-section" *ngIf="activity.ods?.length">
+          <h3 class="info-label">ODS</h3>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-success rounded-pill" *ngFor="let ods of activity.ods">
+              {{ ods.descripcion }}
+            </span>
+          </div>
+        </div>
+
         <!-- Description -->
         <div class="info-section">
           <h3 class="info-label">Descripción de la actividad</h3>

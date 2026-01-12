@@ -23,6 +23,7 @@ export class ActivitiesService {
             imagenUrl: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?auto=format&fit=crop&q=80&w=1000',
             convoca: { nombre: 'Cruz Roja Navarra' },
             tiposActividad: [{ descripcion: 'Medio Ambiente' }],
+            ods: [{ descripcion: 'Vida Submarina' }, { descripcion: 'Acción por el Clima' }],
             voluntarios: [{}, {}, {}], // 3 voluntarios
             slots: 20
         },
@@ -36,6 +37,7 @@ export class ActivitiesService {
             imagenUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=1000',
             convoca: { nombre: 'Solera Asistencial' },
             tiposActividad: [{ descripcion: 'Social' }, { descripcion: 'Tercera Edad' }],
+            ods: [{ descripcion: 'Salud y Bienestar' }, { descripcion: 'Reducción de las Desigualdades' }],
             voluntarios: [{}, {}, {}, {}, {}], // 5 voluntarios
             slots: 10
         },
@@ -49,6 +51,7 @@ export class ActivitiesService {
             imagenUrl: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=1000',
             convoca: { nombre: 'Banco de Alimentos' },
             tiposActividad: [{ descripcion: 'Social' }],
+            ods: [{ descripcion: 'Hambre Cero' }],
             voluntarios: [],
             slots: 50
         },
@@ -62,6 +65,7 @@ export class ActivitiesService {
             imagenUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000',
             convoca: { nombre: 'Cuatrovientos' },
             tiposActividad: [{ descripcion: 'Educación' }, { descripcion: 'Tecnología' }],
+            ods: [{ descripcion: 'Educación de Calidad' }],
             voluntarios: [{}, {}, {}],
             slots: 15
         }
