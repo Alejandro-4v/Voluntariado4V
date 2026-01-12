@@ -1,5 +1,5 @@
-export interface Ods {
-    idOds?: number;
+export interface Grado {
+    idGrado?: number;
+    nivel: string;
     descripcion: string;
-    imagenUrl?: string;
 }
