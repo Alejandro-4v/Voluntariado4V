@@ -19,7 +19,7 @@
         <!-- Main List -->
         <div class="col-md-8">
             <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
-                [selectedId]="selectedVolunteer?.id || null" (select)="selectVolunteer($event)">
+                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
             </app-generic-list>
         </div>
     </div>
