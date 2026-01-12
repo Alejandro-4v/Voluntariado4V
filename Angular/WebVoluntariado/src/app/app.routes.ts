@@ -15,6 +15,6 @@ export const routes: Routes = [
     path: 'auth',
     children: AUTH_ROUTES
   },
-  { path: '', redirectTo: 'auth/iniciar-sesion', pathMatch: 'full' },
-  { path: '**', redirectTo: 'auth/iniciar-sesion' }
+  { path: '', loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent) },
+  { path: '**', redirectTo: '' }
 ];

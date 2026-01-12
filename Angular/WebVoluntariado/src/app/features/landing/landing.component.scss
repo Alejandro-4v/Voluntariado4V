@@ -1,0 +1,58 @@
+$primary-blue: #0d47a1;
+
+.landing-wrapper {
+    overflow-x: hidden;
+}
+
+.hero-section {
+    background-image: url('https://images.unsplash.com/photo-1559027615-cd4628902d4a?q=80&w=2074&auto=format&fit=crop'); // Placeholder image from Unsplash
+    background-size: cover;
+    background-position: center;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6); // Dark overlay for text readability
+    }
+}
+
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+    }
+}
+
+// Ensure carousel fits well
+app-carrousel {
+    display: block;
+    margin-bottom: 2rem;
+}
+
+// Custom Colors Override
+.bg-primary-custom {
+    background-color: $primary-blue !important;
+}
+
+.btn-primary-custom {
+    background-color: $primary-blue;
+    border-color: $primary-blue;
+
+    &:hover {
+        background-color: darken($primary-blue, 10%);
+        border-color: darken($primary-blue, 10%);
+    }
+}
+
+.text-primary-custom {
+    color: $primary-blue !important;
+}
