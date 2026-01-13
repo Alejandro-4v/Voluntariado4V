@@ -5,163 +5,147 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/backgroundColor"
     tools:context=".LoginActivity">
 
     <View
         android:id="@+id/topBar"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="#0F3B82"
+        android:layout_height="180dp"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivTopLogo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/logo4v"
-        app:layout_constraintBottom_toBottomOf="@+id/topBar"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="@+id/topBar"
         app:layout_constraintStart_toStartOf="@+id/topBar"
         app:layout_constraintTop_toTopOf="@+id/topBar"
        />
 
-
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/surfaceColor"
         app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
+        app:cardElevation="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar">
+        app:layout_constraintTop_toBottomOf="@+id/ivTopLogo">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="24dp">
+            android:layout_height="wrap_content"
+            android:padding="32dp">
 
-            <ImageView
-                android:id="@+id/ivCardLogo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/logo4v"
-
-                app:layout_constraintEnd_toEndOf="parent"
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bienvenido"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="28sp"
+                android:letterSpacing="0.02"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvSubtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Cuatrovientos Voluntariado"
-                android:textColor="#555555"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/ivCardLogo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ivCardLogo" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Log in"
-                android:textColor="#000000"
-                android:textSize="34sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSubtitle" />
-
-
-            <TextView
-                android:id="@+id/tvLabelEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Correo electrónico"
-                android:textColor="#333333"
+                android:text="Inicia sesión para continuar"
+                android:textColor="@color/textColorSecondary"
                 android:textSize="14sp"
-                android:textStyle="bold"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-            <EditText
-                android:id="@+id/etEmail"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_edit_text_blue"
-                android:hint="ejemplo@cuatrovientos.org"
-                android:inputType="textEmailAddress"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="iryna_pavlenko@cuatrovientos.org"
-                android:textColor="#555555"
-                android:textColorHint="#AAAAAA"
-                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:hint="Correo electrónico"
+                app:boxBackgroundColor="@color/inputBackground"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintTextColor="@color/colorPrimary"
+                app:startIconDrawable="@android:drawable/ic_dialog_email"
+                app:startIconTint="@color/textColorSecondary"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLabelEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/tvSubtitle">
 
-            <TextView
-                android:id="@+id/tvLabelPassword"
-                android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/textColorPrimary"
+                    android:text="iryna_pavlenko@cuatrovientos.org" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Contraseña"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etEmail" />
-
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_edit_text_blue"
                 android:hint="Contraseña"
-                android:inputType="textPassword"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="#000000"
-                android:textColorHint="#AAAAAA"
-                android:textSize="14sp"
+                app:boxBackgroundColor="@color/inputBackground"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintTextColor="@color/colorPrimary"
+                app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+                app:startIconTint="@color/textColorSecondary"
+                app:endIconMode="password_toggle"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvLabelPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/tilEmail">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textColor="@color/textColorPrimary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="¿Has olvidado tu contraseña?"
-                android:textColor="#4285F4"
+                android:textColor="@color/textColorLink"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/btnLogin"
-                app:layout_constraintStart_toStartOf="@+id/btnLogin"
-                app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilPassword" />
 
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:backgroundTint="#0F3B82"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="Iniciar sesión"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/textColorWhite"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:cornerRadius="8dp"
-                tools:layout_editor_absoluteX="87dp"
-                tools:layout_editor_absoluteY="328dp" />
-
+                app:cornerRadius="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
