@@ -43,28 +43,28 @@
         @if (!isSearchActive) {
         <!-- Próximas actividades -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-white mb-4 ps-2">Próximas actividades</h2>
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
             <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Actividades pasadas -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-white mb-4 ps-2">Actividades pasadas</h2>
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
             <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Actividades pendiente de aprobación -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-white mb-4 ps-2">Actividades pendiente de aprobación</h2>
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
             <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
 
         <!-- Propuestas desde Cuatrovientos -->
         <section class="mb-5">
-            <h2 class="h5 fw-normal text-white mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
             <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
             </app-carrousel>
         </section>
@@ -72,8 +72,8 @@
         <!-- Grid View for Search Results -->
         <section class="mb-5">
             <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
-                <h2 class="h5 fw-normal text-white mb-0">Resultados de búsqueda ({{ filteredActivities.length }})</h2>
-                <button class="btn btn-sm btn-outline-light" (click)="onClear()">Volver a la vista general</button>
+                <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})</h2>
+                <button class="btn btn-sm btn-outline-dark" (click)="onClear()">Volver a la vista general</button>
             </div>
 
             <div class="row g-4">
@@ -86,7 +86,7 @@
                 </div>
                 } @empty {
                 <div class="col-12 text-center py-5">
-                    <p class="text-white h5">No se encontraron actividades.</p>
+                    <p class="text-dark h5">No se encontraron actividades.</p>
                 </div>
                 }
             </div>
