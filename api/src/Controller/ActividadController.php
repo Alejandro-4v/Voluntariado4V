@@ -32,10 +32,13 @@ final class ActividadController extends AbstractController
 
     #[Route('/actividad', name: 'actividad_index', methods: ['GET'])]
     public function index(
-        ActividadRepository $actividadRepository
+        ActividadRepository $actividadRepository,
+        Request $request
     ): JsonResponse {
+        $filters = $request->query->all();
+
         /** @var Actividad[] $actividades */
-        $actividades = $actividadRepository->findAll();
+        $actividades = $actividadRepository->findByFilters($filters);
 
         return $this->json(
             $actividades,
@@ -207,7 +210,7 @@ final class ActividadController extends AbstractController
 
                 if (!$ods) {
                     return $this->json([
-                        'error' => "Ods with id {$idOds} not found",
+                        'error' => "Ods with id {$idOds} not found"
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
