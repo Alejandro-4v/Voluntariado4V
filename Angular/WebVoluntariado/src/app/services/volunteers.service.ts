@@ -22,6 +22,10 @@ export class VolunteersService {
             mail: 'juan.perez@cuatrovientos.org',
             estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Juan',
+            disponibilidades: [
+                { diaSemana: { idDia: 1, nombre: 'Lunes' }, horaInicio: '09:00:00', horaFin: '13:00:00' },
+                { diaSemana: { idDia: 3, nombre: 'Miércoles' }, horaInicio: '09:00:00', horaFin: '13:00:00' }
+            ],
             tiposActividad: [{ descripcion: 'Tecnología' }, { descripcion: 'Medio Ambiente' }]
         },
         {
@@ -33,6 +37,9 @@ export class VolunteersService {
             mail: 'ana.lopez@cuatrovientos.org',
             estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ana',
+            disponibilidades: [
+                { diaSemana: { idDia: 5, nombre: 'Viernes' }, horaInicio: '16:00:00', horaFin: '20:00:00' }
+            ],
             tiposActividad: [{ descripcion: 'Social' }]
         },
         {
@@ -44,6 +51,7 @@ export class VolunteersService {
             mail: 'carlos.ruiz@cuatrovientos.org',
             estado: 'Inactivo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos',
+            disponibilidades: [],
             tiposActividad: [{ descripcion: 'Deporte' }, { descripcion: 'Educación' }]
         },
         {
@@ -55,6 +63,7 @@ export class VolunteersService {
             mail: 'maria.gonzalez@cuatrovientos.org',
             estado: 'Activo',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria',
+            disponibilidades: [],
             tiposActividad: [{ descripcion: 'Arte' }]
         },
         {
@@ -66,6 +75,7 @@ export class VolunteersService {
             mail: 'luis.rodriguez@cuatrovientos.org',
             estado: 'Pendiente',
             perfilUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Luis',
+            disponibilidades: [],
             tiposActividad: [{ descripcion: 'Tecnología' }]
         }
     ];

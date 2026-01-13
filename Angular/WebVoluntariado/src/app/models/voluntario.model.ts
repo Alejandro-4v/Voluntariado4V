@@ -1,5 +1,6 @@
 import { Grado } from './grado.model';
 import { TipoActividad } from './tipo-actividad.model';
+import { Disponibilidad } from './disponibilidad.model';
 
 export interface Voluntario {
     nif: string;
@@ -11,6 +12,6 @@ export interface Voluntario {
     passwordHash: string;
     estado: string;
     perfilUrl?: string;
-    disponibilidades?: any[]; // TODO: Define Disponibilidad model
+    disponibilidades?: Disponibilidad[];
     tiposActividad?: TipoActividad[];
 }
