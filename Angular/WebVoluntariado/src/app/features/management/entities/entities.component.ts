@@ -19,6 +19,7 @@ export class ManagementEntitiesComponent implements OnInit {
     displayEntities: Entidad[] = [];
     selectedEntity: Entidad | null = null;
 
+    filterBy: string = 'all';
     sortBy: string = '';
     groupBy: string = '';
 
@@ -45,6 +46,12 @@ export class ManagementEntitiesComponent implements OnInit {
         listDisplayField: 'nombre'
     };
 
+    filterOptions = [
+        { label: 'Todas', value: 'all' },
+        { label: 'Con Actividades', value: 'with_activities' },
+        { label: 'Sin Actividades', value: 'without_activities' }
+    ];
+
     sortOptions = [
         { label: 'Nombre', value: 'nombre' },
         { label: 'Fecha de inscripción', value: 'fechaRegistro' }
@@ -69,6 +76,11 @@ export class ManagementEntitiesComponent implements OnInit {
         this.selectedEntity = entity;
     }
 
+    onFilterBy(criteria: string) {
+        this.filterBy = criteria;
+        this.applyFilters();
+    }
+
     onSortBy(criteria: string) {
         this.sortBy = criteria;
         this.applyFilters();
@@ -81,6 +93,13 @@ export class ManagementEntitiesComponent implements OnInit {
 
     applyFilters() {
         let temp = [...this.entities];
+
+        // 0. Filtering
+        if (this.filterBy === 'with_activities') {
+            temp = temp.filter(e => e.actividades && e.actividades.length > 0);
+        } else if (this.filterBy === 'without_activities') {
+            temp = temp.filter(e => !e.actividades || e.actividades.length === 0);
+        }
 
         temp.sort((a, b) => {
             // 1. Primary Sort: Grouping
