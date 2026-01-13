@@ -76,8 +76,8 @@ export class ManagementVolunteersComponent implements OnInit {
     private tipoActividadService = inject(TipoActividadService);
 
     types: any[] = [];
-    selectedInterest: string = '';
-    selectedDay: string = '';
+    selectedInterests: number[] = [];
+    selectedDays: number[] = [];
 
     daysOfWeek = [
         { id: 1, name: 'Lunes' },
@@ -122,30 +122,58 @@ export class ManagementVolunteersComponent implements OnInit {
         this.applyFilters();
     }
 
-    onInterestChange() {
+    toggleInterest(id: number) {
+        if (this.selectedInterests.includes(id)) {
+            this.selectedInterests = this.selectedInterests.filter(i => i !== id);
+        } else {
+            this.selectedInterests.push(id);
+        }
         this.applyFilters();
     }
 
-    onDayChange() {
+    toggleDay(id: number) {
+        if (this.selectedDays.includes(id)) {
+            this.selectedDays = this.selectedDays.filter(d => d !== id);
+        } else {
+            this.selectedDays.push(id);
+        }
         this.applyFilters();
+    }
+
+    clearFilters() {
+        this.selectedInterests = [];
+        this.selectedDays = [];
+        this.filterBy = 'all';
+        this.applyFilters();
+    }
+
+    getInterestName(id: number): string {
+        return this.types.find(t => t.idTipoActividad === id)?.nombre || 'Desconocido';
+    }
+
+    getDayName(id: number): string {
+        return this.daysOfWeek.find(d => d.id === id)?.name || 'Desconocido';
     }
 
     applyFilters() {
         let temp = [...this.volunteers];
 
-        // 0. Filtering
+        // 0. Filtering (Status)
         if (this.filterBy !== 'all') {
             temp = temp.filter(v => v.estado?.toLowerCase() === this.filterBy.toLowerCase());
         }
 
-        // Filter by Interest
-        if (this.selectedInterest) {
-            temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad == +this.selectedInterest));
+        // Filter by Interest (OR logic: has ANY of the selected interests)
+        if (this.selectedInterests.length > 0) {
+            temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad !== undefined && this.selectedInterests.includes(t.idTipoActividad)));
         }
 
-        // Filter by Availability (Day)
-        if (this.selectedDay) {
-            temp = temp.filter(v => v.disponibilidades?.some(d => d.diaSemana.idDia == +this.selectedDay));
+        // Filter by Availability (OR logic: available on ANY of the selected days)
+        if (this.selectedDays.length > 0) {
+            temp = temp.filter(v => v.disponibilidades?.some(d => {
+                const id = d.diaSemana?.idDia;
+                return id !== undefined && this.selectedDays.includes(id);
+            }));
         }
 
         temp.sort((a, b) => {
