@@ -1,6 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { OdsService } from '../../../services/ods.service';
+import { TipoActividadService } from '../../../services/tipo-actividad.service';
+import { EntitiesService } from '../../../services/entities.service';
 
 @Component({
     selector: 'app-activity-form',
@@ -20,6 +23,14 @@ export class ActivityFormComponent implements OnInit {
     selectedImage: string | ArrayBuffer | null = null;
     entities = ['Cuatrovientos Voluntariado', 'Cruz Roja', 'Banco de Alimentos'];
 
+    private odsService = inject(OdsService);
+    private tipoActividadService = inject(TipoActividadService);
+    private entitiesService = inject(EntitiesService);
+
+    odsList: any[] = [];
+    typesList: any[] = [];
+    entitiesList: any[] = [];
+
     constructor(private fb: FormBuilder) {
         this.activityForm = this.fb.group({
             name: ['', Validators.required],
@@ -27,21 +38,27 @@ export class ActivityFormComponent implements OnInit {
             description: ['', Validators.required],
             entity: ['', Validators.required],
             date: ['', Validators.required],
-            location: ['', Validators.required]
+            location: ['', Validators.required],
+            ods: [[]],
+            types: [[]]
         });
     }
 
     ngOnInit(): void {
-        if (this.initialData) {
-            this.activityForm.patchValue(this.initialData);
-            if (this.initialData.image) {
-                this.selectedImage = this.initialData.image;
-            }
-        }
+        this.odsService.getAll().subscribe(data => this.odsList = data);
+        this.tipoActividadService.getAll().subscribe(data => this.typesList = data);
+        this.entitiesService.getAll().subscribe(data => this.entitiesList = data);
 
-        // Select default entity for create mode if needed
-        if (this.mode === 'create' && !this.activityForm.get('entity')?.value) {
-            // Optional: Setup default
+        if (this.initialData) {
+            this.activityForm.patchValue({
+                ...this.initialData,
+                entity: this.initialData.convoca?.nombre || this.initialData.entity, // Handle object or string
+                ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
+                types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || []
+            });
+            if (this.initialData.image || this.initialData.imagenUrl) {
+                this.selectedImage = this.initialData.image || this.initialData.imagenUrl;
+            }
         }
     }
 

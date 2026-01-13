@@ -35,12 +35,37 @@
                     placeholder="Descripción breve con un listado de tareas"></textarea>
             </div>
             <div class="col-md-6">
+                <!-- Entity -->
                 <div class="mb-3">
-                    <label for="entity" class="form-label fw-bold">Entidad</label>
-                    <select id="entity" class="form-select form-select-lg bg-light" formControlName="entity">
+                    <label for="entity" class="form-label fw-bold">Entidad Organizadora</label>
+                    <select class="form-select bg-light" id="entity" formControlName="entity">
                         <option value="" disabled selected>Selecciona una entidad</option>
-                        <option *ngFor="let ent of entities" [value]="ent">{{ ent }}</option>
+                        @for (entity of entitiesList; track entity.idEntidad) {
+                        <option [value]="entity.nombre">{{ entity.nombre }}</option>
+                        }
                     </select>
+                </div>
+
+                <!-- Types -->
+                <div class="mb-3">
+                    <label for="types" class="form-label fw-bold">Tipos de Actividad</label>
+                    <select class="form-select bg-light" id="types" formControlName="types" multiple>
+                        @for (type of typesList; track type.idTipoActividad) {
+                        <option [value]="type.idTipoActividad">{{ type.nombre }}</option>
+                        }
+                    </select>
+                    <div class="form-text">Mantén pulsado Ctrl (Windows) o Cmd (Mac) para seleccionar varios.</div>
+                </div>
+
+                <!-- ODS -->
+                <div class="mb-3">
+                    <label for="ods" class="form-label fw-bold">ODS Relacionados</label>
+                    <select class="form-select bg-light" id="ods" formControlName="ods" multiple>
+                        @for (ods of odsList; track ods.idOds) {
+                        <option [value]="ods.idOds">{{ ods.nombre }}</option>
+                        }
+                    </select>
+                    <div class="form-text">Mantén pulsado Ctrl (Windows) o Cmd (Mac) para seleccionar varios.</div>
                 </div>
 
                 <!-- Image Upload Section -->

@@ -13,6 +13,7 @@ export interface Actividad {
     inicio: string;
     fin: string;
     imagenUrl?: string;
+    plazasTotales?: number;
     grado: Grado;
     tiposActividad: TipoActividad[];
     ods: Ods[];
