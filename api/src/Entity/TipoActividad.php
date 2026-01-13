@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TipoActividadRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -30,6 +31,11 @@ class TipoActividad
     #[ORM\JoinColumn(name: 'id_tipo_actividad', referencedColumnName: 'id_tipo_actividad')]
     #[ORM\InverseJoinColumn(name: 'id_actividad', referencedColumnName: 'id_actividad')]
     private Collection $actividades;
+
+    public function __construct()
+    {
+        $this->actividades = new ArrayCollection();
+    }
 
     public function getIdTipoActividad(): ?int
     {

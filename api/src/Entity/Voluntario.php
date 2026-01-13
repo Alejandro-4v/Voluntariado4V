@@ -16,7 +16,7 @@ class Voluntario
     #[ORM\Id]
     #[ORM\Column(name: 'nif', type: 'string', length: 10)]
     #[Groups(['voluntario:read', 'actividad:read'])]
-    private ?string $nif = null;
+    private ?string $nif;
 
     #[ORM\Column(name: 'nombre', type: 'string', length: 40)]
     #[Groups(['voluntario:read', 'actividad:read'])]
@@ -33,7 +33,7 @@ class Voluntario
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'voluntarios')]
     #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: false)]
     #[Groups(['voluntario:read', 'actividad:read'])]
-    private ?Grado $grado = null;
+    private ?Grado $grado;
 
     #[ORM\Column(name: 'mail', type: 'string', length: 255)]
     #[Groups(['voluntario:read', 'voluntario: login', 'actividad:read'])]
@@ -165,7 +165,7 @@ class Voluntario
         return $this->perfilUrl;
     }
 
-    public function serPerfilUrl(string $perfilUrl): self
+    public function setPerfilUrl(string $perfilUrl): self
     {
         $this->perfilUrl = $perfilUrl;
         return $this;
