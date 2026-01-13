@@ -15,7 +15,6 @@ class Disponibilidad
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Voluntario::class, inversedBy: 'disponibilidades')]
     #[ORM\JoinColumn(name: 'nif', referencedColumnName: 'nif', nullable: false)]
-    #[Groups(['disponibilidad:read'])]
     private ?Voluntario $voluntario = null;
 
     #[ORM\Id]
