@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VolunteersService } from '../../../services/volunteers.service';
+import { ExcelService } from '../../../services/excel.service';
 import { Voluntario } from '../../../models/voluntario.model';
 import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
@@ -23,6 +24,7 @@ export class ManagementVolunteersComponent implements OnInit {
     groupBy: string = '';
 
     private volunteersService = inject(VolunteersService);
+    private excelService = inject(ExcelService);
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
@@ -109,5 +111,20 @@ export class ManagementVolunteersComponent implements OnInit {
         });
 
         this.displayVolunteers = temp;
+    }
+
+    exportToExcel() {
+        const dataToExport = this.displayVolunteers.map(v => ({
+            'NIF': v.nif,
+            'Nombre': v.nombre,
+            'Apellido 1': v.apellido1,
+            'Apellido 2': v.apellido2,
+            'Email': v.mail,
+            'Grado': v.grado?.descripcion || '',
+            'Estado': v.estado,
+            'Intereses': v.tiposActividad?.map(t => t.nombre).join(', ') || ''
+        }));
+
+        this.excelService.exportAsExcelFile(dataToExport, 'voluntarios');
     }
 }
