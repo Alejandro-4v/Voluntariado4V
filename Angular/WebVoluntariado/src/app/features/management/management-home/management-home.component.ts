@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ActivitiesService } from '../../../services/activities.service';
 import { VolunteersService } from '../../../services/volunteers.service';
@@ -78,5 +79,31 @@ export class ManagementHomeComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+  private router = inject(Router);
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+  }
+
+  downloadReport() {
+    const reportData = [
+      ['Métrica', 'Valor'],
+      ['Voluntarios Totales', this.stats.totalVolunteers],
+      ['Actividades Activas', this.stats.activeActivities],
+      ['Entidades Colaboradoras', this.stats.totalEntities],
+      ['Pendientes de Aprobación', this.stats.pendingApprovals]
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8,"
+      + reportData.map(e => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "reporte_dashboard.csv");
+    document.body.appendChild(link); // Required for FF
+    link.click();
+    document.body.removeChild(link);
   }
 }

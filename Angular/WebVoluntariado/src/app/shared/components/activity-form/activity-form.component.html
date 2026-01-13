@@ -27,13 +27,33 @@
             </div>
         </div>
 
-        <!-- Row 2: Description and Entity -->
-        <div class="row g-3 mb-3">
+        <!-- Row 2: Main Content -->
+        <div class="row g-3 mb-4">
+            <!-- Left Column -->
             <div class="col-md-6">
-                <label for="description" class="form-label fw-bold">Descripción de la actividad</label>
-                <textarea id="description" class="form-control bg-light" formControlName="description" rows="5"
-                    placeholder="Descripción breve con un listado de tareas"></textarea>
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-bold">Descripción de la actividad</label>
+                    <textarea id="description" class="form-control bg-light" formControlName="description" rows="5"
+                        placeholder="Descripción breve con un listado de tareas"></textarea>
+                </div>
+
+                <!-- Date -->
+                <div class="mb-3">
+                    <label for="date" class="form-label fw-bold">Fecha y Hora</label>
+                    <input type="datetime-local" id="date" class="form-control form-control-lg bg-light"
+                        formControlName="date">
+                </div>
+
+                <!-- Location -->
+                <div class="mb-3">
+                    <label for="location" class="form-label fw-bold">Lugar / Ubicación</label>
+                    <input type="text" id="location" class="form-control form-control-lg bg-light"
+                        formControlName="location" placeholder="Polideportivo Municipal...">
+                </div>
             </div>
+
+            <!-- Right Column -->
             <div class="col-md-6">
                 <!-- Entity -->
                 <div class="mb-3">
@@ -69,7 +89,7 @@
                 </div>
 
                 <!-- Image Upload Section -->
-                <div class="mb-0">
+                <div class="mb-3">
                     <label class="form-label fw-bold">Imagen de la actividad</label>
                     <div class="upload-area bg-secondary bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center p-3 cursor-pointer"
                         (click)="triggerFileInput()">
@@ -79,33 +99,14 @@
                         <i class="bi bi-image text-primary fs-5"></i>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Row 3: Date/Time and Image Preview -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <!-- Date -->
-                <div class="mb-3">
-                    <label for="date" class="form-label fw-bold">Fecha y Hora</label>
-                    <input type="datetime-local" id="date" class="form-control form-control-lg bg-light"
-                        formControlName="date">
-                </div>
-
-                <!-- Location -->
-                <div>
-                    <label for="location" class="form-label fw-bold">Lugar / Ubicación</label>
-                    <input type="text" id="location" class="form-control form-control-lg bg-light"
-                        formControlName="location" placeholder="Polideportivo Municipal...">
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Imagen seleccionada</label>
-                <div class="image-preview-container rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
-                    style="height: 140px;">
-                    <img *ngIf="selectedImage" [src]="selectedImage" alt="Preview" class="w-100 h-100 object-fit-cover">
-                    <span *ngIf="!selectedImage" class="text-muted">Sin imagen seleccionada</span>
+                <!-- Image Preview -->
+                <div *ngIf="selectedImage">
+                    <label class="form-label fw-bold">Vista previa</label>
+                    <div class="image-preview-container rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
+                        style="height: 140px;">
+                        <img [src]="selectedImage" alt="Preview" class="w-100 h-100 object-fit-cover">
+                    </div>
                 </div>
             </div>
         </div>
