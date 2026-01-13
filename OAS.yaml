@@ -14,7 +14,7 @@ tags:
   - name: Entidad
     description: Todo en relación a las entidades de la asociación que organizan actividades
   - name: Tipos de actividad
-    description: Todo en relación a los tipos de actividades con los que una actividad cumple o con los que un voluntarios está interesado
+    description: Todo en relación a los tipos de actividad con los que una actividad cumple o con los que un voluntarios está interesado
   - name: Grado
     description: Todo en relación a los grados del centro
   - name: ODS
@@ -128,6 +128,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Actividad'
+        '404':
+          description: Actividad no encontrada
+    delete:
+      tags:
+        - Actividades
+      summary: Elimina una actividad
+      parameters:
+        - in: path
+          name: idActividad
+          schema:
+            type: integer
+          required: true
+          description: ID de la actividad a eliminar
+      responses:
+        '204':
+          description: Actividad eliminada
         '404':
           description: Actividad no encontrada
 
@@ -263,6 +279,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Voluntario'
+    delete:
+      tags:
+        - Voluntarios
+      summary: Elimina un voluntario
+      parameters:
+        - in: path
+          name: nif
+          schema:
+            type: string
+          required: true
+          description: NIF del voluntario a eliminar
+      responses:
+        '204':
+          description: Voluntario eliminado
+        '404':
+          description: Voluntario no encontrado
 
   /entidades:
     get:
@@ -346,6 +378,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entidad'
+    delete:
+      tags:
+        - Entidad
+      summary: Elimina una entidad
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la entidad a eliminar
+      responses:
+        '204':
+          description: Entidad eliminada
+        '404':
+          description: Entidad no encontrada
 
   /tipos-actividad:
     get:
