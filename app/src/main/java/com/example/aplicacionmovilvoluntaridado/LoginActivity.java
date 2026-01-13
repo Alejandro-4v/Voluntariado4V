@@ -61,7 +61,12 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Por favor, rellena todos los campos", Toast.LENGTH_SHORT).show();
                 } else {
                     // Si todo está bien, llamamos a la API
-                    loginVoluntario(correo, pass);
+                    if(correo.equals("iryna_pavlenko@cuatrovientos.org") && pass.equals("1234")){
+                        // Navegar a la pantalla principal
+                        Intent intent = new Intent(getApplicationContext(), ActividadesActivity.class);
+                        startActivity(intent);
+                    }
+                    //loginVoluntario(correo, pass); CUANDO ESTÉ LA API SE HACE CON ESTO
                 }
             }
         });
