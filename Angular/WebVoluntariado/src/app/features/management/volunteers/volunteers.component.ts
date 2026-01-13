@@ -20,6 +20,7 @@ export class ManagementVolunteersComponent implements OnInit {
     displayVolunteers: Voluntario[] = [];
     selectedVolunteer: Voluntario | null = null;
 
+    filterBy: string = 'all';
     sortBy: string = '';
     groupBy: string = '';
 
@@ -54,6 +55,12 @@ export class ManagementVolunteersComponent implements OnInit {
         listDisplayField: 'descripcion'
     };
 
+    filterOptions = [
+        { label: 'Todos', value: 'all' },
+        { label: 'Activos', value: 'activo' },
+        { label: 'Inactivos', value: 'inactivo' }
+    ];
+
     sortOptions = [
         { label: 'Nombre', value: 'nombre' },
         { label: 'Apellido', value: 'apellido1' }
@@ -78,6 +85,11 @@ export class ManagementVolunteersComponent implements OnInit {
         this.selectedVolunteer = volunteer;
     }
 
+    onFilterBy(criteria: string) {
+        this.filterBy = criteria;
+        this.applyFilters();
+    }
+
     onSortBy(criteria: string) {
         this.sortBy = criteria;
         this.applyFilters();
@@ -90,6 +102,11 @@ export class ManagementVolunteersComponent implements OnInit {
 
     applyFilters() {
         let temp = [...this.volunteers];
+
+        // 0. Filtering
+        if (this.filterBy !== 'all') {
+            temp = temp.filter(v => v.estado?.toLowerCase() === this.filterBy.toLowerCase());
+        }
 
         temp.sort((a, b) => {
             // 1. Primary Sort: Grouping

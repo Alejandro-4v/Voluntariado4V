@@ -6,8 +6,8 @@
             <button class="btn btn-success d-flex align-items-center gap-2" (click)="exportToExcel()">
                 <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
             </button>
-            <app-filter-sort [groupOptions]="groupOptions" [sortOptions]="sortOptions" (groupChange)="onGroupBy($event)"
-                (sortChange)="onSortBy($event)">
+            <app-filter-sort [filterOptions]="filterOptions" [groupOptions]="groupOptions" [sortOptions]="sortOptions"
+                (filterChange)="onFilterBy($event)" (groupChange)="onGroupBy($event)" (sortChange)="onSortBy($event)">
             </app-filter-sort>
         </div>
     </div>
