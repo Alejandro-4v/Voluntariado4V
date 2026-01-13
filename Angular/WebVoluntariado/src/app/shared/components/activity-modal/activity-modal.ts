@@ -14,7 +14,7 @@ export class ActivityModalComponent {
   @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
 
   // New input for mode
-  @Input() mode: 'student' | 'management' = 'student';
+  @Input() mode: 'student' | 'management' | 'preview' = 'student';
 
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();

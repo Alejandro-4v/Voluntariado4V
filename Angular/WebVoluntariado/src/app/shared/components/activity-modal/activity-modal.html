@@ -80,6 +80,11 @@
           <button type="button" class="btn btn-primary" (click)="onDelete()">Eliminar</button>
           <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
         </div>
+
+        <!-- Preview Buttons -->
+        <div class="modal-buttons text-center" *ngIf="mode === 'preview'">
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar Vista Previa</button>
+        </div>
       </div>
     </div>
   </div>

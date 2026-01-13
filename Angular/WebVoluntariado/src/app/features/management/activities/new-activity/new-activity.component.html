@@ -3,4 +3,7 @@
     <app-activity-form mode="create" (save)="onSave($event)" (draft)="onDraft($event)"
         (previewAction)="onPreview($event)">
     </app-activity-form>
+
+    <app-activity-modal [isOpen]="isModalOpen" [activity]="previewActivity" mode="preview" (close)="closeModal()">
+    </app-activity-modal>
 </div>

@@ -1,5 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivitiesService } from '../../../services/activities.service';
+import { TipoActividadService } from '../../../services/tipo-actividad.service';
+import { EntitiesService } from '../../../services/entities.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
@@ -24,15 +26,20 @@ export class ManagementActivitiesComponent implements OnInit {
     isModalOpen = false;
 
     private activitiesService = inject(ActivitiesService);
+    private tipoActividadService = inject(TipoActividadService);
+    private entitiesService = inject(EntitiesService);
 
     allActivities: any[] = [];
     filteredActivities: any[] = [];
+    types: any[] = [];
+    entities: any[] = [];
     isSearchActive = false;
 
     // Search filters
     searchTerm: string = '';
     selectedType: string = '';
     selectedDate: string = '';
+    selectedEntity: string = '';
 
     ngOnInit() {
         this.activitiesService.getAll().subscribe(data => {
@@ -46,11 +53,19 @@ export class ManagementActivitiesComponent implements OnInit {
             // Assuming proposals are also pending or another state, for now using pending
             this.proposals = []; // Or filter differently if needed
         });
+
+        this.tipoActividadService.getAll().subscribe(data => {
+            this.types = data;
+        });
+
+        this.entitiesService.getAll().subscribe(data => {
+            this.entities = data;
+        });
     }
 
     onSearch() {
         // If no filters are active, show carousels
-        if (!this.selectedType && !this.selectedDate && !this.searchTerm) {
+        if (!this.selectedType && !this.selectedDate && !this.searchTerm && !this.selectedEntity) {
             this.isSearchActive = false;
             return;
         }
@@ -60,37 +75,56 @@ export class ManagementActivitiesComponent implements OnInit {
             let matchesType = true;
             let matchesDate = true;
             let matchesSearch = true;
+            let matchesEntity = true;
 
-            if (this.selectedType && this.selectedType !== 'Tipos...') {
-                // Mock mapping for types (adjust based on actual data structure)
-                // Assuming '1' = Voluntariado, '2' = Formación, '3' = Ocio
-                // Or check against activity.tipoActividad.descripcion if available
-                matchesType = true; // Implement actual type filtering logic
+            // Filter by Type
+            if (this.selectedType && this.selectedType !== '') {
+                const selectedTypeObj = this.types.find(t => t.idTipoActividad == this.selectedType);
+                if (selectedTypeObj) {
+                    matchesType = activity.tiposActividad?.some((t: any) => t.descripcion === selectedTypeObj.descripcion);
+                } else {
+                    matchesType = false;
+                }
             }
 
+            // Filter by Date
             if (this.selectedDate) {
-                // Implement date filtering logic
-                matchesDate = true;
+                const activityDate = new Date(activity.inicio).toDateString();
+                const filterDate = new Date(this.selectedDate).toDateString();
+                matchesDate = activityDate === filterDate;
             }
 
-            return matchesType && matchesDate && matchesSearch;
+            // Filter by Entity
+            if (this.selectedEntity && this.selectedEntity !== '') {
+                matchesEntity = activity.convoca?.nombre === this.selectedEntity;
+            }
+
+            // Filter by Search Term (Name or Description)
+            if (this.searchTerm) {
+                const term = this.searchTerm.toLowerCase();
+                matchesSearch = (activity.nombre?.toLowerCase().includes(term) ||
+                    activity.descripcion?.toLowerCase().includes(term));
+            }
+
+            return matchesType && matchesDate && matchesSearch && matchesEntity;
         });
 
         // Sort by date descending
-        this.filteredActivities.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+        this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
     onViewAll() {
         this.isSearchActive = true;
         this.filteredActivities = [...this.allActivities];
         // Sort by date descending
-        this.filteredActivities.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+        this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
     onClear() {
         this.selectedType = '';
         this.selectedDate = '';
         this.searchTerm = '';
+        this.selectedEntity = '';
         this.isSearchActive = false;
     }
 
