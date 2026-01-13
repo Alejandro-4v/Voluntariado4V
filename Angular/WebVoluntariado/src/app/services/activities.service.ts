@@ -79,15 +79,20 @@ export class ActivitiesService {
     }
 
     getById(id: number): Observable<Actividad> {
-        return this.http.get<Actividad>(`${this.apiUrl}/${id}`);
+        const activity = this.mockActivities.find(a => a.idActividad === id);
+        return of(activity as Actividad);
     }
 
     create(actividad: Actividad): Observable<Actividad> {
-        return this.http.post<Actividad>(this.apiUrl, actividad);
+        // Mock creation
+        console.log('Mock Create:', actividad);
+        return of(actividad);
     }
 
     update(id: number, actividad: Actividad): Observable<Actividad> {
-        return this.http.put<Actividad>(`${this.apiUrl}/${id}`, actividad);
+        // Mock update
+        console.log('Mock Update:', id, actividad);
+        return of(actividad);
     }
 
     delete(id: number): Observable<any> {

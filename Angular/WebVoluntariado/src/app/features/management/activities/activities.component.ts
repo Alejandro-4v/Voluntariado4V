@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ActivitiesService } from '../../../services/activities.service';
 import { TipoActividadService } from '../../../services/tipo-actividad.service';
 import { EntitiesService } from '../../../services/entities.service';
@@ -138,8 +139,12 @@ export class ManagementActivitiesComponent implements OnInit {
         this.selectedActivity = null;
     }
 
+    private router = inject(Router);
+
     onEditActivity() {
-        console.log('Edit activity:', this.selectedActivity);
+        if (this.selectedActivity && this.selectedActivity.idActividad) {
+            this.router.navigate(['/management/actividades/editar', this.selectedActivity.idActividad]);
+        }
         this.closeActivityModal();
     }
 

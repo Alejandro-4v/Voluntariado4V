@@ -24,7 +24,7 @@ export class NewActivityComponent {
         const newActivity = this.mapToActivity(activityData, 'A');
         this.activitiesService.create(newActivity).subscribe(() => {
             console.log('Activity published');
-            this.router.navigate(['/management/activities']);
+            this.router.navigate(['/management/actividades']);
         });
     }
 
@@ -32,7 +32,7 @@ export class NewActivityComponent {
         const newActivity = this.mapToActivity(activityData, 'P');
         this.activitiesService.create(newActivity).subscribe(() => {
             console.log('Activity saved as draft');
-            this.router.navigate(['/management/activities']);
+            this.router.navigate(['/management/actividades']);
         });
     }
 

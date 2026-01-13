@@ -47,7 +47,7 @@ export class EditActivityComponent implements OnInit {
             const updatedActivity = this.mapToActivity(updatedData, 'A');
             this.activitiesService.update(+id, updatedActivity).subscribe(() => {
                 console.log('Activity updated');
-                this.router.navigate(['/management/activities']);
+                this.router.navigate(['/management/actividades']);
             });
         }
     }
@@ -58,7 +58,7 @@ export class EditActivityComponent implements OnInit {
             const updatedActivity = this.mapToActivity(updatedData, 'P');
             this.activitiesService.update(+id, updatedActivity).subscribe(() => {
                 console.log('Activity draft updated');
-                this.router.navigate(['/management/activities']);
+                this.router.navigate(['/management/actividades']);
             });
         }
     }
