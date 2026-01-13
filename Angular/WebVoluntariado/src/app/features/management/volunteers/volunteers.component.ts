@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VolunteersService } from '../../../services/volunteers.service';
+import { TipoActividadService } from '../../../services/tipo-actividad.service';
+import { FormsModule } from '@angular/forms';
 import { ExcelService } from '../../../services/excel.service';
 import { Voluntario } from '../../../models/voluntario.model';
 import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
@@ -10,7 +12,7 @@ import { GenericDetailComponent, DetailConfig } from '../../../shared/components
 @Component({
     selector: 'app-management-volunteers',
     standalone: true,
-    imports: [CommonModule, FilterSortComponent, GenericListComponent, GenericDetailComponent],
+    imports: [CommonModule, FormsModule, FilterSortComponent, GenericListComponent, GenericDetailComponent],
     templateUrl: './volunteers.component.html',
     styleUrls: ['./volunteers.component.scss']
 })
@@ -71,6 +73,22 @@ export class ManagementVolunteersComponent implements OnInit {
         { label: 'Ninguno', value: '' }
     ];
 
+    private tipoActividadService = inject(TipoActividadService);
+
+    types: any[] = [];
+    selectedInterest: string = '';
+    selectedDay: string = '';
+
+    daysOfWeek = [
+        { id: 1, name: 'Lunes' },
+        { id: 2, name: 'Martes' },
+        { id: 3, name: 'Miércoles' },
+        { id: 4, name: 'Jueves' },
+        { id: 5, name: 'Viernes' },
+        { id: 6, name: 'Sábado' },
+        { id: 7, name: 'Domingo' }
+    ];
+
     ngOnInit() {
         this.volunteersService.getAll().subscribe(data => {
             this.volunteers = data;
@@ -78,6 +96,10 @@ export class ManagementVolunteersComponent implements OnInit {
             if (this.volunteers.length > 0) {
                 this.selectedVolunteer = this.volunteers[0];
             }
+        });
+
+        this.tipoActividadService.getAll().subscribe(data => {
+            this.types = data;
         });
     }
 
@@ -100,12 +122,30 @@ export class ManagementVolunteersComponent implements OnInit {
         this.applyFilters();
     }
 
+    onInterestChange() {
+        this.applyFilters();
+    }
+
+    onDayChange() {
+        this.applyFilters();
+    }
+
     applyFilters() {
         let temp = [...this.volunteers];
 
         // 0. Filtering
         if (this.filterBy !== 'all') {
             temp = temp.filter(v => v.estado?.toLowerCase() === this.filterBy.toLowerCase());
+        }
+
+        // Filter by Interest
+        if (this.selectedInterest) {
+            temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad == +this.selectedInterest));
+        }
+
+        // Filter by Availability (Day)
+        if (this.selectedDay) {
+            temp = temp.filter(v => v.disponibilidades?.some(d => d.diaSemana.idDia == +this.selectedDay));
         }
 
         temp.sort((a, b) => {
