@@ -18,7 +18,7 @@ public class ActividadesPagerAdapter extends FragmentStateAdapter {
             case 0:
                 return new ProximasActividadesFragment(); // Primera pestaña
             case 1:
-                return new PasadasActividAdapteadesFragment();  // Segunda pestaña
+                return new PasadasActividadesFragment();  // Segunda pestaña
             default:
                 return new ProximasActividadesFragment();
         }

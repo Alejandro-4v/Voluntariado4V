@@ -14,11 +14,16 @@ public class ActividadesActivity extends AppCompatActivity {
     // La actividad solo coordina los fragments.
     BottomNavigationView bottomNavigation;
     ViewPager2 viewPager;
+    androidx.appcompat.widget.SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
+
+        searchView = findViewById(R.id.searchView);
+        searchView.setIconifiedByDefault(false);
+        searchView.setFocusable(true);
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
         viewPager = findViewById(R.id.viewPager);
@@ -56,5 +61,28 @@ public class ActividadesActivity extends AppCompatActivity {
                 }
             }
         });
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ejecutarBusqueda(query);
+                searchView.clearFocus(); // Oculta el teclado
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ejecutarBusqueda(newText);
+                return true;
+            }
+        });
+    }
+    private void ejecutarBusqueda (String newText){
+        for (androidx.fragment.app.Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof ProximasActividadesFragment) {
+                ((ProximasActividadesFragment) fragment).filtrarLista(newText);
+            } else if (fragment instanceof PasadasActividadesFragment) {
+                ((PasadasActividadesFragment) fragment).filtrarLista(newText);
+            }
+        }
     }
 }

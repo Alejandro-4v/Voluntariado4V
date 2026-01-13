@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 
 public class ProximasActividadesFragment extends Fragment {
+    RecyclerDataAdapter adapter;
 
     @Nullable
     @Override
@@ -30,7 +31,7 @@ public class ProximasActividadesFragment extends Fragment {
         lista.add(new Actividad("Recogida Alimentos", "Banco", "15/10/2025", "Pamplona", "Desc...", 20));
         lista.add(new Actividad("Carrera Solidaria", "Anfas", "20/11/2025", "Centro", "Desc...", 100));
 
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(lista, new RecyclerDataAdapter.OnItemClickListener() {
+        adapter = new RecyclerDataAdapter(lista, new RecyclerDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Actividad actividad, int position) {
                 // Lógica de abrir detalle (Igual que antes)
@@ -40,8 +41,17 @@ public class ProximasActividadesFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        adapter.setDatos(lista);
         recyclerView.setAdapter(adapter);
 
         return view;
+
     }
+    public void filtrarLista(String texto) {
+        if (adapter != null) {
+            adapter.filtrar(texto);
+        }
+    }
+
+
 }

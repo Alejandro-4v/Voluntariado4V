@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 
 public class PasadasActividadesFragment extends Fragment {
-
+    RecyclerDataAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class PasadasActividadesFragment extends Fragment {
         lista.add(new Actividad("Taller Reciclaje", "Mancomunidad", "22/04/2026", "Mendillorri", "Taller creativo para aprender a reutilizar envases domésticos y crear objetos útiles.", 30));
         lista.add(new Actividad("Cinefórum Social", "Amnistía Internacional", "18/03/2026", "Golem Baiona", "Proyección de documental sobre derechos humanos seguido de un debate abierto.", 80));
 
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(lista, new RecyclerDataAdapter.OnItemClickListener() {
+        adapter = new RecyclerDataAdapter(lista, new RecyclerDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Actividad actividad, int position) {
                 Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
@@ -51,5 +51,10 @@ public class PasadasActividadesFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+    public void filtrarLista(String texto) {
+        if (adapter != null) {
+            adapter.filtrar(texto);
+        }
     }
 }

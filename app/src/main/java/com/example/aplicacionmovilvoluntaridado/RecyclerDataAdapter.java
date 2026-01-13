@@ -8,21 +8,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // [cite: 108] Heredamos de RecyclerView.Adapter y usamos nuestra clase interna RecyclerDataHolder
 public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.RecyclerDataHolder> {
 
-    // [cite: 203, 205] Atributos para la lista y el listener
     private ArrayList<Actividad> listData;
+    private ArrayList<Actividad> listDataOriginal;  //Copia seguridad con todos los datos
     private OnItemClickListener itemListener;
 
     // [cite: 206] Constructor que recibe la lista y el listener
     public RecyclerDataAdapter(ArrayList<Actividad> listData, OnItemClickListener listener) {
         this.listData = listData;
+        this.listDataOriginal = new ArrayList<>(listData);
         this.itemListener = listener;
     }
 
-    // [cite: 143] Inflamos la vista item_actividad
+    public void setDatos(ArrayList<Actividad> nuevosDatos) {
+        this.listData = new ArrayList<>(nuevosDatos); // Actualizamos la visual
+        this.listDataOriginal = new ArrayList<>(nuevosDatos); // Actualizamos la copia de seguridad
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerDataHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,7 +52,24 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         return listData.size();
     }
 
-    // [cite: 107, 130] Clase interna Holder
+    public void filtrar(String textoBusqueda) {
+        if (textoBusqueda.isEmpty()) {
+            listData.clear();
+            listData.addAll(listDataOriginal);
+            } else {
+                // Versión compatible con Android antiguo
+                listData.clear();
+                for (Actividad c : listDataOriginal) {
+                    if (c.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase())) {
+                        listData.add(c);
+                    }
+                }
+            }
+        notifyDataSetChanged();
+        }
+
+
+
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
         // [cite: 131] Referencias a los elementos visuales
         TextView tvNombre, tvEntidad, tvFecha;
@@ -75,8 +100,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         }
     }
 
-    //
-    //   para manejar el click
+
     public interface OnItemClickListener {
         void onItemClick(Actividad actividad, int position);
     }
