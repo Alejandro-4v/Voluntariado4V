@@ -13,7 +13,8 @@
       </p>
 
       <!-- Rated activities section -->
-      <div class="mb-5" [hidden]="allActivities.length === 0">
+      @if (allActivities.length > 0) {
+      <div class="mb-5">
 
         <h2 class="fs-6 fw-bold mb-4 text-dark">
           Todas tus actividades
@@ -24,9 +25,11 @@
 
         </app-carrousel>
       </div>
+      }
 
       <!-- Unrated activities section -->
-      <div class="mb-5" [hidden]="unratedActivities.length === 0">
+      @if (unratedActivities.length > 0) {
+      <div class="mb-5">
 
         <h2 class="fs-6 fw-bold mb-4 text-dark">
           Queremos saber tu opinión sobre estas actividades
@@ -36,11 +39,14 @@
         <app-carrousel [items]="unratedActivities" cardType="activity" (cardClick)="openActivityModal($event)">
         </app-carrousel>
       </div>
+      }
 
       <!-- Empty state -->
-      <div *ngIf="allActivities.length === 0 && unratedActivities.length === 0" class="alert alert-info" role="alert">
+      @if (allActivities.length === 0 && unratedActivities.length === 0) {
+      <div class="alert alert-info" role="alert">
         <p class="mb-0">Aún no has participado en ninguna actividad. ¡Únete a nuestro programa de voluntariado!</p>
       </div>
+      }
     </div>
   </main>
 

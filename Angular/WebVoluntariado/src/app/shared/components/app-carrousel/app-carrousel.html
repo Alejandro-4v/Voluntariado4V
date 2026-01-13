@@ -1,7 +1,8 @@
 <div class="position-relative w-100 px-0 px-md-5">
 
   <!-- FLECHA IZQUIERDA -->
-  <button *ngIf="items.length > 3"
+  @if (items.length > 3) {
+  <button
     class="btn btn-outline-primary rounded-circle d-none d-md-flex align-items-center justify-content-center position-absolute top-50 start-0 translate-middle-y bg-white"
     style="width: 48px; height: 48px; z-index: 10; left: 0px; border-width: 2px;" (click)="scroll('left')">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left"
@@ -10,37 +11,49 @@
         d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
     </svg>
   </button>
+  }
 
   <!-- CARRUSEL (centrado y ancho fijo con clase personalizada) -->
   <div #track
     class="d-flex flex-nowrap overflow-auto carrousel-track mx-auto gap-0 gap-md-4 carousel-width py-2 px-0 px-md-0"
     (scroll)="onScroll($event)">
-    <div class="flex-shrink-0 card-width" *ngFor="let item of items; let i = index" [ngSwitch]="cardType">
+    @for (item of items; track i; let i = $index) {
+    <div class="flex-shrink-0 card-width">
 
+      @switch (cardType) {
       <!-- Activity Card -->
-      <activity-card *ngSwitchCase="'activity'" [name]="item.nombre || item.name"
+      @case ('activity') {
+      <activity-card [name]="item.nombre || item.name"
         [type]="item.tiposActividad?.[0]?.descripcion || item.type || item.entity || 'N/A'" [slots]="item.slots || 0"
         [filled]="item.voluntarios?.length || item.filled || 0" [image]="item.imagenUrl || item.image || ''"
         [showIcon]="item.showIcon !== false" [imageFit]="item.imageFit || 'cover'"
         [customBackground]="item.customBackground" (cardClick)="onActivityClick(item)">
       </activity-card>
+      }
 
       <!-- Proposal Card -->
-      <proposal-card *ngSwitchCase="'proposal'" [name]="item.nombre || item.name" [slots]="item.slots || 0"
+      @case ('proposal') {
+      <proposal-card [name]="item.nombre || item.name" [slots]="item.slots || 0"
         [filled]="item.voluntarios?.length || item.filled || 0" (cardClick)="onActivityClick(item)">
       </proposal-card>
+      }
 
       <!-- Entity Card -->
-      <entity-card *ngSwitchCase="'entity'" [name]="item.nombre || item.name"
+      @case ('entity') {
+      <entity-card [name]="item.nombre || item.name"
         [type]="item.actividades?.length + ' actividades' || item.type || 'N/A'" [image]="item.perfilUrl || item.image"
         (cardClick)="onActivityClick(item)">
       </entity-card>
+      }
+      }
 
     </div>
+    }
   </div>
 
   <!-- FLECHA DERECHA -->
-  <button *ngIf="items.length > 3"
+  @if (items.length > 3) {
+  <button
     class="btn btn-outline-primary rounded-circle d-none d-md-flex align-items-center justify-content-center position-absolute top-50 end-0 translate-middle-y bg-white"
     style="width: 48px; height: 48px; z-index: 10; right: 0px; border-width: 2px;" (click)="scroll('right')">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right"
@@ -49,14 +62,17 @@
         d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
     </svg>
   </button>
+  }
 
   <!-- Puntos de paginación (solo móvil) -->
   <div class="d-flex d-md-none justify-content-center gap-2 mt-3">
-    <div *ngFor="let item of items; let i = index" class="rounded-circle transition-all cursor-pointer"
+    @for (item of items; track i; let i = $index) {
+    <div class="rounded-circle transition-all cursor-pointer"
       style="cursor: pointer;" [style.width.px]="10" [style.height.px]="10"
       [style.background-color]="i === activeIndex ? '#0d47a1' : '#dee2e6'"
       [style.border]="i === activeIndex ? 'none' : '1px solid #0d47a1'" (click)="scrollToIndex(i)">
     </div>
+    }
   </div>
 
 </div>

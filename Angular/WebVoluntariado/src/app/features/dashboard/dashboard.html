@@ -16,7 +16,8 @@
       </h1>
 
       <!-- Activities by entity -->
-      <ng-container *ngFor="let entity of entitiesActivities">
+      @for (entity of entitiesActivities; track entity) {
+      <ng-container>
         <section class="mb-5">
 
           <h2 class="fs-6 fw-bold mb-4 text-dark">
@@ -29,6 +30,7 @@
 
         </section>
       </ng-container>
+      }
 
       <!-- Proposals -->
       <section class="mb-5">

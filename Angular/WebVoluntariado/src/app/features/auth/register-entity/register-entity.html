@@ -18,12 +18,16 @@
             placeholder="Razón social o nombre de la organización"
             [class.is-invalid]="entityForm.get('orgName')?.invalid && (entityForm.get('orgName')?.dirty || entityForm.get('orgName')?.touched)">
 
-          <div class="invalid-feedback" *ngIf="entityForm.get('orgName')?.errors?.['required']">
+          @if (entityForm.get('orgName')?.errors?.['required']) {
+          <div class="invalid-feedback">
             El nombre de la organización es obligatorio.
           </div>
-          <div class="invalid-feedback" *ngIf="entityForm.get('orgName')?.errors?.['minlength']">
+          }
+          @if (entityForm.get('orgName')?.errors?.['minlength']) {
+          <div class="invalid-feedback">
             Debe tener al menos 3 caracteres.
           </div>
+          }
         </div>
 
         <div class="mb-0">
@@ -31,12 +35,16 @@
           <input type="email" class="form-control" formControlName="email" placeholder="entidad@entidad.tld"
             [class.is-invalid]="entityForm.get('email')?.invalid && (entityForm.get('email')?.dirty || entityForm.get('email')?.touched)">
 
-          <div class="invalid-feedback" *ngIf="entityForm.get('email')?.errors?.['required']">
+          @if (entityForm.get('email')?.errors?.['required']) {
+          <div class="invalid-feedback">
             El correo es obligatorio.
           </div>
-          <div class="invalid-feedback" *ngIf="entityForm.get('email')?.errors?.['email']">
+          }
+          @if (entityForm.get('email')?.errors?.['email']) {
+          <div class="invalid-feedback">
             Introduce un correo válido.
           </div>
+          }
         </div>
       </div>
 
@@ -46,12 +54,16 @@
           placeholder="Tu mensaje"
           [class.is-invalid]="entityForm.get('message')?.invalid && (entityForm.get('message')?.dirty || entityForm.get('message')?.touched)"></textarea>
 
-        <div class="invalid-feedback" *ngIf="entityForm.get('message')?.errors?.['required']">
+        @if (entityForm.get('message')?.errors?.['required']) {
+        <div class="invalid-feedback">
           El mensaje es obligatorio.
         </div>
-        <div class="invalid-feedback" *ngIf="entityForm.get('message')?.errors?.['maxlength']">
+        }
+        @if (entityForm.get('message')?.errors?.['maxlength']) {
+        <div class="invalid-feedback">
           El mensaje no puede exceder los 500 caracteres.
         </div>
+        }
       </div>
 
     </div>

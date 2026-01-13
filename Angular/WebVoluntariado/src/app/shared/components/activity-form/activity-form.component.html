@@ -101,13 +101,16 @@
                 </div>
 
                 <!-- Image Preview -->
-                <div *ngIf="selectedImage">
+                <!-- Image Preview -->
+                @if (selectedImage) {
+                <div>
                     <label class="form-label fw-bold">Vista previa</label>
                     <div class="image-preview-container rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
                         style="height: 140px;">
                         <img [src]="selectedImage" alt="Preview" class="w-100 h-100 object-fit-cover">
                     </div>
                 </div>
+                }
             </div>
         </div>
 

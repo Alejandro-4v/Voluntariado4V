@@ -8,10 +8,12 @@
     {{ cardMessage }}
   </p>
 
-  <div *ngIf="showContactLink" class="small text-muted mb-4 px-2">
+  @if (showContactLink) {
+  <div class="small text-muted mb-4 px-2">
      ¿Necesitas cambiar algo en tu solicitud o contactar con nosotros? <br>
      Manda un correo a <a href="mailto:voluntariado@cuatrovientos.org" class="fw-bold text-decoration-none">voluntariado@cuatrovientos.org</a>
   </div>
+  }
 
   <div class="mt-4 fw-bold" style="color: var(--cv-blue);">
     ¡Juntos haremos la diferencia!

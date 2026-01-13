@@ -9,13 +9,19 @@
           {{ layoutData.title }}
         </h1>
 
-        <h2 *ngIf="layoutData.subtitle" class="mb-4 text-dark" style="font-weight: 600; font-size: 2rem;">
+        @if (layoutData.subtitle) {
+        <h2 class="mb-4 text-dark" style="font-weight: 600; font-size: 2rem;">
           {{ layoutData.subtitle }}
         </h2>
+        }
         
         <div class="fs-6 mt-3" style="color: #6c8299; line-height: 1.6;">
-          <p class="mb-2" *ngIf="layoutData.text1">{{ layoutData.text1 }}</p>
-          <p class="mb-0" *ngIf="layoutData.text2">{{ layoutData.text2 }}</p>
+          @if (layoutData.text1) {
+          <p class="mb-2">{{ layoutData.text1 }}</p>
+          }
+          @if (layoutData.text2) {
+          <p class="mb-0">{{ layoutData.text2 }}</p>
+          }
         </div>
 
       </div>

@@ -2,12 +2,14 @@
     <div class="card-body p-4">
         <!-- Logo Container -->
         <div class="mb-3 d-flex align-items-center" style="height: 60px;">
-            <img *ngIf="image" [src]="image" alt="{{ name }}" class="img-fluid"
+            @if (image) {
+            <img [src]="image" alt="{{ name }}" class="img-fluid"
                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
-            <div *ngIf="!image"
-                class="w-100 h-100 bg-light rounded d-flex align-items-center justify-content-center text-muted small">
+            } @else {
+            <div class="w-100 h-100 bg-light rounded d-flex align-items-center justify-content-center text-muted small">
                 Sin logo
             </div>
+            }
         </div>
 
         <h5 class="card-title fs-6 fw-bold mb-2 text-dark">{{ name }}</h5>

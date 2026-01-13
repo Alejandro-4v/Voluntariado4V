@@ -14,12 +14,16 @@
       <input type="email" class="form-control" formControlName="email" placeholder="nuevo_voluntario@gmail.com"
         [class.is-invalid]="studentForm.get('email')?.invalid && (studentForm.get('email')?.dirty || studentForm.get('email')?.touched)">
 
-      <div class="invalid-feedback" *ngIf="studentForm.get('email')?.errors?.['required']">
+      @if (studentForm.get('email')?.errors?.['required']) {
+      <div class="invalid-feedback">
         El correo es obligatorio.
       </div>
-      <div class="invalid-feedback" *ngIf="studentForm.get('email')?.errors?.['email']">
+      }
+      @if (studentForm.get('email')?.errors?.['email']) {
+      <div class="invalid-feedback">
         Introduce un correo válido.
       </div>
+      }
     </div>
 
     <div class="mb-3">
@@ -27,9 +31,11 @@
       <input type="text" class="form-control" formControlName="name" placeholder="John Doe"
         [class.is-invalid]="studentForm.get('name')?.invalid && (studentForm.get('name')?.dirty || studentForm.get('name')?.touched)">
 
-      <div class="invalid-feedback" *ngIf="studentForm.get('name')?.errors?.['required']">
+      @if (studentForm.get('name')?.errors?.['required']) {
+      <div class="invalid-feedback">
         El nombre es obligatorio.
       </div>
+      }
     </div>
 
     <div class="d-flex justify-content-between mt-4 mb-4 small">
