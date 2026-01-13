@@ -5,7 +5,7 @@ import { TipoActividadService } from '../../../services/tipo-actividad.service';
 import { FormsModule } from '@angular/forms';
 import { ExcelService } from '../../../services/excel.service';
 import { Voluntario } from '../../../models/voluntario.model';
-import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
+import { FilterSortComponent, FilterSection } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
 
@@ -22,12 +22,12 @@ export class ManagementVolunteersComponent implements OnInit {
     displayVolunteers: Voluntario[] = [];
     selectedVolunteer: Voluntario | null = null;
 
-    filterBy: string = 'all';
     sortBy: string = '';
     groupBy: string = '';
 
     private volunteersService = inject(VolunteersService);
     private excelService = inject(ExcelService);
+    private tipoActividadService = inject(TipoActividadService);
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
@@ -57,12 +57,6 @@ export class ManagementVolunteersComponent implements OnInit {
         listDisplayField: 'descripcion'
     };
 
-    filterOptions = [
-        { label: 'Todos', value: 'all' },
-        { label: 'Activos', value: 'activo' },
-        { label: 'Inactivos', value: 'inactivo' }
-    ];
-
     sortOptions = [
         { label: 'Nombre', value: 'nombre' },
         { label: 'Apellido', value: 'apellido1' }
@@ -73,11 +67,7 @@ export class ManagementVolunteersComponent implements OnInit {
         { label: 'Ninguno', value: '' }
     ];
 
-    private tipoActividadService = inject(TipoActividadService);
-
     types: any[] = [];
-    selectedInterests: number[] = [];
-    selectedDays: number[] = [];
 
     daysOfWeek = [
         { id: 1, name: 'Lunes' },
@@ -89,26 +79,69 @@ export class ManagementVolunteersComponent implements OnInit {
         { id: 7, name: 'Domingo' }
     ];
 
+    filterSections: FilterSection[] = [];
+    activeFilters: { [key: string]: any } = {};
+
     ngOnInit() {
+        this.updateFilterSections(); // Initialize filters immediately
+
         this.volunteersService.getAll().subscribe(data => {
             this.volunteers = data;
             this.displayVolunteers = [...this.volunteers];
             if (this.volunteers.length > 0) {
                 this.selectedVolunteer = this.volunteers[0];
             }
+            this.applyFilters();
         });
 
-        this.tipoActividadService.getAll().subscribe(data => {
-            this.types = data;
+        this.loadTypes();
+    }
+
+    loadTypes() {
+        this.tipoActividadService.getAll().subscribe(types => {
+            this.types = types;
+            this.updateFilterSections();
         });
+    }
+
+    updateFilterSections() {
+        this.filterSections = [
+            {
+                key: 'status',
+                label: 'Estado',
+                type: 'radio',
+                options: [
+                    { label: 'Todos', value: 'all' },
+                    { label: 'Activos', value: 'activo' },
+                    { label: 'Inactivos', value: 'inactivo' }
+                ]
+            },
+            {
+                key: 'interests',
+                label: 'Intereses',
+                type: 'checkbox',
+                options: this.types.map(t => ({ label: t.nombre, value: t.idTipoActividad }))
+            },
+            {
+                key: 'availability',
+                label: 'Disponibilidad',
+                type: 'checkbox',
+                options: this.daysOfWeek.map(d => ({ label: d.name, value: d.id }))
+            }
+        ];
+
+        // Initialize defaults if not set
+        if (!this.activeFilters['status']) this.activeFilters['status'] = 'all';
+        if (!this.activeFilters['interests']) this.activeFilters['interests'] = [];
+        if (!this.activeFilters['availability']) this.activeFilters['availability'] = [];
     }
 
     selectVolunteer(volunteer: Voluntario) {
         this.selectedVolunteer = volunteer;
     }
 
-    onFilterBy(criteria: string) {
-        this.filterBy = criteria;
+    onFiltersChange(newFilters: { [key: string]: any }) {
+        this.activeFilters = newFilters;
         this.applyFilters();
     }
 
@@ -122,57 +155,27 @@ export class ManagementVolunteersComponent implements OnInit {
         this.applyFilters();
     }
 
-    toggleInterest(id: number) {
-        if (this.selectedInterests.includes(id)) {
-            this.selectedInterests = this.selectedInterests.filter(i => i !== id);
-        } else {
-            this.selectedInterests.push(id);
-        }
-        this.applyFilters();
-    }
-
-    toggleDay(id: number) {
-        if (this.selectedDays.includes(id)) {
-            this.selectedDays = this.selectedDays.filter(d => d !== id);
-        } else {
-            this.selectedDays.push(id);
-        }
-        this.applyFilters();
-    }
-
-    clearFilters() {
-        this.selectedInterests = [];
-        this.selectedDays = [];
-        this.filterBy = 'all';
-        this.applyFilters();
-    }
-
-    getInterestName(id: number): string {
-        return this.types.find(t => t.idTipoActividad === id)?.nombre || 'Desconocido';
-    }
-
-    getDayName(id: number): string {
-        return this.daysOfWeek.find(d => d.id === id)?.name || 'Desconocido';
-    }
-
     applyFilters() {
         let temp = [...this.volunteers];
 
-        // 0. Filtering (Status)
-        if (this.filterBy !== 'all') {
-            temp = temp.filter(v => v.estado?.toLowerCase() === this.filterBy.toLowerCase());
+        // Filter by Status
+        const status = this.activeFilters['status'];
+        if (status && status !== 'all') {
+            temp = temp.filter(v => v.estado?.toLowerCase() === status);
         }
 
-        // Filter by Interest (OR logic: has ANY of the selected interests)
-        if (this.selectedInterests.length > 0) {
-            temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad !== undefined && this.selectedInterests.includes(t.idTipoActividad)));
+        // Filter by Interest
+        const interests = this.activeFilters['interests'];
+        if (interests && interests.length > 0) {
+            temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad !== undefined && interests.includes(t.idTipoActividad)));
         }
 
-        // Filter by Availability (OR logic: available on ANY of the selected days)
-        if (this.selectedDays.length > 0) {
+        // Filter by Availability
+        const days = this.activeFilters['availability'];
+        if (days && days.length > 0) {
             temp = temp.filter(v => v.disponibilidades?.some(d => {
                 const id = d.diaSemana?.idDia;
-                return id !== undefined && this.selectedDays.includes(id);
+                return id !== undefined && days.includes(id);
             }));
         }
 

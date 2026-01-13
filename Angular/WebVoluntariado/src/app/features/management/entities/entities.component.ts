@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EntitiesService } from '../../../services/entities.service';
 import { Entidad } from '../../../models/entidad.model';
-import { FilterSortComponent } from '../../../shared/components/filter-sort/filter-sort.component';
+import { FilterSortComponent, FilterSection } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
 
@@ -19,7 +19,6 @@ export class ManagementEntitiesComponent implements OnInit {
     displayEntities: Entidad[] = [];
     selectedEntity: Entidad | null = null;
 
-    filterBy: string = 'all';
     sortBy: string = '';
     groupBy: string = '';
 
@@ -41,16 +40,27 @@ export class ManagementEntitiesComponent implements OnInit {
             { label: 'Responsable', field: 'nombreResponsable' },
             { label: 'Email', field: 'contactMail' }
         ],
-        listField: 'actividades', // This might need adjustment in GenericDetailComponent to handle objects
+        listField: 'actividades',
         listLabel: 'Actividades',
         listDisplayField: 'nombre'
     };
 
-    filterOptions = [
-        { label: 'Todas', value: 'all' },
-        { label: 'Con Actividades', value: 'with_activities' },
-        { label: 'Sin Actividades', value: 'without_activities' }
+    filterSections: FilterSection[] = [
+        {
+            key: 'activityStatus',
+            label: 'Estado de Actividades',
+            type: 'radio',
+            options: [
+                { label: 'Todas', value: 'all' },
+                { label: 'Con Actividades', value: 'with_activities' },
+                { label: 'Sin Actividades', value: 'without_activities' }
+            ]
+        }
     ];
+
+    activeFilters: { [key: string]: any } = {
+        activityStatus: 'all'
+    };
 
     sortOptions = [
         { label: 'Nombre', value: 'nombre' },
@@ -69,6 +79,7 @@ export class ManagementEntitiesComponent implements OnInit {
             if (this.entities.length > 0) {
                 this.selectedEntity = this.entities[0];
             }
+            this.applyFilters();
         });
     }
 
@@ -76,8 +87,8 @@ export class ManagementEntitiesComponent implements OnInit {
         this.selectedEntity = entity;
     }
 
-    onFilterBy(criteria: string) {
-        this.filterBy = criteria;
+    onFiltersChange(newFilters: { [key: string]: any }) {
+        this.activeFilters = newFilters;
         this.applyFilters();
     }
 
@@ -95,9 +106,10 @@ export class ManagementEntitiesComponent implements OnInit {
         let temp = [...this.entities];
 
         // 0. Filtering
-        if (this.filterBy === 'with_activities') {
+        const activityStatus = this.activeFilters['activityStatus'];
+        if (activityStatus === 'with_activities') {
             temp = temp.filter(e => e.actividades && e.actividades.length > 0);
-        } else if (this.filterBy === 'without_activities') {
+        } else if (activityStatus === 'without_activities') {
             temp = temp.filter(e => !e.actividades || e.actividades.length === 0);
         }
 
