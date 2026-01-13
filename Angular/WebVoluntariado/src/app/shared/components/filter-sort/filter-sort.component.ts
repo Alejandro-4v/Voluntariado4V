@@ -12,11 +12,17 @@ import { CommonModule } from '@angular/common';
       <div class="dropdown">
         <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center gap-2"
           type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.1rem;">
-          <i class="bi bi-funnel"></i> Filtrar por
+          <i class="bi bi-funnel"></i> 
+          @if (getLabel(filterOptions, currentFilter)) {
+            Filtrar: <span class="fw-bold">{{ getLabel(filterOptions, currentFilter) }}</span>
+          } @else {
+            Filtrar por
+          }
+          <i class="bi bi-chevron-down ms-1" style="font-size: 0.8em;"></i>
         </button>
         <ul class="dropdown-menu">
           @for (option of filterOptions; track option.value) {
-            <li><a class="dropdown-item" href="javascript:void(0)" (click)="onFilterChange(option.value)">{{ option.label }}</a></li>
+            <li><a class="dropdown-item" [class.active]="option.value === currentFilter" href="javascript:void(0)" (click)="onFilterChange(option.value)">{{ option.label }}</a></li>
           }
         </ul>
       </div>
@@ -27,11 +33,17 @@ import { CommonModule } from '@angular/common';
       <div class="dropdown">
         <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center gap-2"
           type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.1rem;">
-          <i class="bi bi-grid"></i> Agrupar por
+          <i class="bi bi-grid"></i> 
+          @if (getLabel(groupOptions, currentGroup)) {
+            Agrupar: <span class="fw-bold">{{ getLabel(groupOptions, currentGroup) }}</span>
+          } @else {
+            Agrupar por
+          }
+          <i class="bi bi-chevron-down ms-1" style="font-size: 0.8em;"></i>
         </button>
         <ul class="dropdown-menu">
           @for (option of groupOptions; track option.value) {
-            <li><a class="dropdown-item" href="javascript:void(0)" (click)="onGroupChange(option.value)">{{ option.label }}</a></li>
+            <li><a class="dropdown-item" [class.active]="option.value === currentGroup" href="javascript:void(0)" (click)="onGroupChange(option.value)">{{ option.label }}</a></li>
           }
         </ul>
       </div>
@@ -42,11 +54,17 @@ import { CommonModule } from '@angular/common';
       <div class="dropdown">
         <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center gap-2"
           type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.1rem;">
-          <i class="bi bi-filter-left"></i> Ordenar por
+          <i class="bi bi-filter-left"></i> 
+          @if (getLabel(sortOptions, currentSort)) {
+            Ordenar: <span class="fw-bold">{{ getLabel(sortOptions, currentSort) }}</span>
+          } @else {
+            Ordenar por
+          }
+          <i class="bi bi-chevron-down ms-1" style="font-size: 0.8em;"></i>
         </button>
         <ul class="dropdown-menu">
           @for (option of sortOptions; track option.value) {
-            <li><a class="dropdown-item" href="javascript:void(0)" (click)="onSortChange(option.value)">{{ option.label }}</a></li>
+            <li><a class="dropdown-item" [class.active]="option.value === currentSort" href="javascript:void(0)" (click)="onSortChange(option.value)">{{ option.label }}</a></li>
           }
         </ul>
       </div>
@@ -59,6 +77,10 @@ export class FilterSortComponent {
   @Input() filterOptions: { label: string, value: string }[] = [];
   @Input() groupOptions: { label: string, value: string }[] = [];
   @Input() sortOptions: { label: string, value: string }[] = [];
+
+  @Input() currentFilter: string = '';
+  @Input() currentGroup: string = '';
+  @Input() currentSort: string = '';
 
   @Output() filterChange = new EventEmitter<string>();
   @Output() groupChange = new EventEmitter<string>();
@@ -74,5 +96,11 @@ export class FilterSortComponent {
 
   onSortChange(value: string) {
     this.sortChange.emit(value);
+  }
+
+  getLabel(options: { label: string, value: string }[], value: string): string | null {
+    if (!value || value === 'all' || value === '') return null;
+    const option = options.find(o => o.value === value);
+    return option ? option.label : null;
   }
 }
