@@ -1,0 +1,36 @@
+<div class="container-fluid py-4 ps-5 pe-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center gap-3">
+            <h1 class="h3 text-dark fw-bold mb-0">Voluntarios</h1>
+            <button class="btn btn-success btn-sm d-flex align-items-center gap-2" (click)="exportToExcel()">
+                <i class="bi bi-file-earmark-excel"></i> Exportar
+            </button>
+        </div>
+
+        <div class="d-flex gap-4 align-items-center">
+            <!-- Shared Filter Sort Component -->
+            <app-filter-sort [filterSections]="filterSections" [activeFilters]="activeFilters"
+                [groupOptions]="groupOptions" [sortOptions]="sortOptions" [currentGroup]="groupBy"
+                [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (gro
+                upChange)="onGroupBy($event)" (sortChange)="onSortBy($event)">
+            </app-filter-sort>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Details -->
+        <div class="col-md-4 mb-4 sticky-sidebar">
+            @if (selectedVolunteer) {
+            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+            </app-generic-detail>
+            }
+        </div>
+
+        <!-- Main List -->
+        <div class="col-md-8">
+            <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
+                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
+            </app-generic-list>
+        </div>
+    </div>
