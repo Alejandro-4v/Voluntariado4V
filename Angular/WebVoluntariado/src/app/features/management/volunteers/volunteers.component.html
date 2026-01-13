@@ -120,7 +120,26 @@
         }
 
         <!-- Clear All -->
-        </app-generic-list>
+        <button class="btn btn-link btn-sm text-danger text-decoration-none fw-bold" (click)="clearFilters()">
+            Borrar todo
+        </button>
     </div>
-</div>
+    }
+
+    <div class="row">
+        <!-- Sidebar Details -->
+        <div class="col-md-4 mb-4 sticky-sidebar">
+            @if (selectedVolunteer) {
+            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+            </app-generic-detail>
+            }
+        </div>
+
+        <!-- Main List -->
+        <div class="col-md-8">
+            <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
+                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
+            </app-generic-list>
+        </div>
+    </div>
 </div>
