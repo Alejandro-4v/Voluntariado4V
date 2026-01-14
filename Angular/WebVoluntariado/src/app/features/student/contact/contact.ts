@@ -8,13 +8,16 @@ import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/
 import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { fadeIn, slideUp } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, FooterComponent, NavbarComponent],
+  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, FooterComponent, NavbarComponent, LoadingSpinnerComponent],
   templateUrl: './contact.html',
-  styleUrl: './contact.scss'
+  styleUrl: './contact.scss',
+  animations: [fadeIn, slideUp]
 })
 export class ContactComponent implements OnInit {
   private router = inject(Router);
@@ -28,6 +31,7 @@ export class ContactComponent implements OnInit {
   entities: any[] = [];
   selectedActivity: any = null;
   isModalOpen = false;
+  isLoading = true;
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -36,32 +40,53 @@ export class ContactComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
+
     // Fetch all activities
-    this.activitiesService.getAll().subscribe(activities => {
-      const now = new Date();
+    this.activitiesService.getAll().subscribe({
+      next: (activities) => {
+        const now = new Date();
 
-      // Past activities for the current user
-      // Assuming we filter by user participation if available in the model or just showing all past for now if not linked
-      // The previous mock logic filtered by user ID. The API model has 'voluntarios' array in activity.
-      // We can check if currentUser.nif is in activity.voluntarios
-
-      this.allActivities = activities.filter(a => {
-        const isPast = new Date(a.fin) < now;
-        const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
-        return isPast && isParticipant;
-      }).sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
+        // Past activities for the current user
+        this.allActivities = activities.filter(a => {
+          const isPast = new Date(a.fin) < now;
+          const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
+          return isPast && isParticipant;
+        }).sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
 
 
-      // Upcoming activities (Available for everyone)
-      this.upcomingActivities = activities.filter(a => {
-        return new Date(a.inicio) >= now && a.estado === 'A'; // 'A' for Active/Approved
-      }).sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+        // Upcoming activities (Available for everyone)
+        this.upcomingActivities = activities.filter(a => {
+          return new Date(a.inicio) >= now && a.estado === 'A'; // 'A' for Active/Approved
+        }).sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+
+        this.checkLoading();
+      },
+      error: (err) => {
+        console.error('Error loading activities', err);
+        this.checkLoading();
+      }
     });
 
     // Fetch entities
-    this.entitiesService.getAll().subscribe(entities => {
-      this.entities = entities;
+    this.entitiesService.getAll().subscribe({
+      next: (entities) => {
+        this.entities = entities;
+        this.checkLoading();
+      },
+      error: (err) => {
+        console.error('Error loading entities', err);
+        this.checkLoading();
+      }
     });
+  }
+
+  private loadCount = 0;
+  private checkLoading() {
+    this.loadCount++;
+    if (this.loadCount >= 2) {
+      this.isLoading = false;
+    }
   }
 
   openActivityModal(activity: any) {

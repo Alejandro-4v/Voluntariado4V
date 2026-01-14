@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { ActivitiesService } from '../../services/activities.service';
 import { EntitiesService } from '../../services/entities.service';
@@ -16,7 +15,6 @@ import { fadeIn, slideUp, staggerFade } from '../../shared/animations/animations
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     AppCarrouselComponent,
     ActivityModalComponent,
     FooterComponent,

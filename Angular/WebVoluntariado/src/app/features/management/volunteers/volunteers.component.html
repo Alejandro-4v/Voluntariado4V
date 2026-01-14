@@ -12,25 +12,32 @@
             <!-- Shared Filter Sort Component -->
             <app-filter-sort [filterSections]="filterSections" [activeFilters]="activeFilters"
                 [groupOptions]="groupOptions" [sortOptions]="sortOptions" [currentGroup]="groupBy"
-                [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (gro
-                upChange)="onGroupBy($event)" (sortChange)="onSortBy($event)">
+                [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (groupChange)="onGroupBy($event)"
+                (sortChange)="onSortBy($event)">
             </app-filter-sort>
         </div>
     </div>
 
     <div class="row">
-        <!-- Sidebar Details -->
-        <div class="col-md-4 mb-4 sticky-sidebar">
-            @if (selectedVolunteer) {
-            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
-            </app-generic-detail>
-            }
-        </div>
+        @if (isLoading) {
+        <app-loading-spinner [text]="'Cargando voluntarios...'"></app-loading-spinner>
+        } @else {
+        <div class="d-contents" @fadeIn>
+            <!-- Sidebar Details -->
+            <div class="col-md-4 mb-4 sticky-sidebar" @slideUp>
+                @if (selectedVolunteer) {
+                <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+                </app-generic-detail>
+                }
+            </div>
 
-        <!-- Main List -->
-        <div class="col-md-8">
-            <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
-                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
-            </app-generic-list>
+            <!-- Main List -->
+            <div class="col-md-8" @slideUp>
+                <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
+                    [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
+                </app-generic-list>
+            </div>
         </div>
+        }
     </div>
+</div>

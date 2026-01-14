@@ -5,19 +5,23 @@ import { Entidad } from '../../../models/entidad.model';
 import { FilterSortComponent, FilterSection } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { fadeIn, slideUp } from '../../../shared/animations/animations';
 
 @Component({
     selector: 'app-management-entities',
     standalone: true,
-    imports: [CommonModule, FilterSortComponent, GenericListComponent, GenericDetailComponent],
+    imports: [CommonModule, FilterSortComponent, GenericListComponent, GenericDetailComponent, LoadingSpinnerComponent],
     templateUrl: './entities.component.html',
-    styleUrls: ['./entities.component.scss']
+    styleUrls: ['./entities.component.scss'],
+    animations: [fadeIn, slideUp]
 })
 export class ManagementEntitiesComponent implements OnInit {
 
     entities: Entidad[] = [];
     displayEntities: Entidad[] = [];
     selectedEntity: Entidad | null = null;
+    isLoading = true;
 
     sortBy: string = '';
     groupBy: string = '';
@@ -73,13 +77,21 @@ export class ManagementEntitiesComponent implements OnInit {
     ];
 
     ngOnInit() {
-        this.entitiesService.getAll().subscribe(data => {
-            this.entities = data;
-            this.displayEntities = [...this.entities];
-            if (this.entities.length > 0) {
-                this.selectedEntity = this.entities[0];
+        this.isLoading = true;
+        this.entitiesService.getAll().subscribe({
+            next: (data) => {
+                this.entities = data;
+                this.displayEntities = [...this.entities];
+                if (this.entities.length > 0) {
+                    this.selectedEntity = this.entities[0];
+                }
+                this.applyFilters();
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading entities', err);
+                this.isLoading = false;
             }
-            this.applyFilters();
         });
     }
 

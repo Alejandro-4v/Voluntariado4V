@@ -1,74 +1,88 @@
 <div class="dashboard-wrapper min-vh-100 bg-light">
+  <!-- Navbar -->
+  <app-navbar [mode]="'white'" [options]="[
+      { label: 'Mis actividades pasadas', path: '/student/actividades-pasadas' },
+      { label: 'Contacto', path: '/student/contacto' },
+      { label: 'Nuevas actividades', type: 'button', path: '/student/panel' }
+    ]"></app-navbar>
+
   <!-- Main content -->
   <main class="dashboard-content bg-white py-5">
     <div class="container-lg">
-      <!-- Main title -->
-      <h1 class="fs-4 fw-bold mb-2 text-dark">
-        Tienes algún problema o comentario sobre una actividad?
-      </h1>
 
-      <!-- Subtitle -->
-      <p class="text-muted mb-5">
-        Tus actividades pasadas
-      </p>
+      @if (isLoading) {
+      <app-loading-spinner [text]="'Cargando información de contacto...'"></app-loading-spinner>
+      } @else {
+      <div @fadeIn>
+        <!-- Main title -->
+        <h1 class="fs-4 fw-bold mb-2 text-dark" @slideUp>
+          Tienes algún problema o comentario sobre una actividad?
+        </h1>
 
-      <!-- Past activities section -->
-      @if (allActivities.length > 0) {
-      <div class="mb-5">
-        <!-- Carrusel de actividades pasadas -->
-        <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
-        </app-carrousel>
-      </div>
-      }
+        <!-- Subtitle -->
+        <p class="text-muted mb-5" @slideUp>
+          Tus actividades pasadas
+        </p>
 
-      <!-- Empty state for past activities -->
-      @if (allActivities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert">
-        <p class="mb-0">No tienes actividades pasadas aun.</p>
-      </div>
-      }
+        <!-- Past activities section -->
+        @if (allActivities.length > 0) {
+        <div class="mb-5" @slideUp>
+          <!-- Carrusel de actividades pasadas -->
+          <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+          </app-carrousel>
+        </div>
+        }
 
-      <!-- Upcoming activities section -->
-      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5">
-        Tus proximas actividades
-      </h2>
+        <!-- Empty state for past activities -->
+        @if (allActivities.length === 0) {
+        <div class="alert alert-info mb-5" role="alert" @slideUp>
+          <p class="mb-0">No tienes actividades pasadas aun.</p>
+        </div>
+        }
 
-      @if (upcomingActivities.length > 0) {
-      <div class="mb-5">
-        <!-- Carrusel de proximas actividades -->
-        <app-carrousel [items]="upcomingActivities" cardType="activity" (cardClick)="openActivityModal($event)">
-        </app-carrousel>
-      </div>
-      }
+        <!-- Upcoming activities section -->
+        <h2 class="fs-6 fw-bold mb-4 text-dark mt-5" @slideUp>
+          Tus proximas actividades
+        </h2>
 
-      <!-- Empty state for upcoming activities -->
-      @if (upcomingActivities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert">
-        <p class="mb-0">No hay proximas actividades disponibles.</p>
-      </div>
-      }
+        @if (upcomingActivities.length > 0) {
+        <div class="mb-5" @slideUp>
+          <!-- Carrusel de proximas actividades -->
+          <app-carrousel [items]="upcomingActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+          </app-carrousel>
+        </div>
+        }
 
-      <!-- Entities section -->
-      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5">
-        Contacta con una entidad
-      </h2>
+        <!-- Empty state for upcoming activities -->
+        @if (upcomingActivities.length === 0) {
+        <div class="alert alert-info mb-5" role="alert" @slideUp>
+          <p class="mb-0">No hay proximas actividades disponibles.</p>
+        </div>
+        }
 
-      <p class="text-muted mb-4">
-        Entidades que participan con nosotros
-      </p>
+        <!-- Entities section -->
+        <h2 class="fs-6 fw-bold mb-4 text-dark mt-5" @slideUp>
+          Contacta con una entidad
+        </h2>
 
-      @if (entities.length > 0) {
-      <div class="mb-5">
-        <!-- Carrusel de entidades -->
-        <app-carrousel [items]="entities" cardType="entity">
-        </app-carrousel>
-      </div>
-      }
+        <p class="text-muted mb-4" @slideUp>
+          Entidades que participan con nosotros
+        </p>
 
-      <!-- Empty state for entities -->
-      @if (entities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert">
-        <p class="mb-0">No hay entidades disponibles.</p>
+        @if (entities.length > 0) {
+        <div class="mb-5" @slideUp>
+          <!-- Carrusel de entidades -->
+          <app-carrousel [items]="entities" cardType="entity">
+          </app-carrousel>
+        </div>
+        }
+
+        <!-- Empty state for entities -->
+        @if (entities.length === 0) {
+        <div class="alert alert-info mb-5" role="alert" @slideUp>
+          <p class="mb-0">No hay entidades disponibles.</p>
+        </div>
+        }
       </div>
       }
     </div>
