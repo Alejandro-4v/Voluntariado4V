@@ -23,8 +23,7 @@
           <div class="info-row">
             <span class="date">{{ (activity.inicio || activity.date) | date : 'dd/MM/yyyy' }}</span>
             @if (activity.inicio || activity.time) {
-            <span class="time">{{ (activity.inicio || activity.time) | date :
-              'HH:mm' }}</span>
+            <span class="time">{{ (activity.inicio || activity.time) | date : 'HH:mm' }}</span>
             }
           </div>
         </div>
@@ -35,13 +34,34 @@
           <p class="info-text">{{ activity.location || 'Ubicación no especificada' }}</p>
         </div>
 
-        <!-- Slots -->
-        @if (activity.slots) {
+        <!-- Grado (Target Audience) -->
+        @if (activity.grado) {
         <div class="info-section">
-          <h3 class="info-label">Plazas habilitadas / disponibles</h3>
-          <p class="info-text">{{ activity.filled || activity.voluntarios?.length || 0 }} / {{ activity.slots }}</p>
+          <h3 class="info-label">Dirigido a</h3>
+          <p class="info-text">{{ activity.grado.descripcion }} ({{ activity.grado.nivel === 'S' ? 'Grado Superior' :
+            'Grado Medio' }})</p>
         </div>
         }
+
+        <!-- Contact Info -->
+        @if (activity.convoca?.contactMail) {
+        <div class="info-section">
+          <h3 class="info-label">Contacto</h3>
+          <p class="info-text">
+            <a [href]="'mailto:' + activity.convoca.contactMail" class="text-decoration-none">
+              {{ activity.convoca.contactMail }}
+            </a>
+          </p>
+        </div>
+        }
+
+        <!-- Slots -->
+        <div class="info-section">
+          <h3 class="info-label">Plazas ocupadas / totales</h3>
+          <p class="info-text">
+            {{ activity.voluntarios?.length || 0 }} / {{ activity.plazasTotales || activity.slots || 'Ilimitadas' }}
+          </p>
+        </div>
 
         <!-- Tipos de Actividad -->
         @if (activity.tiposActividad?.length) {

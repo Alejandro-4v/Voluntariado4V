@@ -210,7 +210,7 @@ export class ManagementVolunteersComponent implements OnInit {
             'Email': v.mail,
             'Grado': v.grado?.descripcion || '',
             'Estado': v.estado,
-            'Intereses': v.tiposActividad?.map(t => t.nombre).join(', ') || ''
+            'Intereses': v.tiposActividad?.map(t => t.descripcion).join(', ') || ''
         }));
 
         this.excelService.exportAsExcelFile(dataToExport, 'voluntarios');

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $primary-blue: #0d47a1;
 $text-blue: #1e3a8a;
 
@@ -16,7 +18,7 @@ $text-blue: #1e3a8a;
             color: $text-blue;
 
             &:hover {
-                color: darken($text-blue, 10%);
+                color: color.adjust($text-blue, $lightness: -10%);
             }
         }
 
@@ -25,7 +27,7 @@ $text-blue: #1e3a8a;
             color: white;
 
             &:hover {
-                background-color: darken($primary-blue, 10%);
+                background-color: color.adjust($primary-blue, $lightness: -10%);
             }
         }
 

@@ -15,6 +15,10 @@ export interface Actividad {
     tiposActividad: TipoActividad[];
     ods: Ods[];
     voluntarios: VoluntarioActividad[];
+    // Future fields
+    plazasTotales?: number;
+    valoracion?: number;
+    location?: string; // Not in API yet but used in UI
 }
 
 export interface EntidadActividad {
