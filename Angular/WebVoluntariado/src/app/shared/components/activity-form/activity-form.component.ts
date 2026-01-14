@@ -5,12 +5,15 @@ import { OdsService } from '../../../services/ods.service';
 import { TipoActividadService } from '../../../services/tipo-actividad.service';
 import { EntitiesService } from '../../../services/entities.service';
 
+import { fadeIn } from '../../animations/animations';
+
 @Component({
     selector: 'app-activity-form',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './activity-form.component.html',
-    styleUrls: ['./activity-form.component.scss']
+    styleUrls: ['./activity-form.component.scss'],
+    animations: [fadeIn]
 })
 export class ActivityFormComponent implements OnInit {
     @Input() mode: 'create' | 'edit' = 'create';

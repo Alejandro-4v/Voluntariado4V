@@ -23,29 +23,38 @@
         <app-carrousel [items]="group.activities" (cardClick)="openActivityModal($event)">
         </app-carrousel>
       </section>
+      } @empty {
+      <div class="alert alert-info mb-5" @slideUp>
+        No hay nuevas actividades de tus entidades.
+      </div>
       }
 
       <!-- Proposals from Cuatrovientos -->
-      @if (proposalsFromCuatrovientos.length > 0) {
       <section class="mb-5" @slideUp>
         <h2 class="fs-5 fw-bold mb-4 text-dark">
           Propuestas desde Cuatrovientos
         </h2>
+        @if (proposalsFromCuatrovientos.length > 0) {
         <app-carrousel [items]="proposalsFromCuatrovientos" cardType="proposal" (cardClick)="openActivityModal($event)">
         </app-carrousel>
+        } @else {
+        <p class="text-muted">No hay propuestas activas en este momento.</p>
+        }
       </section>
-      }
 
       <!-- Other Entities -->
-      @if (otherEntities.length > 0) {
       <section class="mb-5" @slideUp>
         <h2 class="fs-5 fw-bold mb-4 text-dark">
           Otras entidades que te pueden interesar
         </h2>
+        @if (otherEntities.length > 0) {
         <app-carrousel [items]="otherEntities" cardType="entity">
         </app-carrousel>
+        } @else {
+        <p class="text-muted">No hay otras entidades disponibles.</p>
+        }
       </section>
-      }
+
     </div>
     }
 
