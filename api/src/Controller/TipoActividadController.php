@@ -51,31 +51,6 @@ final class TipoActividadController extends AbstractController
         return $this->json($tipoActividad, context: ['groups' => ['tipoActividad:read']]);
     }
 
-
-    #[Route('/tipoActividadEnUso', name: 'tipo_actividad_en_uso', methods: ['GET'])]
-    public function enUso(
-        TipoActividadRepository $tipoActividadRepository
-    ): JsonResponse {
-        /** @var TipoActividad[] $tipoActividades */
-        $tipoActividades = $tipoActividadRepository->findAll();
-
-        /** @var TipoActividad[] $tipoActividadesEnUso */
-        $tipoActividadesEnUso = array();
-
-        foreach ($tipoActividades as $tipoActividad) {
-            if (count($tipoActividad->getActividades()) > 0) {
-                array_push($tipoActividadesEnUso, $tipoActividad);
-            }
-        }
-
-        return $this->json(
-            $tipoActividadesEnUso,
-            context: ['groups' => ['tipoActividad:read']],
-            status: Response::HTTP_OK
-        );
-
-    }
-
     #[Route('/tipoActividad', name: 'tipo_actividad_create', methods: ['POST'])]
     public function create(
         Request $request,
@@ -109,23 +84,16 @@ final class TipoActividadController extends AbstractController
 
     }
 
-    #[Route('/tipoActividad', name: 'tipo_actividad_update', methods: ['PUT'])]
+    #[Route('/tipoActividad/{id}', name: 'tipo_actividad_update', methods: ['PUT'])]
     public function update(
+        int $id,
         Request $request,
         TipoActividadRepository $tipoActividadRepository,
         SerializerInterface $serializer
     ): JsonResponse {
         $data = $request->getContent();
-        $json = json_decode($data, true);
 
-        if (!isset($json['idTipoActividad'])) {
-            return $this->json([
-                'error' => 'Missing ID',
-                'details' => 'PUT request must include idTipoActividad'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $tipoActividad = $tipoActividadRepository->find($json['idTipoActividad']);
+        $tipoActividad = $tipoActividadRepository->find($id);
 
         if (!$tipoActividad) {
             return $this->json([
@@ -146,6 +114,24 @@ final class TipoActividadController extends AbstractController
         $tipoActividadRepository->update($tipoActividad);
 
         return $this->json($tipoActividad, context: ['groups' => ['tipoActividad:read']]);
+    }
+
+    #[Route('/tipoActividad/{id}', name: 'tipo_actividad_delete', methods: ['DELETE'])]
+    public function delete(
+        int $id,
+        TipoActividadRepository $tipoActividadRepository
+    ): JsonResponse {
+        $tipoActividad = $tipoActividadRepository->find($id);
+
+        if (!$tipoActividad) {
+            return $this->json([
+                'error' => 'TipoActividad not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $tipoActividadRepository->remove($tipoActividad);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
 }
