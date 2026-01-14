@@ -1,4 +1,4 @@
-.PHONY: up down restart build shell start stop install clean m-entity m-controller load-mock-data
+.PHONY: up down restart build shell start stop install clean load-mock-data
 
 BLUE := \033[0;34m
 RED := \033[0;31m
@@ -50,20 +50,6 @@ clean: down
 	@echo "$(BLUE)Cleaning Docker resources"
 	docker compose down -v --rmi local
 	@echo "$(GREEN)Docker resources cleaned"
-
-m-entity:
-	docker exec -it php php bin/console make:entity
-
-m-controller:
-	docker exec -it php php bin/console make:controller
-
-migrate:
-	@echo "$(BLUE)Building migration$(RESET)"
-	docker exec -it php php bin/console make:migration
-	@echo "$(GREEN)Migration built"
-	@echo "$(BLUE)Launching migration to DB"
-	docker exec -it php php bin/console doctrine:migrations:migrate
-	@echo "$(GREEN)Migrated successfully$(RESET)"
 
 load-mock-data:
 	@echo "$(BLUE)Loading mock data$(RESET)"
