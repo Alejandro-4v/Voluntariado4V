@@ -120,7 +120,7 @@ export class ManagementVolunteersComponent implements OnInit {
                 key: 'interests',
                 label: 'Intereses',
                 type: 'checkbox',
-                options: this.types.map(t => ({ label: t.nombre, value: t.idTipoActividad }))
+                options: this.types.map(t => ({ label: t.descripcion, value: t.idTipoActividad }))
             },
             {
                 key: 'availability',
