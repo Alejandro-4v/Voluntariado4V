@@ -6,12 +6,14 @@ use App\Repository\VoluntarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: VoluntarioRepository::class)]
 #[ORM\Table(name: 'VOLUNTARIO')]
 #[ORM\Index(columns: ['nombre', 'apellido_1', 'apellido_2'], name: 'IX_VOLUNTARIO_nombre_completo')]
-class Voluntario
+class Voluntario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'nif', type: 'string', length: 10)]
@@ -186,4 +188,29 @@ class Voluntario
         return $this->actividades;
     }
 
+    public function setTiposActividad(Collection $tiposActividad): self
+    {
+        $this->tiposActividad = $tiposActividad;
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_VOLUNTARIO'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->mail;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->passwordHash;
+    }
 }

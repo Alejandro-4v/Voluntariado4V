@@ -70,17 +70,34 @@ class VoluntarioRepository extends ServiceEntityRepository
                ->setParameter('telefono', '%' . $filters['telefono'] . '%');
         }
 
-        if (isset($filters['disponibilidad']) && is_array($filters['disponibilidad'])) {
-            $qb->leftJoin('v.disponibilidad', 'd')
-               ->andWhere($qb->expr()->in('d.id', ':disponibilidadIds'))
-               ->setParameter('disponibilidadIds', $filters['disponibilidad']);
+        if (isset($filters['dias'])) {
+            $diasIds = array_map(
+                'intval',
+                explode(',', $filters['dias'])
+            );
+
+            $qb->leftJoin('v.disponibilidades', 'd')
+               ->leftJoin('d.diaSemana', 'ds')
+               ->andWhere('ds.idDia IN (:diasIds)')
+               ->setParameter('diasIds', $diasIds);
+        }
+
+        if (isset($filters['tiposActividad'])) {
+            $tiposActividadIds = array_map(
+                'intval',
+                explode(',', $filters['tiposActividad'])
+            );
+
+            $qb->leftJoin('v.tiposActividad', 'ta')
+               ->andWhere('ta.idTipoActividad IN (:tiposActividadIds)')
+               ->setParameter('tiposActividadIds', $tiposActividadIds);
         }
 
         if (isset($filters['limit']) && is_numeric($filters['limit'])) {
             $qb->setMaxResults((int) $filters['limit']);
         }
 
-        $qb->orderBy('v.apellidos', 'ASC')
+        $qb->orderBy('v.apellido1', 'ASC')
            ->addOrderBy('v.nombre', 'ASC');
 
         return $qb->getQuery()->getResult();
