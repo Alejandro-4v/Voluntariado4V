@@ -2,10 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../../services/auth.service';
+import { ActivitiesService } from '../../../services/activities.service';
+import { EntitiesService } from '../../../services/entities.service';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+
 @Component({
   selector: 'app-contact',
   standalone: true,
@@ -16,52 +19,15 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar.compon
 export class ContactComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private activitiesService = inject(ActivitiesService);
+  private entitiesService = inject(EntitiesService);
 
   currentUser: User | null = null;
-  allActivities: any[] = [];
+  allActivities: any[] = []; // Past activities
   upcomingActivities: any[] = [];
   entities: any[] = [];
   selectedActivity: any = null;
   isModalOpen = false;
-
-  // Datos de actividades pasadas del usuario
-  pastActivitiesByUser: { [userId: number]: any[] } = {
-    1: [
-      { name: 'Actividad de jardin', type: 'Jardineria', slots: 5, filled: 5, image: '', entity: 'Amabir', date: '2024-10-15', rating: 5 },
-      { name: 'Taller de manualidades', type: 'Manualidades', slots: 5, filled: 5, image: '', entity: 'Amabir', date: '2024-09-20', rating: 4 }
-    ],
-    2: [
-      { name: 'Ayuda en tareas', type: 'Apoyo', slots: 5, filled: 5, image: '', entity: 'Solera Asistencial', date: '2024-09-12', rating: 4 },
-      { name: 'Voluntariado en eventos', type: 'Eventos', slots: 10, filled: 10, image: '', entity: 'Cuatrovientos', date: '2024-08-05', rating: 5 }
-    ],
-    3: [
-      { name: 'Gestion de actividades', type: 'Administrativo', slots: 0, filled: 0, image: '', entity: 'Amabir', date: '2024-10-01', rating: 5 }
-    ],
-    4: [
-      { name: 'Supervision general', type: 'Administrativo', slots: 0, filled: 0, image: '', entity: 'Cuatrovientos', date: '2024-10-10', rating: 5 }
-    ]
-  };
-
-  // Todas las actividades disponibles ordenadas cronologicamente
-  allAvailableActivities = [
-    { name: 'Actividad de jardin', type: 'Jardineria', slots: 5, filled: 1, image: '', entity: 'Amabir', date: '2024-12-15' },
-    { name: 'Taller de manualidades', type: 'Manualidades', slots: 5, filled: 3, image: '', entity: 'Amabir', date: '2024-12-20' },
-    { name: 'Paseo acompanado', type: 'Acompanamiento', slots: 5, filled: 0, image: '', entity: 'Amabir', date: '2024-12-25' },
-    { name: 'Lectura compartida', type: 'Lectura', slots: 5, filled: 2, image: '', entity: 'Amabir', date: '2025-01-10' },
-    { name: 'Ayuda en tareas', type: 'Apoyo', slots: 5, filled: 1, image: '', entity: 'Solera Asistencial', date: '2025-01-15' },
-    { name: 'Compania en residencia', type: 'Acompanamiento', slots: 5, filled: 4, image: '', entity: 'Solera Asistencial', date: '2025-01-20' },
-    { name: 'Apoyo administrativo', type: 'Administrativo', slots: 5, filled: 2, image: '', entity: 'Solera Asistencial', date: '2025-02-05' },
-    { name: 'Voluntariado en eventos', type: 'Eventos', slots: 10, filled: 2, image: '', entity: 'Cuatrovientos', date: '2025-02-10' },
-    { name: 'Taller de tecnologia', type: 'Tecnologia', slots: 8, filled: 5, image: '', entity: 'Cuatrovientos', date: '2025-02-15' },
-    { name: 'Limpieza comunitaria', type: 'Comunitario', slots: 12, filled: 7, image: '', entity: 'Cuatrovientos', date: '2025-03-01' }
-  ];
-
-  // Entidades disponibles
-  entitiesList = [
-    { name: 'Amabir', type: 'Organizacion', image: '' },
-    { name: 'Solera Asistencial', type: 'Organizacion', image: '' },
-    { name: 'Cuatrovientos', type: 'Organizacion', image: '' }
-  ];
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -70,25 +36,36 @@ export class ContactComponent implements OnInit {
       return;
     }
 
-    // Cargar actividades pasadas del usuario
-    const userPastActivities = this.pastActivitiesByUser[this.currentUser.id] || [];
-    this.allActivities = userPastActivities.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Fetch all activities
+    this.activitiesService.getAll().subscribe(activities => {
+      const now = new Date();
 
-    // Cargar actividades proximas ordenadas cronologicamente (de mas cercana a mas lejana)
-    this.upcomingActivities = this.allAvailableActivities
-      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      // Past activities for the current user
+      // Assuming we filter by user participation if available in the model or just showing all past for now if not linked
+      // The previous mock logic filtered by user ID. The API model has 'voluntarios' array in activity.
+      // We can check if currentUser.nif is in activity.voluntarios
 
-    // Cargar entidades sin orden especifico
-    this.entities = this.entitiesList;
+      this.allActivities = activities.filter(a => {
+        const isPast = new Date(a.fin) < now;
+        const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
+        return isPast && isParticipant;
+      }).sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
+
+
+      // Upcoming activities (Available for everyone)
+      this.upcomingActivities = activities.filter(a => {
+        return new Date(a.inicio) >= now && a.estado === 'A'; // 'A' for Active/Approved
+      }).sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+    });
+
+    // Fetch entities
+    this.entitiesService.getAll().subscribe(entities => {
+      this.entities = entities;
+    });
   }
 
   openActivityModal(activity: any) {
-    this.selectedActivity = {
-      ...activity,
-      location: activity.location || 'Polideportivo Municipal',
-      time: activity.time || '10:00',
-      description: activity.description || 'Descripcion breve de tareas de la actividad'
-    };
+    this.selectedActivity = activity;
     this.isModalOpen = true;
   }
 
@@ -98,7 +75,7 @@ export class ContactComponent implements OnInit {
   }
 
   onActivityAction() {
-    console.log('Participar:', this.selectedActivity.name);
+    console.log('Participar:', this.selectedActivity?.nombre);
     this.closeActivityModal();
   }
 }
