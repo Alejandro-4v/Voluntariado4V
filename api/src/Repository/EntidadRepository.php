@@ -36,4 +36,35 @@ class EntidadRepository extends ServiceEntityRepository
 
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * @param array $filters
+     * @return Entidad[]
+     */
+    public function findByFilters(array $filters): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if (isset($filters['cif'])) {
+            $qb->andWhere('e.cif LIKE :cif')
+               ->setParameter('cif', '%' . $filters['cif'] . '%');
+        }
+
+        if (isset($filters['nombre'])) {
+            $qb->andWhere('e.nombre LIKE :nombre')
+               ->setParameter('nombre', '%' . $filters['nombre'] . '%');
+        }
+
+        if (isset($filters['nombreResponsable'])) {
+            $qb->andWhere('e.nombreResponsable LIKE :nombreResponsable OR e.apellidosResponsable LIKE :nombreResponsable')
+               ->setParameter('nombreResponsable', '%' . $filters['nombreResponsable'] . '%');
+        }
+
+        if (isset($filters['contactMail'])) {
+            $qb->andWhere('e.contactMail LIKE :contactMail')
+               ->setParameter('contactMail', '%' . $filters['contactMail'] . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

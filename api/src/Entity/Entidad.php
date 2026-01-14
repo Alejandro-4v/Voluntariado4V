@@ -7,11 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: EntidadRepository::class)]
 #[ORM\Table(name: 'ENTIDAD')]
-class Entidad
+class Entidad implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -178,6 +180,26 @@ class Entidad
     {
         $this->actividades = $actividades;
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_ENTIDAD'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->loginMail;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->passwordHash;
     }
 
 }

@@ -28,6 +28,10 @@ class Actividad
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private ?string $descripcion = null;
 
+    #[ORM\Column(name: 'lugar', type: 'string', length: 255)]
+    #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
+    private string $lugar;
+
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private string $estado = 'P';
@@ -107,6 +111,18 @@ class Actividad
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getLugar(): string
+    {
+        return $this->lugar;
+    }
+
+    public function setLugar(string $lugar): self
+    {
+        $this->lugar = $lugar;
 
         return $this;
     }

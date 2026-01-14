@@ -20,10 +20,13 @@ final class EntidadController extends AbstractController
 {
     #[Route('/entidad', name: 'entidad_index', methods: ['GET'])]
     public function index(
-        EntidadRepository $entidadRepository
+        EntidadRepository $entidadRepository,
+        Request $request
     ): JsonResponse {
+        $filters = $request->query->all();
+
         /** @var Entidad[] $entidades */
-        $entidades = $entidadRepository->findAll();
+        $entidades = $entidadRepository->findByFilters($filters);
 
         return $this->json(
             $entidades,
@@ -189,8 +192,9 @@ final class EntidadController extends AbstractController
         return $this->json($entidad, context: ['groups' => ['entidad:read']], status: Response::HTTP_CREATED);
     }
 
-    #[Route(path: '/entidad', name: 'entidad_update', methods: ['PUT'])]
+    #[Route(path: '/entidad/{id}', name: 'entidad_update', methods: ['PUT'])]
     public function update(
+        int $id,
         Request $request,
         EntidadRepository $entidadRepository,
         ActividadRepository $actividadRepository
@@ -198,15 +202,8 @@ final class EntidadController extends AbstractController
         $data = $request->getContent();
         $json = json_decode($data, true);
 
-        if (!isset($json['idEntidad'])) {
-            return $this->json([
-                'error' => 'Missing ID',
-                'details' => 'PUT request must include idEntidad'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
         /** @var Entidad $entidad */
-        $entidad = $entidadRepository->find($json['idEntidad']);
+        $entidad = $entidadRepository->find($id);
 
         if (!$entidad) {
             return $this->json([
@@ -352,6 +349,25 @@ final class EntidadController extends AbstractController
             'groups' => ['entidad:read']
 
         ], status: Response::HTTP_ACCEPTED);
+    }
+
+    #[Route('/entidad/{id}', name: 'entidad_delete', methods: ['DELETE'])]
+    public function delete(
+        int $id,
+        EntidadRepository $entidadRepository
+    ): JsonResponse {
+        /** @var Entidad $entidad */
+        $entidad = $entidadRepository->find($id);
+
+        if (!$entidad) {
+            return $this->json([
+                'error' => 'Entidad not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $entidadRepository->remove($entidad);
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
 }
