@@ -22,7 +22,7 @@ tags:
   - name: Log in
     description: Inicio de sesión de voluntarios, entidades o administradores.
 paths:
-  /actividades:
+  /actividad:
     get:
       tags:
         - Actividades
@@ -109,7 +109,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Actividad'
 
-  /actividades/{idActividad}:
+  /actividad/{idActividad}:
     get:
       tags:
         - Actividades
@@ -147,7 +147,7 @@ paths:
         '404':
           description: Actividad no encontrada
 
-  /voluntarios:
+  /voluntario:
     get:
       tags:
         - Voluntarios
@@ -234,7 +234,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Voluntario'
 
-  /voluntarios/{nif}:
+  /voluntario/{nif}:
     get:
       tags:
         - Voluntarios
@@ -296,7 +296,7 @@ paths:
         '404':
           description: Voluntario no encontrado
 
-  /entidades:
+  /entidad:
     get:
       tags:
         - Entidad
@@ -353,7 +353,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Entidad'
 
-  /entidades/{id}:
+  /entidad/{id}:
     put:
       tags:
         - Entidad
@@ -395,7 +395,7 @@ paths:
         '404':
           description: Entidad no encontrada
 
-  /tipos-actividad:
+  /tipoActividad:
     get:
       tags:
         - Tipos de actividad
@@ -427,7 +427,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TipoActividad'
 
-  /tipos-actividad/{id}:
+  /tipoActividad/{id}:
     get:
       tags:
         - Tipos de actividad
@@ -465,7 +465,7 @@ paths:
         '404':
           description: Tipo de actividad no encontrado
 
-  /grados:
+  /grado:
     get:
       tags:
         - Grado
@@ -497,7 +497,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Grado'
 
-  /grados/{id}:
+  /grado/{id}:
     get:
       tags:
         - Grado
