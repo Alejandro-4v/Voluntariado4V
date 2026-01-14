@@ -8,19 +8,23 @@ import { Voluntario } from '../../../models/voluntario.model';
 import { FilterSortComponent, FilterSection } from '../../../shared/components/filter-sort/filter-sort.component';
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { fadeIn, slideUp } from '../../../shared/animations/animations';
 
 @Component({
     selector: 'app-management-volunteers',
     standalone: true,
-    imports: [CommonModule, FormsModule, FilterSortComponent, GenericListComponent, GenericDetailComponent],
+    imports: [CommonModule, FormsModule, FilterSortComponent, GenericListComponent, GenericDetailComponent, LoadingSpinnerComponent],
     templateUrl: './volunteers.component.html',
-    styleUrls: ['./volunteers.component.scss']
+    styleUrls: ['./volunteers.component.scss'],
+    animations: [fadeIn, slideUp]
 })
 export class ManagementVolunteersComponent implements OnInit {
 
     volunteers: Voluntario[] = [];
     displayVolunteers: Voluntario[] = [];
     selectedVolunteer: Voluntario | null = null;
+    isLoading = true;
 
     sortBy: string = '';
     groupBy: string = '';
@@ -84,14 +88,22 @@ export class ManagementVolunteersComponent implements OnInit {
 
     ngOnInit() {
         this.updateFilterSections(); // Initialize filters immediately
+        this.isLoading = true;
 
-        this.volunteersService.getAll().subscribe(data => {
-            this.volunteers = data;
-            this.displayVolunteers = [...this.volunteers];
-            if (this.volunteers.length > 0) {
-                this.selectedVolunteer = this.volunteers[0];
+        this.volunteersService.getAll().subscribe({
+            next: (data) => {
+                this.volunteers = data;
+                this.displayVolunteers = [...this.volunteers];
+                if (this.volunteers.length > 0) {
+                    this.selectedVolunteer = this.volunteers[0];
+                }
+                this.applyFilters();
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading volunteers', err);
+                this.isLoading = false;
             }
-            this.applyFilters();
         });
 
         this.loadTypes();

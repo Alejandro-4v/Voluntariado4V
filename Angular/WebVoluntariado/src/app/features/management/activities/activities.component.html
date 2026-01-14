@@ -49,57 +49,64 @@
     <!-- Results Sections -->
     <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
 
-        @if (!isSearchActive) {
-        <!-- Próximas actividades -->
-        <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
-            <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
-            </app-carrousel>
-        </section>
-
-        <!-- Actividades pasadas -->
-        <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
-            <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
-            </app-carrousel>
-        </section>
-
-        <!-- Actividades pendiente de aprobación -->
-        <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
-            <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
-            </app-carrousel>
-        </section>
-
-        <!-- Propuestas desde Cuatrovientos -->
-        <section class="mb-5">
-            <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
-            <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
-            </app-carrousel>
-        </section>
+        @if (isLoading) {
+        <app-loading-spinner [text]="'Cargando actividades...'"></app-loading-spinner>
         } @else {
-        <!-- Grid View for Search Results -->
-        <section class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
-                <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})</h2>
-                <button class="btn btn-sm btn-outline-dark" (click)="onClear()">Volver a la vista general</button>
-            </div>
+        <div @fadeIn>
+            @if (!isSearchActive) {
+            <!-- Próximas actividades -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
+                <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
 
-            <div class="row g-4">
-                @for (item of filteredActivities; track item) {
-                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <activity-card [name]="item.nombre" [type]="item.tiposActividad?.[0]?.descripcion || 'N/A'"
-                        [slots]="item.plazasTotales || item.slots || 0" [filled]="item.voluntarios?.length || 0"
-                        [image]="item.imagenUrl || ''" (cardClick)="openActivityModal(item)">
-                    </activity-card>
+            <!-- Actividades pasadas -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
+                <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+
+            <!-- Actividades pendiente de aprobación -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
+                <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+
+            <!-- Propuestas desde Cuatrovientos -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+                <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+            } @else {
+            <!-- Grid View for Search Results -->
+            <section class="mb-5" @slideUp>
+                <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
+                    <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})
+                    </h2>
+                    <button class="btn btn-sm btn-outline-dark" (click)="onClear()">Volver a la vista general</button>
                 </div>
-                } @empty {
-                <div class="col-12 text-center py-5">
-                    <p class="text-dark h5">No se encontraron actividades.</p>
+
+                <div class="row g-4" @staggerFade>
+                    @for (item of filteredActivities; track item) {
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <activity-card [name]="item.nombre" [type]="item.tiposActividad?.[0]?.descripcion || 'N/A'"
+                            [slots]="item.plazasTotales || item.slots || 0" [filled]="item.voluntarios?.length || 0"
+                            [image]="item.imagenUrl || ''" (cardClick)="openActivityModal(item)">
+                        </activity-card>
+                    </div>
+                    } @empty {
+                    <div class="col-12 text-center py-5">
+                        <p class="text-dark h5">No se encontraron actividades.</p>
+                    </div>
+                    }
                 </div>
-                }
-            </div>
-        </section>
+            </section>
+            }
+        </div>
         }
     </div>
 

@@ -8,13 +8,16 @@ import { FormsModule } from '@angular/forms';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 import { ActivityCardComponent } from '../../../shared/components/activity-card/activity-card-component';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { fadeIn, slideUp, staggerFade } from '../../../shared/animations/animations';
 
 @Component({
     selector: 'app-management-activities',
     standalone: true,
-    imports: [CommonModule, FormsModule, AppCarrouselComponent, ActivityModalComponent, ActivityCardComponent],
+    imports: [CommonModule, FormsModule, AppCarrouselComponent, ActivityModalComponent, ActivityCardComponent, LoadingSpinnerComponent],
     templateUrl: './activities.component.html',
-    styleUrls: ['./activities.component.scss']
+    styleUrls: ['./activities.component.scss'],
+    animations: [fadeIn, slideUp, staggerFade]
 })
 export class ManagementActivitiesComponent implements OnInit {
 
@@ -25,6 +28,7 @@ export class ManagementActivitiesComponent implements OnInit {
 
     selectedActivity: any = null;
     isModalOpen = false;
+    isLoading = true;
 
     private activitiesService = inject(ActivitiesService);
     private tipoActividadService = inject(TipoActividadService);
@@ -43,16 +47,24 @@ export class ManagementActivitiesComponent implements OnInit {
     selectedEntity: string = '';
 
     ngOnInit() {
-        this.activitiesService.getAll().subscribe(data => {
-            this.allActivities = data;
+        this.isLoading = true;
+        this.activitiesService.getAll().subscribe({
+            next: (data) => {
+                this.allActivities = data;
 
-            // Filter activities based on state for carousels
-            this.upcomingActivities = data.filter(a => a.estado === 'A');
-            this.pastActivities = data.filter(a => a.estado === 'F');
-            this.pendingActivities = data.filter(a => a.estado === 'P');
+                // Filter activities based on state for carousels
+                this.upcomingActivities = data.filter(a => a.estado === 'A');
+                this.pastActivities = data.filter(a => a.estado === 'F');
+                this.pendingActivities = data.filter(a => a.estado === 'P');
 
-            // Assuming proposals are also pending or another state, for now using pending
-            this.proposals = []; // Or filter differently if needed
+                // Assuming proposals are also pending or another state, for now using pending
+                this.proposals = []; // Or filter differently if needed
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading activities', err);
+                this.isLoading = false;
+            }
         });
 
         this.tipoActividadService.getAll().subscribe(data => {

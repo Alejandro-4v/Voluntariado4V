@@ -1,94 +1,107 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivityModalComponent } from '../../shared/components/activity-modal/activity-modal';
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
-import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
-import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
 import { ActivitiesService } from '../../services/activities.service';
 import { EntitiesService } from '../../services/entities.service';
+import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
+import { ActivityModalComponent } from '../../shared/components/activity-modal/activity-modal';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { fadeIn, slideUp, staggerFade } from '../../shared/animations/animations';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    AppCarrouselComponent,
+    ActivityModalComponent,
+    FooterComponent,
+    NavbarComponent,
+    LoadingSpinnerComponent
+  ],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  styleUrl: './dashboard.scss',
+  animations: [fadeIn, slideUp, staggerFade]
 })
 export class DashboardComponent implements OnInit {
-
-  private router = inject(Router);
   private authService = inject(AuthService);
   private activitiesService = inject(ActivitiesService);
   private entitiesService = inject(EntitiesService);
 
   currentUser: User | null = null;
+
+  // Loading state
+  isLoading = true;
+
+  // Data
+  newActivitiesFromEntities: any[] = [];
+  proposalsFromCuatrovientos: any[] = [];
+  otherEntities: any[] = [];
+
+  // Modal state
   selectedActivity: any = null;
   isModalOpen = false;
 
-  entitiesActivities: any[] = [];
-  proposals: any[] = [];
-  otherEntities: any[] = [];
-
-  // Actividades pasadas por usuario
-  // Actividades pasadas por usuario
-  pastActivitiesByUser: { [userId: number]: any[] } = {};
-
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    if (!this.currentUser) {
-      this.router.navigate(['/auth/iniciar-sesion']);
-    }
+    this.loadData();
+  }
 
-    this.activitiesService.getAll().subscribe(data => {
-      // Group by entity
-      const grouped = data.reduce((acc, curr) => {
-        const entityName = curr.convoca?.nombre || 'Desconocido';
-        if (!acc[entityName]) {
-          acc[entityName] = [];
-        }
-        acc[entityName].push(curr);
-        return acc;
-      }, {} as any);
+  loadData() {
+    this.isLoading = true;
 
-      this.entitiesActivities = Object.keys(grouped).map(key => ({
-        entity: key,
-        activities: grouped[key]
-      }));
+    // Fetch activities
+    this.activitiesService.getAll().subscribe({
+      next: (activities) => {
+        const now = new Date();
 
-      this.proposals = data.filter(a => a.estado === 'P'); // Pending as proposals
+        // Filter for "New Activities"
+        this.newActivitiesFromEntities = activities
+          .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre !== 'Cuatrovientos')
+          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
+          .slice(0, 5);
+
+        // Filter for "Proposals from Cuatrovientos"
+        this.proposalsFromCuatrovientos = activities
+          .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre === 'Cuatrovientos')
+          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
+          .slice(0, 5);
+
+        this.checkLoadingComplete();
+      },
+      error: (err) => {
+        console.error('Error loading activities', err);
+        this.checkLoadingComplete();
+      }
     });
 
-    this.entitiesService.getAll().subscribe(data => {
-      this.otherEntities = data;
+    // Fetch entities
+    this.entitiesService.getAll().subscribe({
+      next: (entities) => {
+        this.otherEntities = entities;
+        this.checkLoadingComplete();
+      },
+      error: (err) => {
+        console.error('Error loading entities', err);
+        this.checkLoadingComplete();
+      }
     });
   }
 
-
-
-  scrollCarousel(event: Event, direction: 'left' | 'right') {
-    event.preventDefault();
-
-    const track = (event.target as HTMLElement)
-      .closest('.d-flex')
-      ?.querySelector('.carousel-track') as HTMLElement;
-
-    if (track) {
-      const cardWidth = track.clientWidth / 3; // EXACTAMENTE 3 TARJETAS VISIBLES
-      track.scrollBy({
-        left: direction === 'left' ? -cardWidth : cardWidth,
-        behavior: 'smooth'
-      });
+  private dataLoadedCount = 0;
+  private checkLoadingComplete() {
+    this.dataLoadedCount++;
+    if (this.dataLoadedCount >= 2) {
+      this.isLoading = false;
     }
   }
 
   openActivityModal(activity: any) {
-    this.selectedActivity = {
-      ...activity,
-      location: activity.location || 'Polideportivo Municipal',
-      time: activity.time || '10:00',
-      description: activity.description || 'Descripción breve de tareas de la actividad'
-    };
+    this.selectedActivity = activity;
     this.isModalOpen = true;
   }
 
@@ -98,21 +111,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onActivityAction() {
-    // Aquí irá la lógica de participar
-    console.log('Participar en:', this.selectedActivity.name);
+    console.log('Participar:', this.selectedActivity?.nombre);
     this.closeActivityModal();
-  }
-
-  get navbarOptions(): NavbarOption[] {
-    return [
-      { label: 'Mis actividades pasadas', path: '/past-activities' },
-      { label: 'Contacto', path: '#' },
-      { label: 'Nuevas actividades', type: 'button', path: '/dashboard' }
-    ];
-  }
-
-  handleLogout() {
-    this.authService.logout();
-    this.router.navigate(['/auth/iniciar-sesion']);
   }
 }
