@@ -14,11 +14,11 @@ class DiaSemana
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id_dia', type: 'smallint')]
-    #[Groups(['diaSemana:read'])]
+    #[Groups(['diaSemana:read', 'disponibilidad:read'])]
     private ?int $idDia = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 10, unique: true)]
-    #[Groups(['diaSemana:read'])]
+    #[Groups(['diaSemana:read', 'disponibilidad:read'])]
     private string $descripcion;
 
     #[ORM\OneToMany(targetEntity: Disponibilidad::class, mappedBy: 'diaSemana')]

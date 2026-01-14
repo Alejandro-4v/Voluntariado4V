@@ -62,10 +62,14 @@ class Voluntario
     #[Groups(['voluntario:read'])]
     private Collection $tiposActividad;
 
+    #[ORM\ManyToMany(targetEntity: Actividad::class, mappedBy: 'voluntarios')]
+    private Collection $actividades;
+
     public function __construct()
     {
         $this->disponibilidades = new ArrayCollection();
         $this->tiposActividad = new ArrayCollection();
+        $this->actividades = new ArrayCollection();
     }
 
     public function getNif(): ?string
@@ -175,6 +179,11 @@ class Voluntario
     public function getTiposActividad(): Collection
     {
         return $this->tiposActividad;
+    }
+
+    public function getActividades(): Collection
+    {
+        return $this->actividades;
     }
 
 }
