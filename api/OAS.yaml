@@ -3,7 +3,7 @@ info:
   title: Volutariado 4V - OpenAPI 1.0
   contact:
     email: alejandrolopez2048@gmail.com
-  version: 1.0.0
+  version: beta
 servers:
   - url: http://localhost:80
 tags:
