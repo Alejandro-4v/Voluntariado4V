@@ -19,6 +19,7 @@ use App\Repository\VoluntarioRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,9 @@ final class ActividadController extends AbstractController
 {
     private const ESTADOS_VALIDOS = ['A', 'F', 'P', 'C', 'R', 'E'];
 
+    /**
+     * @throws Exception
+     */
     #[Route('/actividad', name: 'actividad_index', methods: ['GET'])]
     public function index(
         ActividadRepository $actividadRepository,
@@ -37,7 +41,6 @@ final class ActividadController extends AbstractController
     ): JsonResponse {
         $filters = $request->query->all();
 
-        /** @var Actividad[] $actividades */
         $actividades = $actividadRepository->findByFilters($filters);
 
         return $this->json(
@@ -134,7 +137,7 @@ final class ActividadController extends AbstractController
         try {
             /** @var DateTimeImmutable $inicio */
             $inicio = new DateTimeImmutable($json['inicio']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'error' => 'Invalid inicio datetime format'
             ], Response::HTTP_BAD_REQUEST);
@@ -143,7 +146,7 @@ final class ActividadController extends AbstractController
         try {
             /** @var DateTimeImmutable $fin */
             $fin = new DateTimeImmutable($json['fin']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json([
                 'error' => 'Invalid fin datetime format'
             ], Response::HTTP_BAD_REQUEST);
@@ -251,8 +254,9 @@ final class ActividadController extends AbstractController
 
     }
 
-    #[Route(path: '/actividad', name: 'actividad_update', methods: ['PUT'])]
+    #[Route(path: '/actividad/{id}', name: 'actividad_update', methods: ['PUT'])]
     public function update(
+        int $id,
         Request $request,
         ActividadRepository $actividadRepository,
 
@@ -265,14 +269,7 @@ final class ActividadController extends AbstractController
         $data = $request->getContent();
         $json = json_decode($data, true);
 
-        if (!isset($json['idActividad'])) {
-            return $this->json([
-                'error' => 'Missing ID',
-                'details' => 'PUT request must include idActividad'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $actividad = $actividadRepository->find($json['idActividad']);
+        $actividad = $actividadRepository->find($id);
 
         if (!$actividad) {
             return $this->json([
@@ -354,7 +351,7 @@ final class ActividadController extends AbstractController
             try {
                 /** @var DateTimeImmutable $inicio */
                 $inicio = new DateTimeImmutable($json['inicio']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $this->json([
                     'error' => 'Invalid inicio datetime format'
                 ], Response::HTTP_BAD_REQUEST);
@@ -365,7 +362,7 @@ final class ActividadController extends AbstractController
             try {
                 /** @var DateTimeImmutable $fin */
                 $fin = new DateTimeImmutable($json['fin']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $this->json([
                     'error' => 'Invalid fin datetime format'
                 ], Response::HTTP_BAD_REQUEST);
@@ -384,7 +381,7 @@ final class ActividadController extends AbstractController
         }
 
         if ($fin != $actividad->getFin()) {
-            $actividad->setInfin($fin);
+            $actividad->setFin($fin);
         }
 
         if (isset($json['grado'])) {

@@ -2,13 +2,11 @@
 
 namespace App\Repository;
 
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Actividad;
-use App\Entity\Entidad;
-use App\Entity\Grado;
-use App\Entity\Ods;
-use App\Entity\TipoActividad;
+use Exception;
 
 /**
  * @extends ServiceEntityRepository<Actividad>
@@ -43,6 +41,7 @@ class ActividadRepository extends ServiceEntityRepository
 
     /**
      * @return Actividad[] Returns an array of Actividad objects
+     * @throws Exception
      */
     public function findByFilters(array $filters): array
     {
@@ -51,6 +50,11 @@ class ActividadRepository extends ServiceEntityRepository
         if (isset($filters['nombre'])) {
             $qb->andWhere('a.nombre LIKE :nombre')
                 ->setParameter('nombre', '%' . $filters['nombre'] . '%');
+        }
+
+        if (isset($filters['lugar'])) {
+            $qb->andWhere('a.lugar LIKE :lugar')
+                ->setParameter('lugar', '%' . $filters['lugar'] . '%');
         }
 
         if (isset($filters['estado'])) {
@@ -68,26 +72,36 @@ class ActividadRepository extends ServiceEntityRepository
                 ->setParameter('gradoId', $filters['grado']);
         }
 
-        if (isset($filters['ods']) && is_array($filters['ods'])) {
+        if (isset($filters['ods'])) {
+            $odsIds = array_map(
+                'intval',
+                explode(',', $filters['ods'])
+            );
+
             $qb->leftJoin('a.ods', 'o')
-                ->andWhere($qb->expr()->in('o.id', ':odsIds'))
-                ->setParameter('odsIds', $filters['ods']);
+                ->andWhere('o.idOds IN (:odsIds)')
+                ->setParameter('odsIds', $odsIds);
         }
 
-        if (isset($filters['tiposActividad']) && is_array($filters['tiposActividad'])) {
+        if (isset($filters['tiposActividad'])) {
+            $tiposActividadIds = array_map(
+                'intval',
+                explode(',', $filters['tiposActividad'])
+            );
+
             $qb->leftJoin('a.tiposActividad', 'ta')
-                ->andWhere($qb->expr()->in('ta.id', ':tipoActividadIds'))
-                ->setParameter('tipoActividadIds', $filters['tiposActividad']);
+                ->andWhere('ta.idTipoActividad IN (:tiposActividadIds)')
+                ->setParameter('tiposActividadIds', $tiposActividadIds);
         }
 
         if (isset($filters['inicio_after'])) {
             $qb->andWhere('a.inicio >= :inicioAfter')
-                ->setParameter('inicioAfter', new \DateTimeImmutable($filters['inicio_after']));
+                ->setParameter('inicioAfter', new DateTimeImmutable($filters['inicio_after']));
         }
 
         if (isset($filters['fin_before'])) {
             $qb->andWhere('a.fin <= :finBefore')
-                ->setParameter('finBefore', new \DateTimeImmutable($filters['fin_before']));
+                ->setParameter('finBefore', new DateTimeImmutable($filters['fin_before']));
 
         }
 
