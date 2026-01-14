@@ -616,6 +616,14 @@ paths:
       tags:
         - Log in
       summary: Autenticación de usuario y obtención de token JWT
+      parameters:
+        - in: query
+          name: usuario
+          schema:
+            type: string
+            enum: [voluntario, entidad, administrador]
+          required: false
+          description: Tipo de usuario que inicia sesión (opcional)
       requestBody:
         required: true
         content:
