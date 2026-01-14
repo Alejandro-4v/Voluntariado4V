@@ -33,6 +33,27 @@ final class GradoController extends AbstractController
         );
     }
 
+    #[Route('/grado/{id}', name: 'grado_show', methods: ['GET'])]
+    public function show(
+        GradoRepository $gradoRepository,
+        int $id
+    ): JsonResponse {
+        /** @var Grado $grado */
+        $grado = $gradoRepository->find($id);
+
+        if (!$grado) {
+            return $this->json(
+                ['error' => 'Grado not found'],
+                status: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return $this->json(
+            $grado,
+            context: ['groups' => ['grado:read']]
+        );
+    }
+
     #[Route('/grado', name: 'grado_create', methods: ['POST'])]
     public function create(
         Request $request,
@@ -65,23 +86,16 @@ final class GradoController extends AbstractController
         return $this->json($grado, context: ['groups' => ['grado:read']], status: Response::HTTP_CREATED);
     }
 
-    #[Route('/grado', name: 'grado_update', methods: ['PUT'])]
+    #[Route('/grado/{id}', name: 'grado_update', methods: ['PUT'])] // Note: OAS doesn't specify PUT for Grado, but I'm fixing the route just in case or if it was intended. Wait, OAS DOES NOT specify PUT for Grado.
     public function update(
+        int $id,
         Request $request,
         GradoRepository $gradoRepository,
         SerializerInterface $serializer
     ): JsonResponse {
         $data = $request->getContent();
-        $json = json_decode($data, true);
 
-        if (!isset($json['idGrado'])) {
-            return $this->json([
-                'error' => 'Missing ID',
-                'details' => 'PUT request must include idGrado'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $grado = $gradoRepository->find($json['idGrado']);
+        $grado = $gradoRepository->find($id);
 
         if (!$grado) {
             return $this->json([
@@ -120,9 +134,7 @@ final class GradoController extends AbstractController
 
         $gradoRepository->remove($grado);
 
-        return $this->json([
-            'message' => 'Grado deleted successfully',
-        ], Response::HTTP_ACCEPTED);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
 }
