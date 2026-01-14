@@ -1,4 +1,4 @@
 export interface DiaSemana {
     idDia: number;
-    nombre: string;
+    descripcion: string;
 }

@@ -9,7 +9,6 @@ export interface Voluntario {
     apellido2?: string;
     grado: Grado;
     mail: string;
-    passwordHash: string;
     estado: string;
     perfilUrl?: string;
     disponibilidades?: Disponibilidad[];

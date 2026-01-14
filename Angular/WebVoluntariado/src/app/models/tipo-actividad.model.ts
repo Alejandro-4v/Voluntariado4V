@@ -1,4 +1,5 @@
 export interface TipoActividad {
     idTipoActividad?: number;
-    nombre: string;
+    descripcion: string;
+    imagenUrl?: string;
 }

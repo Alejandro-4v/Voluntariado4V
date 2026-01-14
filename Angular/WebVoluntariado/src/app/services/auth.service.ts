@@ -4,6 +4,7 @@ import { delay, tap, switchMap } from 'rxjs/operators';
 
 export interface User {
   id: number;
+  nif?: string; // Added for API matching
   email: string;
   name: string;
   role: 'volunteer' | 'entity' | 'admin';
@@ -20,12 +21,14 @@ export class AuthService {
   private mockUsers: User[] = [
     {
       id: 1,
+      nif: '11111111A',
       email: 'iryna_pavlenko@cuatrovientos.org',
       name: 'Iryna Pavlenko',
       role: 'volunteer'
     },
     {
       id: 2,
+      nif: '22222222B',
       email: 'voluntario@test.com',
       name: 'Juan García',
       role: 'volunteer'
