@@ -1,12 +1,14 @@
 package com.example.aplicacionmovilvoluntaridado;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.aplicacionmovilvoluntaridado.models.Actividad;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,17 +17,17 @@ import java.util.stream.Collectors;
 public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.RecyclerDataHolder> {
 
     private ArrayList<Actividad> listData;
-    private ArrayList<Actividad> listDataOriginal;  //Copia seguridad con todos los datos
+    private ArrayList<Actividad> listDataOriginal; // Copia seguridad con todos los datos
     private OnItemClickListener itemListener;
 
     // [cite: 206] Constructor que recibe la lista y el listener
-    public RecyclerDataAdapter(ArrayList<Actividad> listData, OnItemClickListener listener) {
-        this.listData = listData;
+    public RecyclerDataAdapter(List<Actividad> listData, OnItemClickListener listener) {
+        this.listData = new ArrayList<>(listData);
         this.listDataOriginal = new ArrayList<>(listData);
         this.itemListener = listener;
     }
 
-    public void setDatos(ArrayList<Actividad> nuevosDatos) {
+    public void setDatos(List<Actividad> nuevosDatos) {
         this.listData = new ArrayList<>(nuevosDatos); // Actualizamos la visual
         this.listDataOriginal = new ArrayList<>(nuevosDatos); // Actualizamos la copia de seguridad
         notifyDataSetChanged();
@@ -40,7 +42,8 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         return new RecyclerDataHolder(view);
     }
 
-    // [cite: 231] Enlazamos datos pasando el objeto y el listener al método assignData
+    // [cite: 231] Enlazamos datos pasando el objeto y el listener al método
+    // assignData
     @Override
     public void onBindViewHolder(@NonNull RecyclerDataHolder holder, int position) {
         holder.assignData(listData.get(position), itemListener);
@@ -53,22 +56,20 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     }
 
     public void filtrar(String textoBusqueda) {
-        if (textoBusqueda.isEmpty()) {
+        if (textoBusqueda == null || textoBusqueda.isEmpty()) {
             listData.clear();
             listData.addAll(listDataOriginal);
-            } else {
-                // Versión compatible con Android antiguo
-                listData.clear();
-                for (Actividad c : listDataOriginal) {
-                    if (c.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase())) {
-                        listData.add(c);
-                    }
+        } else {
+            // Versión compatible con Android antiguo
+            listData.clear();
+            for (Actividad c : listDataOriginal) {
+                if (c.getNombre().toLowerCase().contains(textoBusqueda.toLowerCase())) {
+                    listData.add(c);
                 }
             }
-        notifyDataSetChanged();
         }
-
-
+        notifyDataSetChanged();
+    }
 
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
         // [cite: 131] Referencias a los elementos visuales
@@ -82,12 +83,12 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             tvFecha = itemView.findViewById(R.id.tvItemDateLocation);
         }
 
-        //  Método assignData modificado para recibir datos y listener
+        // Método assignData modificado para recibir datos y listener
         public void assignData(final Actividad actividad, final OnItemClickListener onItemClickListener) {
             // Asignamos los textos
             tvNombre.setText(actividad.getNombre());
-            tvEntidad.setText(actividad.getEntidad());
-            tvFecha.setText(actividad.getFecha());
+            tvEntidad.setText(actividad.getEntidadNombre());
+            tvFecha.setText(actividad.getFechaFormatted());
 
             // [cite: 221] Configuramos el click en todo el elemento (itemView)
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +100,6 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             });
         }
     }
-
 
     public interface OnItemClickListener {
         void onItemClick(Actividad actividad, int position);

@@ -29,14 +29,14 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     // 1. Declaramos las variables que se ven en tu imagen
     EditText etCorreo, etPassword;
     Button btnLogin;
     TextView tvRegistrarse, tvOlvidaste;
 
     // IMPORTANTE: Pon aquí la IP o dominio real de tu API del voluntariado
-    // Si pruebas en el emulador y la API está en tu PC local, usa http://10.0.2.2:puerto/api/login
+    // Si pruebas en el emulador y la API está en tu PC local, usa
+    // http://10.0.2.2:puerto/api/login
     String URL_API = "http://10.0.2.2/voluntariado-cuatrovientos/public/";
 
     @Override
@@ -57,16 +57,12 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = etPassword.getText().toString().trim();
 
                 // Validación básica
-                if(correo.isEmpty() || pass.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Por favor, rellena todos los campos", Toast.LENGTH_SHORT).show();
+                if (correo.isEmpty() || pass.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Por favor, rellena todos los campos", Toast.LENGTH_SHORT)
+                            .show();
                 } else {
-                    // Si todo está bien, llamamos a la API
-                    if(correo.equals("iryna_pavlenko@cuatrovientos.org") && pass.equals("1234")){
-                        // Navegar a la pantalla principal
-                        Intent intent = new Intent(getApplicationContext(), ActividadesActivity.class);
-                        startActivity(intent);
-                    }
-                    //loginVoluntario(correo, pass); CUANDO ESTÉ LA API SE HACE CON ESTO
+                    // Llamamos a la API
+                    loginVoluntario(correo, pass);
                 }
             }
         });
@@ -75,61 +71,66 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginVoluntario(final String correo, final String password) {
-        // Mostramos un mensaje de carga (opcional, pero buena práctica)
-        Toast.makeText(this, "Verificando...", Toast.LENGTH_SHORT).show();
+        // [MOCK] Login API provisionalmente deshabilitado
+        if (correo.equals("iryna_pavlenko@cuatrovientos.org") && password.equals("1234")) {
+            Toast.makeText(getApplicationContext(), "¡Bienvenido/a! (Modo Prueba)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), ActividadesActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Credenciales incorrectas (Prueba: iryna.../1234)",
+                    Toast.LENGTH_LONG).show();
+        }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_API,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            // Procesamos la respuesta JSON del servidor
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            // EJEMPLO: Ajusta esto según lo que devuelva TU API real.
-                            // Supongamos que devuelve: {"status": "success", "token": "abc..."}
-                            // O quizas devuelve un booleano: {"login": true}
-
-                            // Verificamos si la respuesta indica éxito
-                            // (Cambia "success" por la clave que use tu API)
-                            boolean exito = jsonObject.optBoolean("success", false);
-
-                            if (exito) {
-                                Toast.makeText(getApplicationContext(), "¡Bienvenido/a!", Toast.LENGTH_SHORT).show();
-
-                                // Navegar a la pantalla principal
-                                Intent intent = new Intent(getApplicationContext(), ActividadesActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                String mensajeError = jsonObject.optString("message", "Credenciales incorrectas");
-                                Toast.makeText(getApplicationContext(), mensajeError, Toast.LENGTH_LONG).show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error al leer datos del servidor", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Error de conexión: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // AQUÍ SE ENVÍAN LOS DATOS.
-                // Las claves "email" y "password" deben coincidir con lo que espera tu API (backend).
-                Map<String, String> params = new HashMap<>();
-                params.put("email", correo);
-                params.put("password", password);
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        /*
+         * // Implementación Retrofit (Deshabilitada temporalmente)
+         * com.example.aplicacionmovilvoluntaridado.models.LogIn loginData =
+         * new com.example.aplicacionmovilvoluntaridado.models.LogIn(correo, password);
+         * 
+         * com.example.aplicacionmovilvoluntaridado.network.ApiClient.getApiService().
+         * login(loginData)
+         * .enqueue(new
+         * retrofit2.Callback<com.example.aplicacionmovilvoluntaridado.models.Token>() {
+         * 
+         * @Override
+         * public void
+         * onResponse(retrofit2.Call<com.example.aplicacionmovilvoluntaridado.models.
+         * Token> call,
+         * retrofit2.Response<com.example.aplicacionmovilvoluntaridado.models.Token>
+         * response) {
+         * if (response.isSuccessful() && response.body() != null) {
+         * String token = response.body().getToken();
+         * 
+         * // Guardar token en SharedPreferences
+         * getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE)
+         * .edit()
+         * .putString("auth_token", token)
+         * .apply();
+         * 
+         * Toast.makeText(getApplicationContext(), "¡Bienvenido/a!",
+         * Toast.LENGTH_SHORT).show();
+         * 
+         * Intent intent = new Intent(getApplicationContext(),
+         * ActividadesActivity.class);
+         * startActivity(intent);
+         * finish();
+         * } else {
+         * Toast.makeText(getApplicationContext(), "Credenciales incorrectas",
+         * Toast.LENGTH_LONG)
+         * .show();
+         * }
+         * }
+         * 
+         * @Override
+         * public void
+         * onFailure(retrofit2.Call<com.example.aplicacionmovilvoluntaridado.models.
+         * Token> call,
+         * Throwable t) {
+         * Toast.makeText(getApplicationContext(), "Error de conexión: " +
+         * t.getMessage(),
+         * Toast.LENGTH_LONG).show();
+         * }
+         * });
+         */
     }
 }

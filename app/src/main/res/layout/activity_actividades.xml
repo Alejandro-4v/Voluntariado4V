@@ -24,7 +24,7 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
-            android:layout_width="220dp"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
             app:queryHint="Buscar actividad..." />
