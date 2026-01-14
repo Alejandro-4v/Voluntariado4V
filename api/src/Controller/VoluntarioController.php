@@ -6,16 +6,21 @@ use App\Entity\Voluntario;
 use App\Repository\VoluntarioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request; // Import Request
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class VoluntarioController extends AbstractController
 {
     #[Route('/voluntario', name: 'voluntario_index', methods: ['GET'])]
-    public function index(VoluntarioRepository $voluntarioRepository): JsonResponse
-    {
+    public function index(
+        VoluntarioRepository $voluntarioRepository,
+        Request $request // Add Request as a parameter
+    ): JsonResponse {
+        $filters = $request->query->all(); // Get all query parameters
+
         /** @var Voluntario[] $voluntarios */
-        $voluntarios = $voluntarioRepository->findAll();
+        $voluntarios = $voluntarioRepository->findByFilters($filters); // Call findByFilters
 
         return $this->json(
             $voluntarios,

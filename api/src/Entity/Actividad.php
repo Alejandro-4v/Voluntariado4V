@@ -35,7 +35,7 @@ class Actividad
     #[ORM\ManyToOne(targetEntity: Entidad::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(name: 'convoca', referencedColumnName: 'id_entidad', nullable: false)]
     #[Groups(['actividad:read', 'actividad:update'])]
-    private ?Entidad $convoca = null;
+    private ?Entidad $convoca;
 
     #[ORM\Column(name: 'inicio', type: 'datetime_immutable')]
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
@@ -50,7 +50,7 @@ class Actividad
     private ?string $imagenUrl = null;
 
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'actividades')]
-    #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: false)]
+    #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: true)]
     #[Groups(['actividad:read', 'actividad:update'])]
     private ?Grado $grado = null;
 

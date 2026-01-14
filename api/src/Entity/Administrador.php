@@ -14,7 +14,7 @@ class Administrador
     #[ORM\Id]
     #[ORM\Column(name: 'login_mail', type: 'string', length: 255)]
     #[Groups(['administrador:read', 'administrador:login'])]
-    private ?string $loginMail = null;
+    private ?string $loginMail;
 
     #[ORM\Column(name: 'password_hash', type: 'string', length: 255)]
     #[Groups(['administrador:read', 'administrador:login'])]

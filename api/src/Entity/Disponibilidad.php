@@ -15,13 +15,13 @@ class Disponibilidad
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Voluntario::class, inversedBy: 'disponibilidades')]
     #[ORM\JoinColumn(name: 'nif', referencedColumnName: 'nif', nullable: false)]
-    private ?Voluntario $voluntario = null;
+    private ?Voluntario $voluntario;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: DiaSemana::class, inversedBy: 'disponibilidades')]
     #[ORM\JoinColumn(name: 'id_dia', referencedColumnName: 'id_dia', nullable: false)]
     #[Groups(['disponibilidad:read'])]
-    private ?DiaSemana $diaSemana = null;
+    private ?DiaSemana $diaSemana;
 
     #[ORM\Column(name: 'hora_inicio', type: Types::TIME_IMMUTABLE)]
     #[Groups(['disponibilidad:read'])]
