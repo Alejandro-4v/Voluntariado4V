@@ -42,6 +42,12 @@ paths:
           required: false
           description: Filtro por nombre de la actividad
         - in: query
+          name: lugar
+          schema:
+            type: string
+          required: false
+          description: Filtro por lugar de la actividad
+        - in: query
           name: estado
           schema:
             type: string
@@ -640,6 +646,9 @@ components:
         descripcion:
           type: string
           example: Talleres sencillos de informática con residentes de la tercera edad.
+        lugar:
+          type: string
+          example: Residencia Amavir
         estado:
           type: string
           example: A
@@ -680,6 +689,9 @@ components:
         descripcion:
           type: string
           example: Talleres sencillos de informática con residentes de la tercera edad.
+        lugar:
+          type: string
+          example: Residencia Amavir
         estado:
           type: string
           example: A
