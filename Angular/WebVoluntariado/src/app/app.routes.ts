@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { AUTH_ROUTES } from './features/auth/auth.routes';
-import { STUDENT_ROUTES } from './features/dashboard/student.routes';
+import { STUDENT_ROUTES } from './features/student/student.routes';
+
+import { UserLayoutComponent } from './layout/user-layout/user-layout.component';
 
 export const routes: Routes = [
   {
@@ -9,6 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'student',
+    component: UserLayoutComponent,
     children: STUDENT_ROUTES
   },
   {
