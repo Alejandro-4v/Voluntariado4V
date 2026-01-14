@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
@@ -25,6 +26,27 @@ final class OdsController extends AbstractController
     ): JsonResponse {
         /** @var Ods[] $ods */
         $ods = $odsRepository->findAll();
+
+        return $this->json(
+            $ods,
+            context: ['groups' => ['ods:read']]
+        );
+    }
+
+    #[Route('/ods/{id}', name: 'ods_show', methods: ['GET'])]
+    public function show(
+        OdsRepository $odsRepository,
+        int $id
+    ): JsonResponse {
+        /** @var Ods $ods */
+        $ods = $odsRepository->find($id);
+
+        if (!$ods) {
+            return $this->json(
+                ['error' => 'Ods not found'],
+                status: Response::HTTP_NOT_FOUND
+            );
+        }
 
         return $this->json(
             $ods,
@@ -49,7 +71,7 @@ final class OdsController extends AbstractController
                 'error' => 'Unique constraint violation',
                 'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
-        } catch (\Symfony\Component\Serializer\Exception\ExceptionInterface $e) {
+        } catch (ExceptionInterface $e) {
             return $this->json([
                 'error' => 'Invalid JSON',
                 'details' => $e->getMessage()
@@ -61,27 +83,20 @@ final class OdsController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->json($ods, context: ['groups' => ['ods:read']], status: Response::HTTP_CREATED);
+        return $this->json($ods, status: Response::HTTP_CREATED, context: ['groups' => ['ods:read']]);
     }
 
-    #[Route('/ods', name: 'ods_update', methods: ['PUT'])]
+    #[Route('/ods/{id}', name: 'ods_update', methods: ['PUT'])]
     public function update(
+        int $id,
         Request $request,
         OdsRepository $odsRepository,
         SerializerInterface $serializer
     ): JsonResponse {
 
         $data = $request->getContent();
-        $json = json_decode($data, true);
 
-        if (!isset($json['idOds'])) {
-            return $this->json([
-                'error' => 'Missing ID',
-                'details' => 'PUT request must include idOds'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $ods = $odsRepository->find($json['idOds']);
+        $ods = $odsRepository->find($id);
 
         if (!$ods) {
             return $this->json([
@@ -121,8 +136,6 @@ final class OdsController extends AbstractController
 
         $odsRepository->remove($ods);
 
-        return $this->json([
-            'message' => 'Ods deleted successfully',
-        ], Response::HTTP_ACCEPTED);
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
