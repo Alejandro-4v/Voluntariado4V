@@ -6,15 +6,13 @@ import { ActivitiesService } from '../../../services/activities.service';
 import { EntitiesService } from '../../../services/entities.service';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
-import { FooterComponent } from '../../../shared/components/footer/footer.component';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { fadeIn, slideUp } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, FooterComponent, NavbarComponent, LoadingSpinnerComponent],
+  imports: [CommonModule, AppCarrouselComponent, ActivityModalComponent, LoadingSpinnerComponent],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
   animations: [fadeIn, slideUp]

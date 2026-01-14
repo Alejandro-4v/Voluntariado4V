@@ -1,74 +1,58 @@
-<div class="dashboard-wrapper min-vh-100 bg-light">
-  <!-- Navbar -->
-  <app-navbar [mode]="'white'" [options]="[
-      { label: 'Mis actividades pasadas', path: '/student/actividades-pasadas' },
-      { label: 'Contacto', path: '/student/contacto' },
-      { label: 'Nuevas actividades', type: 'button', path: '/student/panel' }
-    ]"></app-navbar>
+<!-- Main content -->
+<main class="dashboard-content bg-white py-5">
+  <div class="container-lg">
 
-  <!-- Main content -->
-  <main class="dashboard-content bg-white py-5">
-    <div class="container-lg">
+    <!-- Loading Spinner -->
+    @if (isLoading) {
+    <app-loading-spinner [text]="'Cargando panel de estudiante...'"></app-loading-spinner>
+    } @else {
+    <div @fadeIn>
 
-      <!-- Loading Spinner -->
-      @if (isLoading) {
-      <app-loading-spinner [text]="'Cargando panel de estudiante...'"></app-loading-spinner>
-      } @else {
-      <div @fadeIn>
-        <!-- Welcome Section -->
-        <div class="mb-5" @slideUp>
-          <h1 class="display-6 fw-bold mb-2 text-dark">
-            Hola, {{ currentUser?.name?.split(' ')?.[0] || 'Estudiante' }}! 👋
-          </h1>
-          <p class="text-muted">
-            Bienvenido de nuevo a tu panel de voluntariado.
-          </p>
-        </div>
-
-        <!-- New Activities from Entities -->
-        @if (newActivitiesFromEntities.length > 0) {
-        <section class="mb-5" @slideUp>
-          <h2 class="fs-5 fw-bold mb-4 text-dark">
-            Nuevas actividades de las entidades
-          </h2>
-          <app-carrousel [items]="newActivitiesFromEntities" (cardClick)="openActivityModal($event)">
-          </app-carrousel>
-        </section>
-        }
-
-        <!-- Proposals from Cuatrovientos -->
-        @if (proposalsFromCuatrovientos.length > 0) {
-        <section class="mb-5" @slideUp>
-          <h2 class="fs-5 fw-bold mb-4 text-dark">
-            Propuestas desde Cuatrovientos
-          </h2>
-          <app-carrousel [items]="proposalsFromCuatrovientos" cardType="proposal"
-            (cardClick)="openActivityModal($event)">
-          </app-carrousel>
-        </section>
-        }
-
-        <!-- Other Entities -->
-        @if (otherEntities.length > 0) {
-        <section class="mb-5" @slideUp>
-          <h2 class="fs-5 fw-bold mb-4 text-dark">
-            Otras entidades que te pueden interesar
-          </h2>
-          <app-carrousel [items]="otherEntities" cardType="entity">
-          </app-carrousel>
-        </section>
-        }
+      <div class="mb-5" @slideUp>
+        <h1 class="display-6 fw-bold mb-2 text-dark">
+          Nuevas actividades de entidades en las que participas
+        </h1>
       </div>
+
+      <!-- Grouped Activities by Entity -->
+      @for (group of groupedActivities; track group.entityName) {
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-5 fw-bold mb-4 text-dark">
+          Nuevas actividades desde {{ group.entityName }}
+        </h2>
+        <app-carrousel [items]="group.activities" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+      </section>
       }
 
+      <!-- Proposals from Cuatrovientos -->
+      @if (proposalsFromCuatrovientos.length > 0) {
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-5 fw-bold mb-4 text-dark">
+          Propuestas desde Cuatrovientos
+        </h2>
+        <app-carrousel [items]="proposalsFromCuatrovientos" cardType="proposal" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+      </section>
+      }
+
+      <!-- Other Entities -->
+      @if (otherEntities.length > 0) {
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-5 fw-bold mb-4 text-dark">
+          Otras entidades que te pueden interesar
+        </h2>
+        <app-carrousel [items]="otherEntities" cardType="entity">
+        </app-carrousel>
+      </section>
+      }
     </div>
-  </main>
+    }
 
-  <!-- Activity Modal -->
-  <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" (close)="closeActivityModal()"
-    (action)="onActivityAction()">
-  </app-activity-modal>
+  </div>
+</main>
 
-  <!-- Footer -->
-  <app-footer></app-footer>
-</div>
+<!-- Activity Modal -->
+<app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" (close)="closeActivityModal()"
+  (action)="onActivityAction()">
+</app-activity-modal>

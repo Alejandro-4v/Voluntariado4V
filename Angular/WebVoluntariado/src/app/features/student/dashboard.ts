@@ -5,8 +5,6 @@ import { ActivitiesService } from '../../services/activities.service';
 import { EntitiesService } from '../../services/entities.service';
 import { AppCarrouselComponent } from '../../shared/components/app-carrousel/app-carrousel';
 import { ActivityModalComponent } from '../../shared/components/activity-modal/activity-modal';
-import { FooterComponent } from '../../shared/components/footer/footer.component';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
 import { fadeIn, slideUp, staggerFade } from '../../shared/animations/animations';
 
@@ -17,8 +15,6 @@ import { fadeIn, slideUp, staggerFade } from '../../shared/animations/animations
     CommonModule,
     AppCarrouselComponent,
     ActivityModalComponent,
-    FooterComponent,
-    NavbarComponent,
     LoadingSpinnerComponent
   ],
   templateUrl: './dashboard.html',
@@ -36,7 +32,7 @@ export class DashboardComponent implements OnInit {
   isLoading = true;
 
   // Data
-  newActivitiesFromEntities: any[] = [];
+  groupedActivities: { entityName: string, activities: any[] }[] = [];
   proposalsFromCuatrovientos: any[] = [];
   otherEntities: any[] = [];
 
@@ -57,11 +53,24 @@ export class DashboardComponent implements OnInit {
       next: (activities) => {
         const now = new Date();
 
-        // Filter for "New Activities"
-        this.newActivitiesFromEntities = activities
+        // Filter and Group "New Activities" by Entity
+        const upcomingActivities = activities
           .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre !== 'Cuatrovientos')
-          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
-          .slice(0, 5);
+          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+
+        const groups: { [key: string]: any[] } = {};
+        upcomingActivities.forEach(a => {
+          const entityName = a.convoca?.nombre || 'Otras';
+          if (!groups[entityName]) {
+            groups[entityName] = [];
+          }
+          groups[entityName].push(a);
+        });
+
+        this.groupedActivities = Object.keys(groups).map(key => ({
+          entityName: key,
+          activities: groups[key]
+        }));
 
         // Filter for "Proposals from Cuatrovientos"
         this.proposalsFromCuatrovientos = activities
