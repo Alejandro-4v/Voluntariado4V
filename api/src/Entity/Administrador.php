@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\AdministradorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AdministradorRepository::class)]
 #[ORM\Table(name: 'ADMINISTRADOR')]
-class Administrador
+class Administrador implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
@@ -100,6 +102,26 @@ class Administrador
     {
         $this->perfilUrl = $perfilUrl;
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_ADMINISTRADOR'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->loginMail;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->passwordHash;
     }
 
 }
