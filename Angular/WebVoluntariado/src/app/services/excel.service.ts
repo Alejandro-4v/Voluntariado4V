@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx';
+import * as ExcelJS from 'exceljs';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -11,12 +11,20 @@ export class ExcelService {
 
     constructor() { }
 
-    public exportAsExcelFile(json: any[], excelFileName: string): void {
+    public async exportAsExcelFile(json: any[], excelFileName: string): Promise<void> {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('data');
 
-        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-        const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        this.saveAsExcelFile(excelBuffer, excelFileName);
+        // Add headers and data
+        if (json.length > 0) {
+            const columns = Object.keys(json[0]).map(key => ({ header: key, key: key, width: 20 }));
+            worksheet.columns = columns;
+        }
+
+        worksheet.addRows(json);
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        this.saveAsExcelFile(buffer, excelFileName);
     }
 
     private saveAsExcelFile(buffer: any, fileName: string): void {
