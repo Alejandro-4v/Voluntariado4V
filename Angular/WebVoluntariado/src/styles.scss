@@ -237,3 +237,10 @@ app-past-activities .carrousel-track {
   overflow-x: auto !important;
   white-space: nowrap;
 }
+
+/* Responsive Utilities */
+@media (min-width: 768px) {
+  .w-md-auto {
+    width: auto !important;
+  }
+}

@@ -1,4 +1,4 @@
-<div class="container-fluid py-4 ps-5 pe-5">
+<div class="container-fluid py-4 px-3 px-md-5">
     <!-- Header -->
     <div
         class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-5 gap-3">
@@ -25,7 +25,7 @@
         } @else {
         <div class="d-contents" @fadeIn>
             <!-- Sidebar Details -->
-            <div class="col-md-4 mb-4 sticky-sidebar" @slideUp>
+            <div class="col-12 col-md-4 mb-4 sticky-sidebar" @slideUp>
                 @if (selectedVolunteer) {
                 <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
                 </app-generic-detail>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Main List -->
-            <div class="col-md-8" @slideUp>
+            <div class="col-12 col-md-8" @slideUp>
                 <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
                     [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
                 </app-generic-list>
