@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class EntidadController extends AbstractController
@@ -21,8 +22,9 @@ final class EntidadController extends AbstractController
     #[Route('/entidad', name: 'entidad_index', methods: ['GET'])]
     public function index(
         EntidadRepository $entidadRepository,
-        Request $request
-    ): JsonResponse {
+        Request           $request
+    ): JsonResponse
+    {
         $filters = $request->query->all();
 
         /** @var Entidad[] $entidades */
@@ -37,8 +39,9 @@ final class EntidadController extends AbstractController
     #[Route('/entidad/{id}', name: 'entidad_show', methods: ['GET'])]
     public function show(
         EntidadRepository $entidadRepository,
-        int $id
-    ): JsonResponse {
+        int               $id
+    ): JsonResponse
+    {
         /** @var Entidad $entidad */
         $entidad = $entidadRepository->find($id);
 
@@ -57,10 +60,12 @@ final class EntidadController extends AbstractController
 
     #[Route('/entidad', name: 'entidad_create', methods: ['POST'])]
     public function create(
-        Request $request,
-        EntidadRepository $entidadRepository,
-        ActividadRepository $actividadRepository
-    ): JsonResponse {
+        Request                     $request,
+        EntidadRepository           $entidadRepository,
+        ActividadRepository         $actividadRepository,
+        UserPasswordHasherInterface $passwordHasher
+    ): JsonResponse
+    {
         $data = $request->getContent();
         $json = json_decode($data, true);
 
@@ -141,10 +146,9 @@ final class EntidadController extends AbstractController
             $entidad->setLoginMail(null);
         }
 
-        if (isset($json['passwordHash'])) {
-            $entidad->setPasswordHash($json['passwordHash']);
-        } else {
-            $entidad->setPasswordHash(null);
+        if (isset($json['password'])) {
+            $hashedPassword = $passwordHasher->hashPassword($entidad, $json['password']);
+            $entidad->setPasswordHash($hashedPassword);
         }
 
         if (isset($json['perfilUrl'])) {
@@ -194,10 +198,11 @@ final class EntidadController extends AbstractController
 
     #[Route(path: '/entidad/{id}', name: 'entidad_update', methods: ['PUT'])]
     public function update(
-        int $id,
-        Request $request,
-        EntidadRepository $entidadRepository,
-        ActividadRepository $actividadRepository
+        int                         $id,
+        Request                     $request,
+        EntidadRepository           $entidadRepository,
+        ActividadRepository         $actividadRepository,
+        UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
         $data = $request->getContent();
         $json = json_decode($data, true);
@@ -303,14 +308,9 @@ final class EntidadController extends AbstractController
             }
         }
 
-        if (isset($json['passwordHash'])) {
-            /** @var ?string $passwordHash */
-            $passwordHash = $json['passwordHash'];
-            $newPasswordHash = empty($passwordHash) ? null : $passwordHash;
-
-            if ($newPasswordHash != $entidad->getPasswordHash()) {
-                $entidad->setPasswordHash($newPasswordHash);
-            }
+        if (isset($json['password'])) {
+            $hashedPassword = $passwordHasher->hashPassword($entidad, $json['password']);
+            $entidad->setPasswordHash($hashedPassword);
         }
 
         if (isset($json['perfilUrl'])) {
@@ -347,15 +347,15 @@ final class EntidadController extends AbstractController
 
         return $this->json($entidad, context: [
             'groups' => ['entidad:read']
-
         ], status: Response::HTTP_ACCEPTED);
     }
 
     #[Route('/entidad/{id}', name: 'entidad_delete', methods: ['DELETE'])]
     public function delete(
-        int $id,
+        int               $id,
         EntidadRepository $entidadRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         /** @var Entidad $entidad */
         $entidad = $entidadRepository->find($id);
 
@@ -369,5 +369,4 @@ final class EntidadController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
-
 }
