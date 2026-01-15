@@ -108,12 +108,16 @@ export class EditActivityComponent implements OnInit {
     }
 
     private mapToActivity(formData: any, status: string): any {
+        // Combine date and time
+        const inicio = formData.date && formData.startTime ? `${formData.date}T${formData.startTime}:00` : null;
+        const fin = formData.endDate && formData.endTime ? `${formData.endDate}T${formData.endTime}:00` : null;
+
         return {
             nombre: formData.name,
             descripcion: formData.description,
-            estado: status,
-            inicio: formData.date,
-            fin: formData.date,
+            estado: formData.status || status,
+            inicio: inicio,
+            fin: fin,
             imagenUrl: formData.image || 'https://via.placeholder.com/300',
             convoca: { idEntidad: Number(formData.entity) },
             plazas: Number(formData.slots),

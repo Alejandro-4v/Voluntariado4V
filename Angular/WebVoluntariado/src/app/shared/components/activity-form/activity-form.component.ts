@@ -36,7 +36,11 @@ export class ActivityFormComponent implements OnInit {
             entity: ['', Validators.required],
             grado: ['', Validators.required],
             date: ['', Validators.required],
+            startTime: ['', Validators.required],
+            endDate: ['', Validators.required],
+            endTime: ['', Validators.required],
             location: ['', Validators.required],
+            status: ['P', Validators.required],
             image: [''], // URL input
             ods: [[]],
             types: [[]]
@@ -47,13 +51,21 @@ export class ActivityFormComponent implements OnInit {
         // Data loading moved to parent component
 
         if (this.initialData) {
+            const start = this.initialData.inicio ? new Date(this.initialData.inicio) : null;
+            const end = this.initialData.fin ? new Date(this.initialData.fin) : null;
+
             this.activityForm.patchValue({
                 ...this.initialData,
                 entity: this.initialData.convoca?.idEntidad || this.initialData.entity, // Handle object or string
                 grado: this.initialData.grado?.idGrado || this.initialData.grado,
                 ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
                 types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || [],
-                image: this.initialData.image || this.initialData.imagenUrl
+                image: this.initialData.image || this.initialData.imagenUrl,
+                date: start ? start.toISOString().split('T')[0] : '',
+                startTime: start ? start.toTimeString().slice(0, 5) : '',
+                endDate: end ? end.toISOString().split('T')[0] : '',
+                endTime: end ? end.toTimeString().slice(0, 5) : '',
+                status: this.initialData.estado || 'P'
             });
         }
     }

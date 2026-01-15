@@ -95,12 +95,17 @@ export class NewActivityComponent {
 
     private mapToActivity(formData: any, status: string): any {
         console.log('Mapping formData to Activity:', formData);
+
+        // Combine date and time
+        const inicio = formData.date && formData.startTime ? `${formData.date}T${formData.startTime}:00` : null;
+        const fin = formData.endDate && formData.endTime ? `${formData.endDate}T${formData.endTime}:00` : null;
+
         return {
             nombre: formData.name,
             descripcion: formData.description,
-            estado: status,
-            inicio: formData.date,
-            fin: formData.date, // Defaulting end date to start date for now
+            estado: formData.status || status, // Use form status if available, else default
+            inicio: inicio,
+            fin: fin,
             imagenUrl: formData.image || 'https://via.placeholder.com/300', // Default image if none
             convoca: { idEntidad: Number(formData.entity) },
             plazas: Number(formData.slots),

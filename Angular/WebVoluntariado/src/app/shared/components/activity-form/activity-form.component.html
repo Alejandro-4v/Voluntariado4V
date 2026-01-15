@@ -28,17 +28,51 @@
                 }
             </div>
 
-            <!-- Date & Location -->
+            <!-- Date & Time Start -->
             <div class="col-md-6">
-                <label for="date" class="form-label fw-semibold">Fecha</label>
+                <label for="date" class="form-label fw-semibold">Fecha Inicio</label>
                 <input type="date" id="date" class="form-control" formControlName="date"
                     [class.is-invalid]="activityForm.get('date')?.invalid && activityForm.get('date')?.touched">
                 @if (activityForm.get('date')?.invalid && activityForm.get('date')?.touched) {
                 <div class="invalid-feedback">
-                    La fecha es obligatoria.
+                    La fecha de inicio es obligatoria.
                 </div>
                 }
             </div>
+            <div class="col-md-6">
+                <label for="startTime" class="form-label fw-semibold">Hora Inicio</label>
+                <input type="time" id="startTime" class="form-control" formControlName="startTime"
+                    [class.is-invalid]="activityForm.get('startTime')?.invalid && activityForm.get('startTime')?.touched">
+                @if (activityForm.get('startTime')?.invalid && activityForm.get('startTime')?.touched) {
+                <div class="invalid-feedback">
+                    La hora de inicio es obligatoria.
+                </div>
+                }
+            </div>
+
+            <!-- Date & Time End -->
+            <div class="col-md-6">
+                <label for="endDate" class="form-label fw-semibold">Fecha Fin</label>
+                <input type="date" id="endDate" class="form-control" formControlName="endDate"
+                    [class.is-invalid]="activityForm.get('endDate')?.invalid && activityForm.get('endDate')?.touched">
+                @if (activityForm.get('endDate')?.invalid && activityForm.get('endDate')?.touched) {
+                <div class="invalid-feedback">
+                    La fecha de fin es obligatoria.
+                </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <label for="endTime" class="form-label fw-semibold">Hora Fin</label>
+                <input type="time" id="endTime" class="form-control" formControlName="endTime"
+                    [class.is-invalid]="activityForm.get('endTime')?.invalid && activityForm.get('endTime')?.touched">
+                @if (activityForm.get('endTime')?.invalid && activityForm.get('endTime')?.touched) {
+                <div class="invalid-feedback">
+                    La hora de fin es obligatoria.
+                </div>
+                }
+            </div>
+
+            <!-- Location & Status -->
             <div class="col-md-6">
                 <label for="location" class="form-label fw-semibold">Lugar</label>
                 <input type="text" id="location" class="form-control" formControlName="location"
@@ -47,6 +81,23 @@
                 @if (activityForm.get('location')?.invalid && activityForm.get('location')?.touched) {
                 <div class="invalid-feedback">
                     El lugar es obligatorio.
+                </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <label for="status" class="form-label fw-semibold">Estado</label>
+                <select id="status" class="form-select" formControlName="status"
+                    [class.is-invalid]="activityForm.get('status')?.invalid && activityForm.get('status')?.touched">
+                    <option value="P">Pendiente</option>
+                    <option value="A">Abierta</option>
+                    <option value="C">Cerrada</option>
+                    <option value="F">Finalizada</option>
+                    <option value="R">Rechazada</option>
+                    <option value="E">Eliminada</option>
+                </select>
+                @if (activityForm.get('status')?.invalid && activityForm.get('status')?.touched) {
+                <div class="invalid-feedback">
+                    El estado es obligatorio.
                 </div>
                 }
             </div>
