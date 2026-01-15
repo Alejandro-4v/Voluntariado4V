@@ -89,12 +89,49 @@ $text-blue: #1e3a8a;
         &.bg-white-mobile {
             background-color: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+            // Force dark text on mobile white background
+            .nav-link-custom {
+                color: $text-blue !important;
+                padding: 0.5rem 0;
+                display: block;
+
+                &:hover {
+                    color: color.adjust($text-blue, $lightness: -10%) !important;
+                    background-color: #f8f9fa;
+                    padding-left: 0.5rem;
+                    border-radius: 0.25rem;
+                }
+            }
+
+            // Adjust button styles for mobile
+            .btn-custom {
+                width: 100%;
+                margin-top: 0.5rem;
+                background-color: $primary-blue !important;
+                color: white !important;
+                text-align: center;
+            }
+
+            // Adjust logout button
+            .logout-btn {
+                color: $text-blue !important;
+                width: 100%;
+                justify-content: flex-start;
+                padding: 0.5rem 0;
+
+                &:hover {
+                    background-color: #f8f9fa;
+                    padding-left: 0.5rem;
+                    border-radius: 0.25rem;
+                }
+            }
         }
     }
 
     .ms-auto {
         flex-direction: column;
-        align-items: flex-start !important;
-        gap: 1rem !important;
+        align-items: stretch !important; // Stretch items to full width
+        gap: 0.5rem !important;
     }
 }

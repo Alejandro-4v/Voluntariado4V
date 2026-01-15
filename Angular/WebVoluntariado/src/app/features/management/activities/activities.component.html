@@ -1,9 +1,10 @@
 <div class="container-fluid min-vh-100 d-flex flex-column align-items-center py-5 page-container">
 
     <!-- Search Card -->
-    <div class="card p-5 m-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
-        <div class="d-flex justify-content-between align-items-start mb-4">
-            <div>
+    <div class="card p-4 p-md-5 m-3 m-md-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
+        <div
+            class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-4 gap-3">
+            <div class="text-center text-md-start">
                 <h2 class="text-secondary small mb-1">Cuatrovientos Voluntariado - Entidades</h2>
                 <h1 class="display-5 fw-bold text-dark">Buscar Actividad</h1>
             </div>
@@ -14,7 +15,7 @@
         </div>
 
         <div class="row g-3 mb-4">
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <label class="form-label fw-bold">Tipo de Actividad</label>
                 <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedType">
                     <option selected value="">Todos los tipos</option>
@@ -23,7 +24,7 @@
                     }
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <label class="form-label fw-bold">Entidad</label>
                 <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedEntity">
                     <option selected value="">Todas las entidades</option>
@@ -32,13 +33,13 @@
                     }
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <label class="form-label fw-bold">Fecha de Actividad</label>
                 <input type="date" class="form-control form-control-lg bg-light" [(ngModel)]="selectedDate">
             </div>
         </div>
 
-        <div class="d-flex gap-3 pt-2">
+        <div class="d-flex flex-column flex-md-row gap-3 pt-2">
             <button class="btn btn-outline-secondary btn-lg flex-grow-1" (click)="onClear()">Limpiar</button>
             <button class="btn btn-outline-primary btn-lg flex-grow-1" (click)="onViewAll()">Ver Todas</button>
             <button class="btn btn-primary btn-lg flex-grow-1 text-white" style="background-color: #0d3c83;"
