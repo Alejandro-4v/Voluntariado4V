@@ -1,0 +1,13 @@
+.action-item:hover {
+    background-color: #f1f3f5;
+    cursor: pointer;
+}
+
+.border-bottom-2 {
+    border-bottom: 2px solid #000 !important;
+}
+
+/* Adjust column width distribution if needed, or rely on Bootstrap grid */
+.col {
+    flex: 1;
+}

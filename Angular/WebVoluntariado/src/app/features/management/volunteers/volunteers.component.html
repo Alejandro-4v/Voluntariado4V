@@ -1,0 +1,44 @@
+<div class="container-fluid py-4 px-3 px-md-5">
+    <!-- Header -->
+    <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-5 gap-3">
+        <div class="d-flex align-items-center gap-3 w-100 w-md-auto justify-content-center justify-content-md-start">
+            <h1 class="h3 text-dark fw-bold mb-0">Voluntarios</h1>
+            <button class="btn btn-success btn-sm d-flex align-items-center gap-2" (click)="exportToExcel()">
+                <i class="bi bi-file-earmark-excel"></i> Exportar
+            </button>
+        </div>
+
+        <div class="d-flex gap-4 align-items-center w-100 w-md-auto justify-content-center justify-content-md-end">
+            <!-- Shared Filter Sort Component -->
+            <app-filter-sort [filterSections]="filterSections" [activeFilters]="activeFilters"
+                [groupOptions]="groupOptions" [sortOptions]="sortOptions" [currentGroup]="groupBy"
+                [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (groupChange)="onGroupBy($event)"
+                (sortChange)="onSortBy($event)">
+            </app-filter-sort>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (isLoading) {
+        <app-loading-spinner [text]="'Cargando voluntarios...'"></app-loading-spinner>
+        } @else {
+        <div class="d-contents" @fadeIn>
+            <!-- Sidebar Details -->
+            <div class="col-12 col-md-4 mb-4 sticky-sidebar" @slideUp>
+                @if (selectedVolunteer) {
+                <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+                </app-generic-detail>
+                }
+            </div>
+
+            <!-- Main List -->
+            <div class="col-12 col-md-8" @slideUp>
+                <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
+                    [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
+                </app-generic-list>
+            </div>
+        </div>
+        }
+    </div>
+</div>

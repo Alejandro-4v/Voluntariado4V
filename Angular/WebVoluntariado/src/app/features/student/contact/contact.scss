@@ -1,0 +1,16 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  flex: 1;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1.5rem 0 !important;
+  }
+}

@@ -1,0 +1,107 @@
+<div class="landing-wrapper min-vh-100 bg-light">
+    <app-navbar [options]="navbarOptions" mode="white" [showLogout]="false"></app-navbar>
+
+    <!-- Hero Section -->
+    <header class="hero-section text-center py-5 position-relative">
+        <div class="hero-overlay"></div>
+        <div class="container py-5 position-relative z-1">
+            <h1 class="display-3 fw-bold text-white mb-3">Voluntariado Cuatrovientos</h1>
+            <p class="lead text-white-50 mb-4 fs-3">Tu tiempo puede cambiar vidas. Únete a nosotros.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-primary-custom btn-lg px-5 text-white rounded-pill"
+                    (click)="handleLogin()">Unirse
+                    Ahora</button>
+                <button class="btn btn-outline-light btn-lg px-5 rounded-pill" (click)="handleLogin()">Saber
+                    Más</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="py-4 bg-primary-custom text-white">
+        <div class="container">
+            <div class="row text-center">
+                @for (stat of stats; track stat) {
+                <div class="col-6 col-md-3 mb-3 mb-md-0">
+                    <div class="fs-2 fw-bold">{{ stat.value }}</div>
+                    <div class="small opacity-75">{{ stat.label }}</div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activities Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">Actividades Recientes</h2>
+                <p class="text-muted">Descubre las últimas oportunidades para colaborar</p>
+            </div>
+            <app-carrousel [items]="recentActivities" cardType="proposal"></app-carrousel>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">¿Por qué ser voluntario?</h2>
+                <p class="text-muted">Beneficios que van más allá de ayudar</p>
+            </div>
+            <div class="row g-4">
+                @for (benefit of benefits; track benefit) {
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card text-center p-4">
+                        <div class="fs-1 mb-3">{{ benefit.icon }}</div>
+                        <h5 class="fw-bold mb-2">{{ benefit.title }}</h5>
+                        <p class="text-muted small mb-0">{{ benefit.description }}</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 text-dark">Lo que dicen nuestros voluntarios</h2>
+            <div class="row justify-content-center">
+                @for (testimonial of testimonials; track testimonial) {
+                <div class="col-md-5 mb-4">
+                    <div class="card border-0 shadow-sm p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-secondary rounded-circle me-3 d-flex align-items-center justify-content-center text-white fw-bold"
+                                style="width: 50px; height: 50px;">
+                                {{ testimonial.name.charAt(0) }}
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ testimonial.name }}</h6>
+                                <small class="text-muted">{{ testimonial.role }}</small>
+                            </div>
+                        </div>
+                        <p class="text-muted fst-italic mb-0">"{{ testimonial.text }}"</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary-custom text-white text-center">
+        <div class="container">
+            <h2 class="fw-bold mb-3">¿Estás listo para marcar la diferencia?</h2>
+            <p class="lead mb-4 opacity-75">No esperes más para formar parte de esta gran comunidad.</p>
+            <button class="btn btn-light btn-lg px-5 rounded-pill text-primary-custom fw-bold"
+                (click)="handleLogin()">Registrarme Ahora</button>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p class="mb-0 small opacity-50">&copy; 2026 Voluntariado Cuatrovientos. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</div>

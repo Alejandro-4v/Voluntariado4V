@@ -1,0 +1,95 @@
+/* Scoped styles for the form component */
+.activity-card {
+    width: 100%;
+    max-width: 1000px;
+    border: none;
+    background-color: white;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 1rem !important;
+}
+
+.form-label {
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8f9fa;
+
+    &:focus {
+        box-shadow: 0 0 0 4px rgba(13, 60, 131, 0.1);
+        border-color: #0d3c83;
+        background-color: #fff;
+    }
+
+    &::placeholder {
+        color: #adb5bd;
+    }
+}
+
+.upload-area {
+    border: 2px dashed #dee2e6;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    height: 80px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #e9ecef;
+        border-color: #0d3c83;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.image-preview-container {
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.btn-primary {
+    background-color: #0d3c83;
+    border-color: #0d3c83;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: #0a2e63;
+        border-color: #0a2e63;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 60, 131, 0.2);
+    }
+}
+
+.btn-outline-primary {
+    color: #0d3c83;
+    border-color: #0d3c83;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+
+    &:hover {
+        background-color: #0d3c83;
+        color: white;
+    }
+}
+
+.btn-outline-secondary {
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+}

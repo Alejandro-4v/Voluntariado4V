@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,17 @@
 .externalNativeBuild
 .cxx
 local.properties
+=======
+# IDE
+**/*.code-workspace
+
+# Desktop OS
+
+**/*.DS_Store
+**/Thumbs.db
+
+# Docker
+
+docker/*
+!docker/images
+>>>>>>> main

@@ -1,0 +1,35 @@
+<div class="auth-wrapper">
+  
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      
+      <div class="col-lg-5 d-none d-lg-block pe-4 animate__animated animate__fadeInLeft">
+        
+        <h1 class="display-4 mb-0" style="color: var(--cv-blue); font-weight: 800;">
+          {{ layoutData.title }}
+        </h1>
+
+        @if (layoutData.subtitle) {
+        <h2 class="mb-4 text-dark" style="font-weight: 600; font-size: 2rem;">
+          {{ layoutData.subtitle }}
+        </h2>
+        }
+        
+        <div class="fs-6 mt-3" style="color: #6c8299; line-height: 1.6;">
+          @if (layoutData.text1) {
+          <p class="mb-2">{{ layoutData.text1 }}</p>
+          }
+          @if (layoutData.text2) {
+          <p class="mb-0">{{ layoutData.text2 }}</p>
+          }
+        </div>
+
+      </div>
+
+      <div class="col-12 col-lg-5 offset-lg-2">
+        <router-outlet></router-outlet>
+      </div>
+
+    </div>
+  </div>
+</div>

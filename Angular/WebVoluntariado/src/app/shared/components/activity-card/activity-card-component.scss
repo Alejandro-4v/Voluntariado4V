@@ -1,0 +1,42 @@
+.card-custom {
+    width: 18rem;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.image-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+.icon-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    width: 40px;
+    height: 40px;
+    opacity: 0.9;
+}
+
+.card-title-custom {
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-text-custom {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.progress-custom {
+    height: 4px;
+}

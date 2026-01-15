@@ -1,0 +1,38 @@
+<div class="container-fluid py-4 px-3 px-md-5">
+    <!-- Header -->
+    <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-5 gap-3">
+        <h1 class="h3 text-dark fw-bold text-center text-md-start">Entidades</h1>
+        <div class="w-100 w-md-auto d-flex justify-content-center justify-content-md-end">
+            <app-filter-sort [filterSections]="filterSections" [activeFilters]="activeFilters"
+                [groupOptions]="groupOptions" [sortOptions]="sortOptions" [currentGroup]="groupBy"
+                [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (groupChange)="onGroupBy($event)"
+                (sortChange)="onSortBy($event)">
+            </app-filter-sort>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (isLoading) {
+        <app-loading-spinner [text]="'Cargando entidades...'"></app-loading-spinner>
+        } @else {
+        <div class="d-contents" @fadeIn>
+            <!-- Sidebar Details -->
+            <div class="col-12 col-md-4 mb-4" @slideUp>
+                @if (selectedEntity) {
+                <app-generic-detail [item]="selectedEntity" [config]="detailConfig">
+                </app-generic-detail>
+                }
+            </div>
+
+            <!-- Main List -->
+            <div class="col-12 col-md-8" @slideUp>
+                <app-generic-list [items]="displayEntities" [columns]="listColumns"
+                    [selectedId]="selectedEntity?.idEntidad || null" [keyField]="'idEntidad'"
+                    (select)="selectEntity($event)">
+                </app-generic-list>
+            </div>
+        </div>
+        }
+    </div>
+</div>

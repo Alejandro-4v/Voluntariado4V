@@ -1,0 +1,42 @@
+name: "Intermodular"
+
+networks:
+  api:
+    driver: bridge
+
+services:
+  php:
+    build: ./docker/images/php
+    container_name: php
+    ports:
+      - "80:80"
+      - "8000:8000"
+      - "9003:9003"
+    volumes:
+      - ./api:/api
+    depends_on:
+      - mysql
+    profiles:
+      - "api"
+    networks:
+      - api
+    working_dir: /api
+    stdin_open: true
+    tty: true
+
+  mysql:
+    image: mysql:8.1
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: API
+      MYSQL_USER: api
+      MYSQL_PASSWORD: api123
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    profiles:
+      - "api"
+    networks:
+      - api
