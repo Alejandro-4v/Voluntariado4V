@@ -16,9 +16,10 @@ export interface Actividad {
     ods: Ods[];
     voluntarios: VoluntarioActividad[];
     // Future fields
+    lugar: string;
+    // Future fields or UI specific
     plazasTotales?: number;
     valoracion?: number;
-    location?: string; // Not in API yet but used in UI
 }
 
 export interface EntidadActividad {
