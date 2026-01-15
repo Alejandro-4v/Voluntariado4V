@@ -49,6 +49,7 @@ CREATE TABLE
         fin TIMESTAMP NOT NULL,
         grado TINYINT NOT NULL,
         lugar VARCHAR(100) NOT NULL,
+        plazas TINYINT,
         FOREIGN KEY (convoca) REFERENCES ENTIDAD (id_entidad),
         FOREIGN KEY (grado) REFERENCES GRADO (id_grado),
         CONSTRAINT CK_ACTIVIDAD_inicio_anterior_al_fin CHECK (inicio < fin),
