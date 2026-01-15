@@ -28,6 +28,7 @@ export class ContactComponent implements OnInit {
   upcomingActivities: any[] = [];
   entities: any[] = [];
   selectedActivity: any = null;
+  selectedEntity: any = null;
   isModalOpen = false;
   isLoading = true;
 
@@ -100,5 +101,13 @@ export class ContactComponent implements OnInit {
   onActivityAction() {
     console.log('Participar:', this.selectedActivity?.nombre);
     this.closeActivityModal();
+  }
+
+  openEntityModal(entity: any) {
+    this.selectedEntity = entity;
+  }
+
+  closeEntityModal() {
+    this.selectedEntity = null;
   }
 }

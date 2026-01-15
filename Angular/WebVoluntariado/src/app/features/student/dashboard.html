@@ -1,5 +1,5 @@
 <!-- Main content -->
-<main class="dashboard-content bg-white py-5">
+<main class="dashboard-content bg-light py-5">
   <div class="container-lg">
 
     <!-- Loading Spinner -->
@@ -8,50 +8,102 @@
     } @else {
     <div @fadeIn>
 
+      <!-- Header -->
       <div class="mb-5" @slideUp>
-        <h1 class="display-6 fw-bold mb-2 text-dark">
-          Nuevas actividades de entidades en las que participas
+        <h1 class="display-5 fw-bold mb-2 text-dark">
+          Hola, {{ currentUser?.name || 'Estudiante' }}
         </h1>
+        <p class="text-muted lead">
+          Bienvenido a tu panel de voluntariado. Aquí puedes ver tus actividades y descubrir nuevas oportunidades.
+        </p>
+      </div>
+
+      <!-- My Upcoming Activities -->
+      <section class="mb-5" @slideUp>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h2 class="fs-4 fw-bold text-dark m-0">
+            Mis Próximas Actividades
+          </h2>
+          @if (myUpcomingActivities.length > 0) {
+          <span class="badge bg-primary rounded-pill">{{ myUpcomingActivities.length }} inscritas</span>
+          }
+        </div>
+
+        @if (myUpcomingActivities.length > 0) {
+        <app-carrousel [items]="myUpcomingActivities" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+        } @else {
+        <div class="card border-0 shadow-sm p-5 text-center bg-white rounded-4">
+          <div class="mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+              class="bi bi-calendar-event text-muted opacity-50" viewBox="0 0 16 16">
+              <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+              <path
+                d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+            </svg>
+          </div>
+          <h3 class="h5 text-muted">No tienes actividades próximas</h3>
+          <p class="text-muted mb-0">¡Explora las nuevas oportunidades abajo e inscríbete!</p>
+        </div>
+        }
+      </section>
+
+      <hr class="my-5 text-muted opacity-25">
+
+      <!-- Discovery Section Header -->
+      <div class="mb-4" @slideUp>
+        <h2 class="fs-4 fw-bold text-dark">
+          Descubre Nuevas Oportunidades
+        </h2>
+        <p class="text-muted">Actividades disponibles en las entidades donde participas</p>
       </div>
 
       <!-- Grouped Activities by Entity -->
       @for (group of groupedActivities; track group.entityName) {
       <section class="mb-5" @slideUp>
-        <h2 class="fs-5 fw-bold mb-4 text-dark">
-          Nuevas actividades desde {{ group.entityName }}
-        </h2>
+        <h3 class="fs-5 fw-bold mb-3 text-secondary">
+          {{ group.entityName }}
+        </h3>
         <app-carrousel [items]="group.activities" (cardClick)="openActivityModal($event)">
         </app-carrousel>
       </section>
       } @empty {
-      <div class="alert alert-info mb-5" @slideUp>
-        No hay nuevas actividades de tus entidades.
+      <div class="alert alert-light border shadow-sm mb-5 d-flex align-items-center" @slideUp>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+          class="bi bi-info-circle me-3 text-primary" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+          <path
+            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+        </svg>
+        <div>
+          No hay nuevas actividades disponibles en tus entidades por el momento.
+        </div>
       </div>
       }
 
       <!-- Proposals from Cuatrovientos -->
       <section class="mb-5" @slideUp>
-        <h2 class="fs-5 fw-bold mb-4 text-dark">
+        <h3 class="fs-5 fw-bold mb-3 text-secondary">
           Propuestas desde Cuatrovientos
-        </h2>
+        </h3>
         @if (proposalsFromCuatrovientos.length > 0) {
         <app-carrousel [items]="proposalsFromCuatrovientos" cardType="proposal" (cardClick)="openActivityModal($event)">
         </app-carrousel>
         } @else {
-        <p class="text-muted">No hay propuestas activas en este momento.</p>
+        <p class="text-muted fst-italic">No hay propuestas activas en este momento.</p>
         }
       </section>
 
       <!-- Other Entities -->
       <section class="mb-5" @slideUp>
-        <h2 class="fs-5 fw-bold mb-4 text-dark">
+        <h3 class="fs-5 fw-bold mb-3 text-secondary">
           Otras entidades que te pueden interesar
-        </h2>
+        </h3>
         @if (otherEntities.length > 0) {
         <app-carrousel [items]="otherEntities" cardType="entity">
         </app-carrousel>
         } @else {
-        <p class="text-muted">No hay otras entidades disponibles.</p>
+        <p class="text-muted fst-italic">No hay otras entidades disponibles.</p>
         }
       </section>
 

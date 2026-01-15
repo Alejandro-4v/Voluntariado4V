@@ -1,5 +1,5 @@
 <!-- Main content -->
-<main class="dashboard-content bg-white py-5">
+<main class="dashboard-content bg-light py-5">
   <div class="container-lg">
 
     @if (isLoading) {
@@ -7,74 +7,74 @@
     } @else {
     <div @fadeIn>
       <!-- Main title -->
-      <h1 class="fs-4 fw-bold mb-2 text-dark" @slideUp>
-        Tienes algún problema o comentario sobre una actividad?
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="text-muted mb-5" @slideUp>
-        Tus actividades pasadas
-      </p>
-
-      <!-- Past activities section -->
-      @if (allActivities.length > 0) {
       <div class="mb-5" @slideUp>
-        <!-- Carrusel de actividades pasadas -->
-        <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
-        </app-carrousel>
+        <h1 class="display-5 fw-bold mb-2 text-dark">
+          Centro de Ayuda
+        </h1>
+        <p class="text-muted lead">
+          ¿Tienes algún problema o duda? Contacta con las entidades o infórmanos sobre una actividad.
+        </p>
       </div>
-      }
-
-      <!-- Empty state for past activities -->
-      @if (allActivities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert" @slideUp>
-        <p class="mb-0">No tienes actividades pasadas aun.</p>
-      </div>
-      }
-
-      <!-- Upcoming activities section -->
-      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5" @slideUp>
-        Tus proximas actividades
-      </h2>
-
-      @if (upcomingActivities.length > 0) {
-      <div class="mb-5" @slideUp>
-        <!-- Carrusel de proximas actividades -->
-        <app-carrousel [items]="upcomingActivities" cardType="activity" (cardClick)="openActivityModal($event)">
-        </app-carrousel>
-      </div>
-      }
-
-      <!-- Empty state for upcoming activities -->
-      @if (upcomingActivities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert" @slideUp>
-        <p class="mb-0">No hay proximas actividades disponibles.</p>
-      </div>
-      }
 
       <!-- Entities section -->
-      <h2 class="fs-6 fw-bold mb-4 text-dark mt-5" @slideUp>
-        Contacta con una entidad
-      </h2>
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-4 fw-bold mb-4 text-dark">
+          Contactar con una Entidad
+        </h2>
+        <p class="text-muted mb-4">
+          Haz clic en una entidad para ver sus datos de contacto.
+        </p>
 
-      <p class="text-muted mb-4" @slideUp>
-        Entidades que participan con nosotros
-      </p>
-
-      @if (entities.length > 0) {
-      <div class="mb-5" @slideUp>
-        <!-- Carrusel de entidades -->
-        <app-carrousel [items]="entities" cardType="entity">
+        @if (entities.length > 0) {
+        <app-carrousel [items]="entities" cardType="entity" (cardClick)="openEntityModal($event)">
         </app-carrousel>
-      </div>
-      }
+        } @else {
+        <div class="alert alert-light border shadow-sm" role="alert">
+          No hay entidades disponibles en este momento.
+        </div>
+        }
+      </section>
 
-      <!-- Empty state for entities -->
-      @if (entities.length === 0) {
-      <div class="alert alert-info mb-5" role="alert" @slideUp>
-        <p class="mb-0">No hay entidades disponibles.</p>
-      </div>
-      }
+      <hr class="my-5 text-muted opacity-25">
+
+      <!-- Upcoming activities section -->
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-4 fw-bold mb-4 text-dark">
+          Problemas con Próximas Actividades
+        </h2>
+        <p class="text-muted mb-4">
+          Si tienes dudas sobre una actividad en la que vas a participar o quieres cancelar tu inscripción.
+        </p>
+
+        @if (upcomingActivities.length > 0) {
+        <app-carrousel [items]="upcomingActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+        } @else {
+        <div class="alert alert-light border shadow-sm" role="alert">
+          No tienes actividades próximas.
+        </div>
+        }
+      </section>
+
+      <!-- Past activities section -->
+      <section class="mb-5" @slideUp>
+        <h2 class="fs-4 fw-bold mb-4 text-dark">
+          Reportar Actividades Pasadas
+        </h2>
+        <p class="text-muted mb-4">
+          Si tuviste algún incidente en una actividad pasada.
+        </p>
+
+        @if (allActivities.length > 0) {
+        <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+        </app-carrousel>
+        } @else {
+        <div class="alert alert-light border shadow-sm" role="alert">
+          No tienes actividades pasadas.
+        </div>
+        }
+      </section>
+
     </div>
     }
   </div>
@@ -84,3 +84,46 @@
 <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" buttonType="informar"
   (close)="closeActivityModal()" (action)="onActivityAction()">
 </app-activity-modal>
+
+<!-- Entity Modal (Simple alert for now, or reuse activity modal with different content) -->
+<!-- We can reuse activity modal structure or create a simple one. For now, let's use a simple overlay or just alert in TS. 
+     But user asked for "click and contact". Let's assume we show an alert with mail for now or better, a small modal.
+     Since I cannot create new files easily without verifying, I will add a simple modal structure here or use the existing one adapted.
+     Let's use a simple custom modal here for Entity Contact.
+-->
+@if (selectedEntity) {
+<div class="modal-overlay" (click)="closeEntityModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()" style="max-width: 500px;">
+    <button class="modal-close" (click)="closeEntityModal()">×</button>
+    <div class="modal-body text-center p-4">
+      @if (selectedEntity.perfilUrl) {
+      <img [src]="selectedEntity.perfilUrl" class="rounded-circle mb-3 shadow-sm" width="100" height="100"
+        style="object-fit: cover;">
+      }
+      <h2 class="fw-bold mb-1">{{ selectedEntity.nombre }}</h2>
+      <p class="text-muted mb-4">{{ selectedEntity.type || 'Entidad Colaboradora' }}</p>
+
+      <div class="d-grid gap-3">
+        <a [href]="'mailto:' + (selectedEntity.contactMail || selectedEntity.email)" class="btn btn-primary btn-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-envelope-fill me-2" viewBox="0 0 16 16">
+            <path
+              d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
+          </svg>
+          Enviar Correo
+        </a>
+        @if (selectedEntity.telefono) {
+        <a [href]="'tel:' + selectedEntity.telefono" class="btn btn-outline-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-telephone-fill me-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
+          </svg>
+          Llamar
+        </a>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+}

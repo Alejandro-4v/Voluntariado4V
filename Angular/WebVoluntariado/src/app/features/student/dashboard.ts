@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   isLoading = true;
 
   // Data
+  myUpcomingActivities: any[] = [];
   groupedActivities: { entityName: string, activities: any[] }[] = [];
   proposalsFromCuatrovientos: any[] = [];
   otherEntities: any[] = [];
@@ -59,7 +60,15 @@ export class DashboardComponent implements OnInit {
       next: (activities) => {
         const now = new Date();
 
-        // Filter and Group "New Activities" by Entity
+        // My Upcoming Activities (Enrolled & Future)
+        this.myUpcomingActivities = activities
+          .filter(a => new Date(a.inicio) >= now && a.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif))
+          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+
+        // Filter and Group "New Activities" by Entity (Excluding enrolled ones if desired, or keeping them. 
+        // Usually discovery shows all, but let's keep it as showing available ones. 
+        // We won't filter out enrolled ones from discovery to avoid confusion if they look for it, 
+        // but we could mark them. For now, just standard discovery.)
         const upcomingActivities = activities
           .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre !== 'Cuatrovientos')
           .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
@@ -124,7 +133,32 @@ export class DashboardComponent implements OnInit {
   }
 
   onActivityAction() {
-    console.log('Participar:', this.selectedActivity?.nombre);
-    this.closeActivityModal();
+    if (!this.currentUser || !this.currentUser.nif) {
+      alert('Debes iniciar sesión como voluntario para inscribirte.');
+      return;
+    }
+
+    if (!this.selectedActivity) return;
+
+    // Check if already enrolled
+    const isEnrolled = this.selectedActivity.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif);
+    if (isEnrolled) {
+      alert('Ya estás inscrito en esta actividad.');
+      return;
+    }
+
+    this.isLoading = true;
+    this.activitiesService.enrollVolunteer(this.selectedActivity.idActividad, this.currentUser.nif).subscribe({
+      next: (updatedActivity) => {
+        alert('¡Te has inscrito correctamente en la actividad!');
+        this.closeActivityModal();
+        this.loadData(); // Reload to reflect changes (e.g. remove from list if logic changes, or just refresh)
+      },
+      error: (err) => {
+        console.error('Error enrolling in activity', err);
+        alert('Hubo un error al inscribirse. Por favor, inténtalo de nuevo.');
+        this.isLoading = false;
+      }
+    });
   }
 }

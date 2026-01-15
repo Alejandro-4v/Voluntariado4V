@@ -1,48 +1,60 @@
 <!-- Main content -->
-<main class="dashboard-content bg-white py-5">
+<main class="dashboard-content bg-light py-5">
   <div class="container-lg">
     <!-- Main title -->
-    <h1 class="fs-4 fw-bold mb-2 text-dark">
-      Tu historial de actividades
-    </h1>
-    <!-- Subtitle -->
-    <p class="text-muted mb-5">
-      Todas tus actividades
-    </p>
+    <div class="mb-5">
+      <h1 class="display-5 fw-bold mb-2 text-dark">
+        Tu Historial
+      </h1>
+      <p class="text-muted lead">
+        Consulta todas las actividades en las que has participado y valora tu experiencia.
+      </p>
+    </div>
 
     <!-- Rated activities section -->
-    @if (allActivities.length > 0) {
-    <div class="mb-5">
+    <section class="mb-5">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="fs-4 fw-bold text-dark m-0">
+          Todas tus actividades
+        </h2>
+        @if (allActivities.length > 0) {
+        <span class="badge bg-secondary rounded-pill">{{ allActivities.length }} completadas</span>
+        }
+      </div>
 
-      <h2 class="fs-6 fw-bold mb-4 text-dark">
-        Todas tus actividades
-      </h2>
-
-      <!-- Carrusel de todas las actividades -->
+      @if (allActivities.length > 0) {
       <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
-
       </app-carrousel>
-    </div>
-    }
+      }
+    </section>
 
-    <!-- Unrated activities section -->
+    <!-- Unrated activities section (Placeholder for future logic) -->
     @if (unratedActivities.length > 0) {
-    <div class="mb-5">
-
-      <h2 class="fs-6 fw-bold mb-4 text-dark">
-        Queremos saber tu opinión sobre estas actividades
+    <section class="mb-5">
+      <h2 class="fs-4 fw-bold mb-4 text-dark">
+        Pendientes de valorar
       </h2>
-
-      <!-- Carrusel de actividades sin valorar -->
       <app-carrousel [items]="unratedActivities" cardType="activity" (cardClick)="openActivityModal($event)">
       </app-carrousel>
-    </div>
+    </section>
     }
 
     <!-- Empty state -->
     @if (allActivities.length === 0 && unratedActivities.length === 0) {
-    <div class="alert alert-info" role="alert">
-      <p class="mb-0">Aún no has participado en ninguna actividad. ¡Únete a nuestro programa de voluntariado!</p>
+    <div class="card border-0 shadow-sm p-5 text-center bg-white rounded-4">
+      <div class="mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+          class="bi bi-journal-x text-muted opacity-50" viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M6.146 6.146a.5.5 0 0 1 .708 0L8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707 6.854 9.854a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 0 1 0-.708z" />
+          <path
+            d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z" />
+          <path
+            d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z" />
+        </svg>
+      </div>
+      <h3 class="h5 text-muted">Aún no has participado en actividades</h3>
+      <p class="text-muted mb-0">Cuando completes tu primer voluntariado, aparecerá aquí.</p>
     </div>
     }
   </div>
