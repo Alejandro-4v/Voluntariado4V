@@ -29,6 +29,10 @@ export class VolunteersService {
     }
 
     update(voluntario: Voluntario): Observable<Voluntario> {
-        return this.http.put<Voluntario>(this.apiUrl, voluntario);
+        return this.http.put<Voluntario>(`${this.apiUrl}/${voluntario.nif}`, voluntario);
+    }
+
+    delete(nif: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${nif}`);
     }
 }

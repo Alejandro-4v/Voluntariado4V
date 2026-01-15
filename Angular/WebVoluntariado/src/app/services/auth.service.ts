@@ -32,8 +32,8 @@ export class AuthService {
   /**
    * Login contra la API
    */
-  login(email: string, password: string): Observable<{ success: boolean; user?: User; message?: string }> {
-    return this.http.post<{ token: string }>(this.apiUrl, { loginMail: email, password }).pipe(
+  login(email: string, password: string, type: 'voluntario' | 'entidad' | 'administrador' = 'voluntario'): Observable<{ success: boolean; user?: User; message?: string }> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}?usuario=${type}`, { loginMail: email, password }).pipe(
       tap(response => {
         if (response.token) {
           localStorage.setItem('auth_token', response.token);
@@ -41,59 +41,67 @@ export class AuthService {
         }
       }),
       switchMap(response => {
-        // Una vez tenemos token, intentamos buscar al usuario en Voluntarios o Entidades
-        // Como la API no tiene endpoint /me, buscamos por email en las listas
-        // Esto es ineficiente pero necesario dada la API actual
+        // Fetch user details based on type
+        let userDetails$: Observable<any>;
+        if (type === 'voluntario') {
+          // Assuming we can search by email or we have to fetch all and filter (inefficient but consistent with previous logic if no specific search endpoint)
+          // Ideally: GET /voluntario?mail=email or GET /voluntario/{nif} if we knew NIF. 
+          // Since we only have email, we might need to fetch all or if there's a filter endpoint.
+          // The controller supports filters: $voluntarios = $voluntarioRepository->findByFilters($filters);
+          // So we can try: GET /voluntario?mail=email
+          userDetails$ = this.http.get<Voluntario[]>(`${API_URL}/voluntario?mail=${email}`).pipe(
+            map(volunteers => volunteers[0])
+          );
+        } else if (type === 'entidad') {
+          // EntidadController also supports filters.
+          // GET /entidad?loginMail=email (or contactMail?)
+          // Let's try loginMail first as it's the credential.
+          userDetails$ = this.http.get<Entidad[]>(`${API_URL}/entidad?loginMail=${email}`).pipe(
+            map(entities => entities[0])
+          );
+        } else {
+          // AdministradorController: GET /administrador/{loginMail}
+          userDetails$ = this.http.get<any>(`${API_URL}/administrador/${email}`);
+        }
 
-        const volunteers$ = this.http.get<Voluntario[]>(`${API_URL}/voluntario`);
-        const entities$ = this.http.get<Entidad[]>(`${API_URL}/entidad`);
+        return userDetails$.pipe(
+          map(details => {
+            if (!details) {
+              throw new Error('Usuario no encontrado tras login exitoso');
+            }
 
-        return forkJoin([volunteers$, entities$]).pipe(
-          map(([volunteers, entities]) => {
-            // Buscar en voluntarios
-            const volunteer = volunteers.find(v => v.mail === email);
-            if (volunteer) {
-              const user: User = {
-                nif: volunteer.nif,
-                email: volunteer.mail,
-                name: volunteer.nombre + ' ' + volunteer.apellido1,
+            let user: User;
+            if (type === 'voluntario') {
+              const v = details as Voluntario;
+              user = {
+                nif: v.nif,
+                email: v.mail,
+                name: v.nombre + ' ' + v.apellido1,
                 role: 'volunteer',
-                details: volunteer
+                details: v
               };
-              this.saveUserSession(user);
-              return { success: true, user };
-            }
-
-            // Buscar en entidades (usando contactMail o loginMail si estuviera disponible en el modelo, asumimos contactMail por ahora o coincidencia)
-            // Nota: Entidad tiene contactMail. El login usa loginMail. 
-            // Si el loginMail es diferente del contactMail, esto podría fallar si la API no devuelve loginMail en el GET /entidad.
-            // Asumiremos que el usuario usa el contactMail o que podemos encontrarlo.
-            const entity = entities.find(e => e.contactMail === email);
-            if (entity) {
-              const user: User = {
-                id: entity.idEntidad,
-                cif: entity.cif,
-                email: entity.contactMail,
-                name: entity.nombre,
+            } else if (type === 'entidad') {
+              const e = details as Entidad;
+              user = {
+                id: e.idEntidad,
+                cif: e.cif,
+                email: e.loginMail || e.contactMail,
+                name: e.nombre,
                 role: 'entity',
-                details: entity
+                details: e
               };
-              this.saveUserSession(user);
-              return { success: true, user };
+            } else {
+              const a = details; // Admin
+              user = {
+                email: a.loginMail,
+                name: a.nombre,
+                role: 'admin',
+                details: a
+              };
             }
 
-            // Si no es ni voluntario ni entidad, podría ser admin (hardcoded por ahora si no hay endpoint de admins)
-            if (email === 'admin@cuatrovientos.org') {
-              const user: User = {
-                email: email,
-                name: 'Admin',
-                role: 'admin'
-              };
-              this.saveUserSession(user);
-              return { success: true, user };
-            }
-
-            throw new Error('Usuario no encontrado en los registros');
+            this.saveUserSession(user);
+            return { success: true, user };
           })
         );
       }),

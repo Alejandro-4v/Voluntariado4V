@@ -24,7 +24,8 @@ export class LoginComponent {
   // Formulario con validaciones
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
+    userType: ['voluntario', [Validators.required]]
   });
 
   onSubmit() {
@@ -32,14 +33,23 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
       this.isLoading = true;
-      const { email, password } = this.loginForm.value;
+      const { email, password, userType } = this.loginForm.value;
 
-      this.authService.login(email || '', password || '').subscribe({
+      // Cast userType to the specific union type expected by login
+      const type = (userType as 'voluntario' | 'entidad' | 'administrador') || 'voluntario';
+
+      this.authService.login(email || '', password || '', type).subscribe({
         next: (response) => {
           if (response.success) {
             console.log('✓ Login exitoso:', response.user);
-            // Redirigir al dashboard
-            this.router.navigate(['/student/panel']);
+            // Redirigir al dashboard según el rol
+            if (response.user?.role === 'admin') {
+              this.router.navigate(['/management/dashboard']); // Example route
+            } else if (response.user?.role === 'entity') {
+              this.router.navigate(['/management/dashboard']); // Example route
+            } else {
+              this.router.navigate(['/student/panel']);
+            }
           }
         },
         error: (err) => {

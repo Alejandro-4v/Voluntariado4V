@@ -1,4 +1,4 @@
-<div class="container-fluid py-4 px-3 px-md-5">
+<div class="container-fluid py-4 ps-5 pe-5">
     <!-- Header -->
     <div
         class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-5 gap-3">
@@ -18,7 +18,7 @@
         } @else {
         <div class="d-contents" @fadeIn>
             <!-- Sidebar Details -->
-            <div class="col-12 col-md-4 mb-4" @slideUp>
+            <div class="col-md-4 mb-4 sticky-sidebar" @slideUp>
                 @if (selectedEntity) {
                 <app-generic-detail [item]="selectedEntity" [config]="detailConfig">
                 </app-generic-detail>
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Main List -->
-            <div class="col-12 col-md-8" @slideUp>
+            <div class="col-md-8" @slideUp>
                 <app-generic-list [items]="displayEntities" [columns]="listColumns"
                     [selectedId]="selectedEntity?.idEntidad || null" [keyField]="'idEntidad'"
                     (select)="selectEntity($event)">

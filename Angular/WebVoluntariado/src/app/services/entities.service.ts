@@ -26,6 +26,10 @@ export class EntitiesService {
     }
 
     update(entidad: Entidad): Observable<Entidad> {
-        return this.http.put<Entidad>(this.apiUrl, entidad);
+        return this.http.put<Entidad>(`${this.apiUrl}/${entidad.idEntidad}`, entidad);
+    }
+
+    delete(id: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${id}`);
     }
 }

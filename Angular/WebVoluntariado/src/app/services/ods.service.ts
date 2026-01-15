@@ -22,7 +22,7 @@ export class OdsService {
     }
 
     update(ods: Ods): Observable<Ods> {
-        return this.http.put<Ods>(this.apiUrl, ods);
+        return this.http.put<Ods>(`${this.apiUrl}/${ods.idOds}`, ods);
     }
 
     delete(id: number): Observable<any> {

@@ -22,7 +22,7 @@ export class GradoService {
     }
 
     update(grado: Grado): Observable<Grado> {
-        return this.http.put<Grado>(this.apiUrl, grado);
+        return this.http.put<Grado>(`${this.apiUrl}/${grado.idGrado}`, grado);
     }
 
     delete(id: number): Observable<any> {

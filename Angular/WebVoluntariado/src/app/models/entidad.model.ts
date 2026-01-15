@@ -10,6 +10,7 @@ export interface Entidad {
     apellidosResponsable: string;
     fechaRegistro: string;
     contactMail: string;
+    loginMail?: string;
     perfilUrl?: string;
     actividades?: ActividadEntidad[];
 }

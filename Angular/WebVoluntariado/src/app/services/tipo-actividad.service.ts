@@ -21,15 +21,20 @@ export class TipoActividadService {
         return this.http.get<TipoActividad>(`${this.apiUrl}/${id}`);
     }
 
-    getInUse(): Observable<TipoActividad[]> {
-        return this.http.get<TipoActividad[]>(`${this.apiUrl}EnUso`);
-    }
+    // getInUse endpoint does not exist in API
+    // getInUse(): Observable<TipoActividad[]> {
+    //     return this.http.get<TipoActividad[]>(`${this.apiUrl}EnUso`);
+    // }
 
     create(tipoActividad: TipoActividad): Observable<TipoActividad> {
         return this.http.post<TipoActividad>(this.apiUrl, tipoActividad);
     }
 
     update(tipoActividad: TipoActividad): Observable<TipoActividad> {
-        return this.http.put<TipoActividad>(this.apiUrl, tipoActividad);
+        return this.http.put<TipoActividad>(`${this.apiUrl}/${tipoActividad.idTipoActividad}`, tipoActividad);
+    }
+
+    delete(id: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${id}`);
     }
 }
