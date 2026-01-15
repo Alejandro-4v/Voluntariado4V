@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
 import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
 
@@ -25,9 +24,11 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.widget.ProgressBar;
 
 public class PasadasActividadesFragment extends Fragment {
     RecyclerDataAdapter adapter;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -36,6 +37,7 @@ public class PasadasActividadesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_lista_actividades, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.rvActividades);
+        progressBar = view.findViewById(R.id.progressBar); // Init ProgressBar
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new ActividadClickListener());
@@ -47,10 +49,12 @@ public class PasadasActividadesFragment extends Fragment {
     }
 
     private void cargarDatos() {
+        progressBar.setVisibility(View.VISIBLE); // Show
         ApiClient.getApiService().getActividades(50, null, null, null, null, null)
                 .enqueue(new Callback<List<Actividad>>() {
                     @Override
                     public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
+                        progressBar.setVisibility(View.GONE); // Hide
                         if (response.isSuccessful() && response.body() != null) {
                             List<Actividad> todas = response.body();
                             List<Actividad> pasadas = new ArrayList<>();
@@ -71,6 +75,7 @@ public class PasadasActividadesFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<List<Actividad>> call, Throwable t) {
+                        progressBar.setVisibility(View.GONE); // Hide
                         Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -92,6 +97,8 @@ public class PasadasActividadesFragment extends Fragment {
             intent.putExtra("lugar", actividad.getLugar());
             intent.putExtra("descripcion", actividad.getDescripcion());
             intent.putExtra("plazas", 0);
+            intent.putExtra("listaOds",
+                    (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
             startActivity(intent);
         }
     }

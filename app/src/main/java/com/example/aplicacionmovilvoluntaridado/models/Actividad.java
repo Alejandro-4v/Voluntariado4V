@@ -1,9 +1,10 @@
 package com.example.aplicacionmovilvoluntaridado.models;
 
+import java.io.Serializable;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class Actividad {
+public class Actividad implements Serializable {
     private int idActividad;
     private String nombre;
     private String descripcion;

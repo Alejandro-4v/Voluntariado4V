@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import retrofit2.Response;
 
 public class ProximasActividadesFragment extends Fragment {
     RecyclerDataAdapter adapter;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -41,6 +43,7 @@ public class ProximasActividadesFragment extends Fragment {
                                                                                              // el RecyclerView
 
         RecyclerView recyclerView = view.findViewById(R.id.rvActividades);
+        progressBar = view.findViewById(R.id.progressBar); // Initialize ProgressBar
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Inicializamos con lista vacía
@@ -55,6 +58,8 @@ public class ProximasActividadesFragment extends Fragment {
                 intent.putExtra("lugar", actividad.getLugar());
                 intent.putExtra("descripcion", actividad.getDescripcion());
                 intent.putExtra("plazas", 0); // No disponible en API actual
+                intent.putExtra("listaOds",
+                        (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
                 startActivity(intent);
             }
         });
@@ -68,10 +73,12 @@ public class ProximasActividadesFragment extends Fragment {
     }
 
     private void cargarDatos() {
+        progressBar.setVisibility(View.VISIBLE); // Show loading
         ApiClient.getApiService().getActividades(50, null, null, null, null, null)
                 .enqueue(new Callback<List<Actividad>>() {
                     @Override
                     public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
+                        progressBar.setVisibility(View.GONE); // Hide loading
                         if (response.isSuccessful() && response.body() != null) {
                             List<Actividad> todas = response.body();
                             List<Actividad> proximas = new ArrayList<>();
@@ -96,6 +103,7 @@ public class ProximasActividadesFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<List<Actividad>> call, Throwable t) {
+                        progressBar.setVisibility(View.GONE); // Hide loading
                         // Mostrar mensaje de excepción
                         Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
                         t.printStackTrace(); // Para ver en Logcat si es posible

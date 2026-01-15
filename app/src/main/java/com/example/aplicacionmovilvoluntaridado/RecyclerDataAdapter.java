@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
         // [cite: 131] Referencias a los elementos visuales
         TextView tvNombre, tvEntidad, tvFecha;
+        ChipGroup chipGroupOds;
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);

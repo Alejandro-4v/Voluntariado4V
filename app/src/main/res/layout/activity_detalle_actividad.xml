@@ -109,19 +109,32 @@
                 android:textSize="14sp"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tvDetalleTitulo">
+
+        <!-- ... existing nested LinearLayouts ... -->
+        
     </LinearLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupDetalleOds"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDatos" />
 
     <TextView
         android:id="@+id/tvLabelDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Descripción de la actividad"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDatos"/>
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupDetalleOds"/>
 
     <TextView
         android:id="@+id/tvDetalleDescripcion"

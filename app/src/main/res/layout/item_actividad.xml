@@ -48,6 +48,8 @@
             android:textColor="@color/textColorHint"
             android:textSize="12sp"
             tools:text="Lugar - Fecha" />
+
+
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
