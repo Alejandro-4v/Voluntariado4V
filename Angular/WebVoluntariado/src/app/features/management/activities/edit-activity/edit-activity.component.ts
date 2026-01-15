@@ -71,16 +71,7 @@ export class EditActivityComponent implements OnInit {
         }
     }
 
-    onDraft(updatedData: any): void {
-        const id = this.route.snapshot.paramMap.get('id');
-        if (id) {
-            const updatedActivity = this.mapToActivity(updatedData, 'P');
-            this.activitiesService.update(+id, updatedActivity).subscribe(() => {
-                console.log('Activity draft updated');
-                this.router.navigate(['/management/actividades']);
-            });
-        }
-    }
+
 
     onPreview(updatedData: any): void {
         const activity = this.mapToActivity(updatedData, 'P');
