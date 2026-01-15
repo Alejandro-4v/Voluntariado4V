@@ -31,73 +31,102 @@
             <!-- Date & Location -->
             <div class="col-md-6">
                 <label for="date" class="form-label fw-semibold">Fecha</label>
-                <input type="date" id="date" class="form-control" formControlName="date">
+                <input type="date" id="date" class="form-control" formControlName="date"
+                    [class.is-invalid]="activityForm.get('date')?.invalid && activityForm.get('date')?.touched">
+                @if (activityForm.get('date')?.invalid && activityForm.get('date')?.touched) {
+                <div class="invalid-feedback">
+                    La fecha es obligatoria.
+                </div>
+                }
             </div>
             <div class="col-md-6">
                 <label for="location" class="form-label fw-semibold">Lugar</label>
                 <input type="text" id="location" class="form-control" formControlName="location"
+                    [class.is-invalid]="activityForm.get('location')?.invalid && activityForm.get('location')?.touched"
                     placeholder="Ej: Polideportivo Municipal">
+                @if (activityForm.get('location')?.invalid && activityForm.get('location')?.touched) {
+                <div class="invalid-feedback">
+                    El lugar es obligatorio.
+                </div>
+                }
             </div>
 
             <!-- Slots & Entity -->
             <div class="col-md-6">
                 <label for="slots" class="form-label fw-semibold">Plazas</label>
-                <input type="number" id="slots" class="form-control" formControlName="slots" min="1">
+                <input type="number" id="slots" class="form-control" formControlName="slots" min="1"
+                    [class.is-invalid]="activityForm.get('slots')?.invalid && activityForm.get('slots')?.touched">
+                @if (activityForm.get('slots')?.invalid && activityForm.get('slots')?.touched) {
+                <div class="invalid-feedback">
+                    El número de plazas es obligatorio.
+                </div>
+                }
             </div>
             <div class="col-md-6">
                 <label for="entity" class="form-label fw-semibold">Entidad Organizadora</label>
-                <select id="entity" class="form-select" formControlName="entity">
+                <select id="entity" class="form-select" formControlName="entity"
+                    [class.is-invalid]="activityForm.get('entity')?.invalid && activityForm.get('entity')?.touched">
                     <option value="">Seleccionar...</option>
                     @for (ent of entitiesList; track ent.idEntidad) {
                     <option [value]="ent.idEntidad">{{ ent.nombre }}</option>
                     }
                 </select>
+                @if (activityForm.get('entity')?.invalid && activityForm.get('entity')?.touched) {
+                <div class="invalid-feedback">
+                    La entidad es obligatoria.
+                </div>
+                }
             </div>
 
             <!-- Grado -->
             <div class="col-md-6">
                 <label for="grado" class="form-label fw-semibold">Grado</label>
-                <select id="grado" class="form-select" formControlName="grado">
+                <select id="grado" class="form-select" formControlName="grado"
+                    [class.is-invalid]="activityForm.get('grado')?.invalid && activityForm.get('grado')?.touched">
                     <option value="">Seleccionar...</option>
                     @for (g of gradosList; track g.idGrado) {
                     <option [value]="g.idGrado">{{ g.descripcion }}</option>
                     }
                 </select>
+                @if (activityForm.get('grado')?.invalid && activityForm.get('grado')?.touched) {
+                <div class="invalid-feedback">
+                    El grado es obligatorio.
+                </div>
+                }
             </div>
 
             <!-- Image -->
             <div class="col-12">
-                <label class="form-label fw-semibold d-block">Imagen de cabecera</label>
-                <div class="d-flex align-items-start gap-3">
-                    <button type="button" class="btn btn-outline-secondary" (click)="triggerFileInput()">
-                        <i class="bi bi-image me-2"></i>Seleccionar imagen
-                    </button>
-                    <input type="file" id="activityImage" (change)="onFileSelected($event)" hidden accept="image/*">
+                <label for="image" class="form-label fw-semibold">URL de la Imagen de cabecera</label>
+                <input type="text" id="image" class="form-control" formControlName="image"
+                    placeholder="https://ejemplo.com/imagen.jpg">
 
-                    @if (selectedImage) {
-                    <div class="position-relative">
-                        <img [src]="selectedImage" alt="Vista previa" class="img-thumbnail rounded-3"
-                            style="max-height: 150px; object-fit: cover;">
-                    </div>
-                    }
+                @if (activityForm.get('image')?.value) {
+                <div class="mt-3 position-relative">
+                    <img [src]="activityForm.get('image')?.value" alt="Vista previa" class="img-thumbnail rounded-3"
+                        style="max-height: 150px; object-fit: cover;"
+                        onerror="this.src='https://via.placeholder.com/300?text=Imagen+no+válida'">
                 </div>
+                }
             </div>
 
             <!-- ODS & Types -->
             <div class="col-md-6">
                 <label for="ods" class="form-label fw-semibold">ODS Relacionados</label>
-                <select multiple id="ods" class="form-select" formControlName="ods" size="4">
+                <select multiple id="ods" class="form-select" formControlName="ods" size="4"
+                    [class.is-invalid]="activityForm.get('ods')?.invalid && activityForm.get('ods')?.touched">
                     @for (o of odsList; track o.idOds) {
-                    <option [value]="o.idOds">{{ o.nombre }}</option>
+                    <option [value]="o.idOds">{{ o.descripcion }}</option>
                     }
                 </select>
                 <div class="form-text text-muted small">Mantén Ctrl (o Cmd) para seleccionar varios</div>
             </div>
             <div class="col-md-6">
                 <label for="types" class="form-label fw-semibold">Tipos de Actividad</label>
-                <select multiple id="types" class="form-select" formControlName="types" size="4">
+                <select multiple id="types" class="form-select" formControlName="types" size="4"
+                    [class.is-invalid]="activityForm.get('types')?.invalid && activityForm.get('types')?.touched">
                     @for (t of typesList; track t.idTipoActividad) {
-                    <option [value]="t.idTipoActividad">{{ t.nombre }}</option>
+                    <option [value]="t.idTipoActividad">{{ t.descripcion }}</option>
                     }
                 </select>
                 <div class="form-text text-muted small">Mantén Ctrl (o Cmd) para seleccionar varios</div>

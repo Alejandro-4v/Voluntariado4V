@@ -41,10 +41,19 @@ export class NewActivityComponent {
     }
 
     onSave(activityData: any): void {
+        console.log('NewActivityComponent: onSave called', activityData);
         const newActivity = this.mapToActivity(activityData, 'A');
-        this.activitiesService.create(newActivity).subscribe(() => {
-            console.log('Activity published');
-            this.router.navigate(['/management/actividades']);
+        console.log('Mapped Activity:', newActivity);
+
+        this.activitiesService.create(newActivity).subscribe({
+            next: () => {
+                console.log('Activity published successfully');
+                this.router.navigate(['/management/actividades']);
+            },
+            error: (err) => {
+                console.error('Error creating activity:', err);
+                alert('Error al crear la actividad. Consulta la consola para más detalles.');
+            }
         });
     }
 
@@ -85,6 +94,7 @@ export class NewActivityComponent {
     }
 
     private mapToActivity(formData: any, status: string): any {
+        console.log('Mapping formData to Activity:', formData);
         return {
             nombre: formData.name,
             descripcion: formData.description,
@@ -97,7 +107,7 @@ export class NewActivityComponent {
             grado: { idGrado: Number(formData.grado) },
             tiposActividad: formData.types.map((id: any) => ({ idTipoActividad: Number(id) })),
             ods: formData.ods.map((id: any) => ({ idOds: Number(id) })),
-            lugar: formData.location,
+            lugar: formData.location || 'Ubicación pendiente', // Fallback to prevent null error
             voluntarios: []
         };
     }

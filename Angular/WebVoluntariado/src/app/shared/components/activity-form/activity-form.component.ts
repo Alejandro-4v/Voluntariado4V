@@ -19,7 +19,6 @@ export class ActivityFormComponent implements OnInit {
     @Output() previewAction = new EventEmitter<any>();
 
     activityForm: FormGroup;
-    selectedImage: string | ArrayBuffer | null = null;
     entities = ['Cuatrovientos Voluntariado', 'Cruz Roja', 'Banco de Alimentos'];
 
     @Input() odsList: any[] = [];
@@ -38,6 +37,7 @@ export class ActivityFormComponent implements OnInit {
             grado: ['', Validators.required],
             date: ['', Validators.required],
             location: ['', Validators.required],
+            image: [''], // URL input
             ods: [[]],
             types: [[]]
         });
@@ -52,42 +52,29 @@ export class ActivityFormComponent implements OnInit {
                 entity: this.initialData.convoca?.idEntidad || this.initialData.entity, // Handle object or string
                 grado: this.initialData.grado?.idGrado || this.initialData.grado,
                 ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
-                types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || []
+                types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || [],
+                image: this.initialData.image || this.initialData.imagenUrl
             });
-            if (this.initialData.image || this.initialData.imagenUrl) {
-                this.selectedImage = this.initialData.image || this.initialData.imagenUrl;
-            }
         }
-    }
-
-    onFileSelected(event: Event): void {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                this.selectedImage = reader.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    triggerFileInput(): void {
-        const fileInput = document.getElementById('activityImage') as HTMLElement;
-        fileInput.click();
     }
 
     onSubmit(): void {
+        console.log('ActivityFormComponent: onSubmit called');
+        console.log('Form Valid:', this.activityForm.valid);
+        console.log('Form Value:', this.activityForm.value);
+        console.log('Form Errors:', this.activityForm.errors);
+
         if (this.activityForm.valid) {
-            this.save.emit({ ...this.activityForm.value, image: this.selectedImage });
+            console.log('Emitting save event');
+            this.save.emit(this.activityForm.value);
         } else {
+            console.log('Form invalid, marking as touched');
             this.activityForm.markAllAsTouched();
         }
     }
 
-
-
     onPreview(): void {
-        this.previewAction.emit({ ...this.activityForm.value, image: this.selectedImage });
+        this.previewAction.emit(this.activityForm.value);
     }
 
     get title(): string {
