@@ -1,0 +1,131 @@
+@if (isOpen) {
+<div class="modal-overlay" (click)="onClose()">
+  @if (activity) {
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="onClose()">×</button>
+
+    <div class="modal-body">
+      <!-- Left side - Image -->
+      <div class="modal-image">
+        <div class="image-container" [style.background]="(activity.imagenUrl || activity.image)
+              ? 'url(' + (activity.imagenUrl || activity.image) + ') center/cover'
+              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'"></div>
+      </div>
+
+      <!-- Right side - Content -->
+      <div class="modal-info">
+        <h2 class="modal-title">{{ activity.nombre || activity.name }} - {{ activity.convoca?.nombre || activity.entity
+          }}</h2>
+
+        <!-- Date and Time -->
+        <div class="info-section">
+          <h3 class="info-label">Fecha y hora</h3>
+          <div class="info-row">
+            <span class="date">{{ (activity.inicio || activity.date) | date : 'dd/MM/yyyy' }}</span>
+            @if (activity.inicio || activity.time) {
+            <span class="time">{{ (activity.inicio || activity.time) | date : 'HH:mm' }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="info-section">
+          <h3 class="info-label">Lugar</h3>
+          <p class="info-text">{{ activity.lugar || 'Ubicación no especificada' }}</p>
+        </div>
+
+        <!-- Grado (Target Audience) -->
+        @if (activity.grado) {
+        <div class="info-section">
+          <h3 class="info-label">Dirigido a</h3>
+          <p class="info-text">{{ activity.grado.descripcion }} ({{ activity.grado.nivel === 'S' ? 'Grado Superior' :
+            'Grado Medio' }})</p>
+        </div>
+        }
+
+        <!-- Contact Info -->
+        @if (activity.convoca?.contactMail) {
+        <div class="info-section">
+          <h3 class="info-label">Contacto</h3>
+          <p class="info-text">
+            <a [href]="'mailto:' + activity.convoca.contactMail" class="text-decoration-none">
+              {{ activity.convoca.contactMail }}
+            </a>
+          </p>
+        </div>
+        }
+
+        <!-- Slots -->
+        <div class="info-section">
+          <h3 class="info-label">Plazas ocupadas / totales</h3>
+          <p class="info-text">
+            {{ activity.voluntarios?.length || 0 }} / {{ activity.plazasTotales || activity.slots || 'Ilimitadas' }}
+          </p>
+        </div>
+
+        <!-- Tipos de Actividad -->
+        @if (activity.tiposActividad?.length) {
+        <div class="info-section">
+          <h3 class="info-label">Tipos de Actividad</h3>
+          <div class="d-flex flex-wrap gap-2">
+            @for (tipo of activity.tiposActividad; track tipo) {
+            <span class="badge bg-primary rounded-pill">
+              {{ tipo.descripcion }}
+            </span>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- ODS -->
+        @if (activity.ods?.length) {
+        <div class="info-section">
+          <h3 class="info-label">ODS</h3>
+          <div class="d-flex flex-wrap gap-2">
+            @for (ods of activity.ods; track ods) {
+            <span class="badge bg-success rounded-pill">
+              {{ ods.descripcion }}
+            </span>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Description -->
+        <div class="info-section">
+          <h3 class="info-label">Descripción de la actividad</h3>
+          <p class="info-text">{{ activity.descripcion || activity.description || 'Sin descripción disponible' }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <!-- Student Buttons -->
+        @if (mode === 'student') {
+        <div class="modal-buttons text-center">
+          <button type="button" class="btn btn-primary" (click)="onAction()">
+            {{ getButtonLabel() }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
+        </div>
+        }
+
+        <!-- Management Buttons -->
+        @if (mode === 'management') {
+        <div class="modal-buttons d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-primary" (click)="onEdit()">Editar</button>
+          <button type="button" class="btn btn-primary" (click)="onDelete()">Eliminar</button>
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar</button>
+        </div>
+        }
+
+        <!-- Preview Buttons -->
+        @if (mode === 'preview') {
+        <div class="modal-buttons text-center">
+          <button type="button" class="btn btn-primary" (click)="onClose()">Cerrar Vista Previa</button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
+}

@@ -1,0 +1,12 @@
+# IDE
+**/*.code-workspace
+
+# Desktop OS
+
+**/*.DS_Store
+**/Thumbs.db
+
+# Docker
+
+docker/*
+!docker/images

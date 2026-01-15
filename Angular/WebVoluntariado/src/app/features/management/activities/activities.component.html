@@ -1,0 +1,118 @@
+<div class="container-fluid min-vh-100 d-flex flex-column align-items-center py-5 page-container">
+
+    <!-- Search Card -->
+    <div class="card p-4 p-md-5 m-3 m-md-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
+        <div
+            class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-4 gap-3">
+            <div class="text-center text-md-start">
+                <h2 class="text-secondary small mb-1">Cuatrovientos Voluntariado - Entidades</h2>
+                <h1 class="display-5 fw-bold text-dark">Buscar Actividad</h1>
+            </div>
+            <div>
+                <img src="assets/images/logo-cuatrovientos.png" alt="Logo" class="logo-img"
+                    style="height: 60px; width: auto;">
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">Tipo de Actividad</label>
+                <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedType">
+                    <option selected value="">Todos los tipos</option>
+                    @for (type of types; track type.idTipoActividad) {
+                    <option [value]="type.idTipoActividad">{{ type.descripcion }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">Entidad</label>
+                <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedEntity">
+                    <option selected value="">Todas las entidades</option>
+                    @for (entity of entities; track entity.idEntidad) {
+                    <option [value]="entity.nombre">{{ entity.nombre }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">Fecha de Actividad</label>
+                <input type="date" class="form-control form-control-lg bg-light" [(ngModel)]="selectedDate">
+            </div>
+        </div>
+
+        <div class="d-flex flex-column flex-md-row gap-3 pt-2">
+            <button class="btn btn-outline-secondary btn-lg flex-grow-1" (click)="onClear()">Limpiar</button>
+            <button class="btn btn-outline-primary btn-lg flex-grow-1" (click)="onViewAll()">Ver Todas</button>
+            <button class="btn btn-primary btn-lg flex-grow-1 text-white" style="background-color: #0d3c83;"
+                (click)="onSearch()">Buscar</button>
+        </div>
+    </div>
+
+    <!-- Results Sections -->
+    <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
+
+        @if (isLoading) {
+        <app-loading-spinner [text]="'Cargando actividades...'"></app-loading-spinner>
+        } @else {
+        <div @fadeIn>
+            @if (!isSearchActive) {
+            <!-- Próximas actividades -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
+                <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+
+            <!-- Actividades pasadas -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
+                <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+
+            <!-- Actividades pendiente de aprobación -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
+                <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+
+            <!-- Propuestas desde Cuatrovientos -->
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+                <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+            } @else {
+            <!-- Grid View for Search Results -->
+            <section class="mb-5" @slideUp>
+                <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
+                    <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})
+                    </h2>
+                    <button class="btn btn-sm btn-outline-dark" (click)="onClear()">Volver a la vista general</button>
+                </div>
+
+                <div class="row g-4" @staggerFade>
+                    @for (item of filteredActivities; track item) {
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                        <activity-card [name]="item.nombre" [type]="item.tiposActividad?.[0]?.descripcion || 'N/A'"
+                            [slots]="item.plazasTotales || item.slots || 0" [filled]="item.voluntarios?.length || 0"
+                            [image]="item.imagenUrl || ''" (cardClick)="openActivityModal(item)">
+                        </activity-card>
+                    </div>
+                    } @empty {
+                    <div class="col-12 text-center py-5">
+                        <p class="text-dark h5">No se encontraron actividades.</p>
+                    </div>
+                    }
+                </div>
+            </section>
+            }
+        </div>
+        }
+    </div>
+
+
+    <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" mode="management"
+        (close)="closeActivityModal()" (edit)="onEditActivity()" (delete)="onDeleteActivity()">
+    </app-activity-modal>
+</div>

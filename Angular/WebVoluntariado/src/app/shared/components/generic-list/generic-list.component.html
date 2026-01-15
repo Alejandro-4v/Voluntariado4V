@@ -1,0 +1,46 @@
+<div class="bg-white rounded shadow-sm">
+    <div class="list-group list-group-flush">
+        <!-- Header Row -->
+        <div class="list-group-item bg-transparent fw-bold py-3 border-bottom-2">
+            <div class="row w-100 m-0 align-items-center">
+                <!-- Dynamic Columns -->
+                @for (col of columns; track col.field) {
+                <div [class]="col.className || 'col'" class="text-truncate" [title]="col.header">{{ col.header }}</div>
+                }
+                <!-- Action Column Placeholder -->
+                <div class="col-2 text-end"></div>
+            </div>
+        </div>
+
+        <!-- Items -->
+        @for (item of items; track item[keyField]) {
+        <div class="list-group-item action-item py-3 border-bottom pointer"
+            [class.bg-light]="selectedId === item[keyField]" (click)="onSelect(item)">
+            <div class="row w-100 m-0 align-items-center">
+                <!-- Dynamic Cells -->
+                @for (col of columns; track col.field) {
+                <div [class]="col.className || 'col'" [class.fw-medium]="$first" [class.text-muted]="!$first"
+                    class="text-truncate" [title]="getFieldValue(item, col.field)">
+                    @if (col.pipe === 'date') {
+                    {{ getFieldValue(item, col.field) | date:'dd/MM/yyyy' }}
+                    } @else {
+                    {{ getFieldValue(item, col.field) }}
+                    }
+                </div>
+                }
+
+                <div class="col-2 text-end">
+                    <button class="btn btn-sm btn-primary rounded-pill px-3"
+                        style="background-color: #0d47a1; border: none;">
+                        Contacto
+                    </button>
+                </div>
+            </div>
+        </div>
+        } @empty {
+        <div class="list-group-item py-4 text-center text-muted">
+            No hay elementos para mostrar.
+        </div>
+        }
+    </div>
+</div>

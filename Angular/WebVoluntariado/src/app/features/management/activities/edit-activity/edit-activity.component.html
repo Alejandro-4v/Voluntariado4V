@@ -1,0 +1,14 @@
+<div
+    class="container-fluid min-vh-100 d-flex flex-column align-items-center justify-content-center py-3 py-md-5 page-container">
+    @if (activityData) {
+    <app-activity-form mode="edit" [initialData]="activityData" (save)="onSave($event)" (draft)="onDraft($event)"
+        (previewAction)="onPreview($event)" [odsList]="odsList" [typesList]="typesList" [entitiesList]="entitiesList"
+        [gradosList]="gradosList">
+    </app-activity-form>
+
+    <app-activity-modal [isOpen]="isModalOpen" [activity]="previewActivity" mode="preview" (close)="closeModal()">
+    </app-activity-modal>
+    } @else {
+    <p class="text-white">Cargando...</p>
+    }
+</div>

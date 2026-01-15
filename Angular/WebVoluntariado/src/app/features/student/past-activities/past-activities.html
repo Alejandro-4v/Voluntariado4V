@@ -1,0 +1,54 @@
+<!-- Main content -->
+<main class="dashboard-content bg-white py-5">
+  <div class="container-lg">
+    <!-- Main title -->
+    <h1 class="fs-4 fw-bold mb-2 text-dark">
+      Tu historial de actividades
+    </h1>
+    <!-- Subtitle -->
+    <p class="text-muted mb-5">
+      Todas tus actividades
+    </p>
+
+    <!-- Rated activities section -->
+    @if (allActivities.length > 0) {
+    <div class="mb-5">
+
+      <h2 class="fs-6 fw-bold mb-4 text-dark">
+        Todas tus actividades
+      </h2>
+
+      <!-- Carrusel de todas las actividades -->
+      <app-carrousel [items]="allActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+
+      </app-carrousel>
+    </div>
+    }
+
+    <!-- Unrated activities section -->
+    @if (unratedActivities.length > 0) {
+    <div class="mb-5">
+
+      <h2 class="fs-6 fw-bold mb-4 text-dark">
+        Queremos saber tu opinión sobre estas actividades
+      </h2>
+
+      <!-- Carrusel de actividades sin valorar -->
+      <app-carrousel [items]="unratedActivities" cardType="activity" (cardClick)="openActivityModal($event)">
+      </app-carrousel>
+    </div>
+    }
+
+    <!-- Empty state -->
+    @if (allActivities.length === 0 && unratedActivities.length === 0) {
+    <div class="alert alert-info" role="alert">
+      <p class="mb-0">Aún no has participado en ninguna actividad. ¡Únete a nuestro programa de voluntariado!</p>
+    </div>
+    }
+  </div>
+</main>
+
+<!-- Activity Modal -->
+<app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" buttonType="valorar"
+  (close)="closeActivityModal()" (action)="onActivityAction()">
+</app-activity-modal>
