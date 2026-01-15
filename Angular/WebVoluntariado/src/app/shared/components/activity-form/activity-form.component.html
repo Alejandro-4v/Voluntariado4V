@@ -1,6 +1,7 @@
-<div class="card p-5 m-4 shadow-lg rounded-4 activity-card" @fadeIn>
-    <div class="d-flex justify-content-between align-items-start mb-4">
-        <div>
+<div class="card p-3 p-md-5 m-2 m-md-4 shadow-lg rounded-4 activity-card" @fadeIn>
+    <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-4 gap-3">
+        <div class="text-center text-md-start">
             <h2 class="text-secondary small mb-1">Cuatrovientos Voluntariado - Administrador</h2>
             <h1 class="display-5 fw-bold text-dark">{{ title }}</h1>
         </div>
@@ -15,12 +16,12 @@
 
         <!-- Row 1: Name and Slots -->
         <div class="row g-3 mb-3">
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <label for="name" class="form-label fw-bold">Nombre de la Actividad</label>
                 <input type="text" id="name" class="form-control form-control-lg bg-light" formControlName="name"
                     placeholder="Nombre de la Actividad">
             </div>
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <label for="slots" class="form-label fw-bold">Numero de Plazas</label>
                 <input type="text" id="slots" class="form-control form-control-lg bg-light" formControlName="slots"
                     placeholder='e.g. "5 personas"'>
@@ -30,7 +31,7 @@
         <!-- Row 2: Main Content -->
         <div class="row g-3 mb-4">
             <!-- Left Column -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <!-- Description -->
                 <div class="mb-3">
                     <label for="description" class="form-label fw-bold">Descripción de la actividad</label>
@@ -54,7 +55,7 @@
             </div>
 
             <!-- Right Column -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <!-- Entity -->
                 <div class="mb-3">
                     <label for="entity" class="form-label fw-bold">Entidad Organizadora</label>
@@ -125,7 +126,7 @@
         </div>
 
         <!-- Buttons -->
-        <div class="d-flex justify-content-between gap-3 pt-2">
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 pt-2">
             <button type="button" class="btn btn-outline-secondary btn-lg flex-grow-1" (click)="onSaveDraft()">Guardar
                 como borrador</button>
             <button type="button" class="btn btn-outline-primary btn-lg flex-grow-1" (click)="onPreview()">Previsualizar
