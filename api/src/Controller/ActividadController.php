@@ -248,6 +248,10 @@ final class ActividadController extends AbstractController
             $actividad->setTiposActividad(new ArrayCollection());
         }
 
+        if (isset($json['plazas'])) {
+            $actividad->setPlazas((int)$json['plazas']);
+        }
+
         $actividadRepository->add($actividad);
 
         return $this->json($actividad, context: ['groups' => ['actividad:read']], status: Response::HTTP_CREATED);
@@ -324,6 +328,10 @@ final class ActividadController extends AbstractController
 
             $actividad->setEstado($estado);
 
+        }
+
+        if (isset($json['plazas'])) {
+            $actividad->setPlazas((int)$json['plazas']);
         }
 
         if (isset($json['convoca'])) {
@@ -492,6 +500,7 @@ final class ActividadController extends AbstractController
         }
 
         $actividad->setEstado('E');
+        $actividadRepository->update($actividad);
 
         return $this->json($actividad, context: ['groups' => ['actividad:read']]);
 

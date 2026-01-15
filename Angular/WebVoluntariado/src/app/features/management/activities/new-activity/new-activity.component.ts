@@ -48,13 +48,7 @@ export class NewActivityComponent {
         });
     }
 
-    onDraft(activityData: any): void {
-        const newActivity = this.mapToActivity(activityData, 'P');
-        this.activitiesService.create(newActivity).subscribe(() => {
-            console.log('Activity saved as draft');
-            this.router.navigate(['/management/actividades']);
-        });
-    }
+
 
     onPreview(activityData: any): void {
         const activity = this.mapToActivity(activityData, 'P');
@@ -99,7 +93,7 @@ export class NewActivityComponent {
             fin: formData.date, // Defaulting end date to start date for now
             imagenUrl: formData.image || 'https://via.placeholder.com/300', // Default image if none
             convoca: { idEntidad: Number(formData.entity) },
-            plazasTotales: Number(formData.slots),
+            plazas: Number(formData.slots),
             grado: { idGrado: Number(formData.grado) },
             tiposActividad: formData.types.map((id: any) => ({ idTipoActividad: Number(id) })),
             ods: formData.ods.map((id: any) => ({ idOds: Number(id) })),

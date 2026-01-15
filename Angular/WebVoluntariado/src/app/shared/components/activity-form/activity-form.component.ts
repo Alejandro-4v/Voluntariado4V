@@ -15,7 +15,7 @@ export class ActivityFormComponent implements OnInit {
     @Input() mode: 'create' | 'edit' = 'create';
     @Input() initialData: any = null; // Replace 'any' with an interface if available
     @Output() save = new EventEmitter<any>();
-    @Output() draft = new EventEmitter<any>();
+
     @Output() previewAction = new EventEmitter<any>();
 
     activityForm: FormGroup;
@@ -84,9 +84,7 @@ export class ActivityFormComponent implements OnInit {
         }
     }
 
-    onSaveDraft(): void {
-        this.draft.emit({ ...this.activityForm.value, image: this.selectedImage });
-    }
+
 
     onPreview(): void {
         this.previewAction.emit({ ...this.activityForm.value, image: this.selectedImage });
