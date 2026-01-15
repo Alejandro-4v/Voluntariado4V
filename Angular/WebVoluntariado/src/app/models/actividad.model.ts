@@ -18,7 +18,7 @@ export interface Actividad {
     // Future fields
     lugar: string;
     // Future fields or UI specific
-    plazasTotales?: number;
+    plazas?: number;
     valoracion?: number;
 }
 

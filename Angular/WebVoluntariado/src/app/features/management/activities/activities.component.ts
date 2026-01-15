@@ -161,7 +161,21 @@ export class ManagementActivitiesComponent implements OnInit {
     }
 
     onDeleteActivity() {
-        console.log('Delete activity:', this.selectedActivity);
-        this.closeActivityModal();
+        if (this.selectedActivity && this.selectedActivity.idActividad) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta actividad?')) {
+                this.activitiesService.delete(this.selectedActivity.idActividad).subscribe({
+                    next: () => {
+                        console.log('Activity deleted');
+                        // Refresh the list
+                        this.ngOnInit();
+                        this.closeActivityModal();
+                    },
+                    error: (err) => {
+                        console.error('Error deleting activity', err);
+                        alert('Error al eliminar la actividad');
+                    }
+                });
+            }
+        }
     }
 }

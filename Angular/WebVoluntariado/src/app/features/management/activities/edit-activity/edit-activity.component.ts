@@ -49,7 +49,7 @@ export class EditActivityComponent implements OnInit {
                     description: data.descripcion,
                     date: data.inicio,
                     location: data.lugar || 'Ubicación no especificada',
-                    slots: data.plazasTotales,
+                    slots: data.plazas,
                     entity: data.convoca?.idEntidad, // Use ID
                     grado: data.grado?.idGrado, // Use ID
                     image: data.imagenUrl,
@@ -125,7 +125,7 @@ export class EditActivityComponent implements OnInit {
             fin: formData.date,
             imagenUrl: formData.image || 'https://via.placeholder.com/300',
             convoca: { idEntidad: Number(formData.entity) },
-            plazasTotales: Number(formData.slots),
+            plazas: Number(formData.slots),
             grado: { idGrado: Number(formData.grado) },
             tiposActividad: formData.types?.map((id: any) => ({ idTipoActividad: Number(id) })) || [],
             ods: formData.ods?.map((id: any) => ({ idOds: Number(id) })) || [],
