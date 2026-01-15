@@ -24,7 +24,7 @@
       <!-- Activity Card -->
       @case ('activity') {
       <activity-card [name]="item.nombre || item.name"
-        [type]="item.tiposActividad?.[0]?.descripcion || item.type || item.entity || 'N/A'" [slots]="item.slots || 0"
+        [type]="item.tiposActividad?.[0]?.descripcion || item.type || item.entity || 'N/A'" [slots]="item.plazas || 0"
         [filled]="item.voluntarios?.length || item.filled || 0" [image]="item.imagenUrl || item.image || ''"
         [showIcon]="item.showIcon !== false" [imageFit]="item.imageFit || 'cover'"
         [customBackground]="item.customBackground" (cardClick)="onActivityClick(item)">
@@ -33,7 +33,7 @@
 
       <!-- Proposal Card -->
       @case ('proposal') {
-      <proposal-card [name]="item.nombre || item.name" [slots]="item.slots || 0"
+      <proposal-card [name]="item.nombre || item.name" [slots]="item.plazas || 0"
         [filled]="item.voluntarios?.length || item.filled || 0" (cardClick)="onActivityClick(item)">
       </proposal-card>
       }
@@ -67,9 +67,8 @@
   <!-- Puntos de paginación (solo móvil) -->
   <div class="d-flex d-md-none justify-content-center gap-2 mt-3">
     @for (item of items; track i; let i = $index) {
-    <div class="rounded-circle transition-all cursor-pointer"
-      style="cursor: pointer;" [style.width.px]="10" [style.height.px]="10"
-      [style.background-color]="i === activeIndex ? '#0d47a1' : '#dee2e6'"
+    <div class="rounded-circle transition-all cursor-pointer" style="cursor: pointer;" [style.width.px]="10"
+      [style.height.px]="10" [style.background-color]="i === activeIndex ? '#0d47a1' : '#dee2e6'"
       [style.border]="i === activeIndex ? 'none' : '1px solid #0d47a1'" (click)="scrollToIndex(i)">
     </div>
     }

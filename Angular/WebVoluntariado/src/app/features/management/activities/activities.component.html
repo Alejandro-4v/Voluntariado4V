@@ -120,7 +120,7 @@
                     @for (item of filteredActivities; track item) {
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                         <activity-card [name]="item.nombre" [type]="item.tiposActividad?.[0]?.descripcion || 'N/A'"
-                            [slots]="item.plazasTotales || item.slots || 0" [filled]="item.voluntarios?.length || 0"
+                            [slots]="item.plazas || 0" [filled]="item.voluntarios?.length || 0"
                             [image]="item.imagenUrl || ''" (cardClick)="openActivityModal(item)">
                         </activity-card>
                     </div>
