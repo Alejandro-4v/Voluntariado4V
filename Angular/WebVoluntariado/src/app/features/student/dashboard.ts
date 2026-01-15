@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { ActivitiesService } from '../../services/activities.service';
 import { EntitiesService } from '../../services/entities.service';
@@ -22,6 +23,7 @@ import { fadeIn, slideUp, staggerFade } from '../../shared/animations/animations
   animations: [fadeIn, slideUp, staggerFade]
 })
 export class DashboardComponent implements OnInit {
+  private router = inject(Router);
   private authService = inject(AuthService);
   private activitiesService = inject(ActivitiesService);
   private entitiesService = inject(EntitiesService);
@@ -42,6 +44,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
+    if (!this.currentUser) {
+      this.router.navigate(['/auth/iniciar-sesion']);
+      return;
+    }
     this.loadData();
   }
 
