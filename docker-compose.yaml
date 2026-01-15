@@ -34,8 +34,6 @@ services:
       MYSQL_DATABASE: API
       MYSQL_USER: api
       MYSQL_PASSWORD: api123
-    volumes:
-      - ./docker/mysql:/var/lib/mysql
     profiles:
       - "api"
     networks:
