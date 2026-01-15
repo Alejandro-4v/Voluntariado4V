@@ -57,9 +57,9 @@ export class PastActivitiesComponent implements OnInit {
   openActivityModal(activity: any) {
     this.selectedActivity = {
       ...activity,
-      location: activity.location || 'Polideportivo Municipal',
-      time: activity.time || '10:00',
-      description: activity.description || 'Descripcion breve de tareas de la actividad'
+      location: activity.lugar || 'Ubicación no disponible',
+      time: activity.inicio ? new Date(activity.inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Hora no disponible',
+      description: activity.descripcion || 'Sin descripción'
     };
     this.isModalOpen = true;
   }

@@ -61,7 +61,18 @@
                     <select class="form-select bg-light" id="entity" formControlName="entity">
                         <option value="" disabled selected>Selecciona una entidad</option>
                         @for (entity of entitiesList; track entity.idEntidad) {
-                        <option [value]="entity.nombre">{{ entity.nombre }}</option>
+                        <option [value]="entity.idEntidad">{{ entity.nombre }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Grado -->
+                <div class="mb-3">
+                    <label for="grado" class="form-label fw-bold">Grado Recomendado</label>
+                    <select class="form-select bg-light" id="grado" formControlName="grado">
+                        <option value="" disabled selected>Selecciona un grado</option>
+                        @for (grado of gradosList; track grado.idGrado) {
+                        <option [value]="grado.idGrado">{{ grado.descripcion }}</option>
                         }
                     </select>
                 </div>
@@ -100,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Image Preview -->
                 <!-- Image Preview -->
                 @if (selectedImage) {
                 <div>

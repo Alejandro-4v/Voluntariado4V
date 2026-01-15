@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { OdsService } from '../../../services/ods.service';
-import { TipoActividadService } from '../../../services/tipo-actividad.service';
-import { EntitiesService } from '../../../services/entities.service';
-
 import { fadeIn } from '../../animations/animations';
 
 @Component({
@@ -26,13 +22,12 @@ export class ActivityFormComponent implements OnInit {
     selectedImage: string | ArrayBuffer | null = null;
     entities = ['Cuatrovientos Voluntariado', 'Cruz Roja', 'Banco de Alimentos'];
 
-    private odsService = inject(OdsService);
-    private tipoActividadService = inject(TipoActividadService);
-    private entitiesService = inject(EntitiesService);
+    @Input() odsList: any[] = [];
+    @Input() typesList: any[] = [];
+    @Input() entitiesList: any[] = [];
+    @Input() gradosList: any[] = [];
 
-    odsList: any[] = [];
-    typesList: any[] = [];
-    entitiesList: any[] = [];
+    // Removed service injections
 
     constructor(private fb: FormBuilder) {
         this.activityForm = this.fb.group({
@@ -40,6 +35,7 @@ export class ActivityFormComponent implements OnInit {
             slots: ['', Validators.required],
             description: ['', Validators.required],
             entity: ['', Validators.required],
+            grado: ['', Validators.required],
             date: ['', Validators.required],
             location: ['', Validators.required],
             ods: [[]],
@@ -48,14 +44,13 @@ export class ActivityFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.odsService.getAll().subscribe(data => this.odsList = data);
-        this.tipoActividadService.getAll().subscribe(data => this.typesList = data);
-        this.entitiesService.getAll().subscribe(data => this.entitiesList = data);
+        // Data loading moved to parent component
 
         if (this.initialData) {
             this.activityForm.patchValue({
                 ...this.initialData,
-                entity: this.initialData.convoca?.nombre || this.initialData.entity, // Handle object or string
+                entity: this.initialData.convoca?.idEntidad || this.initialData.entity, // Handle object or string
+                grado: this.initialData.grado?.idGrado || this.initialData.grado,
                 ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
                 types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || []
             });

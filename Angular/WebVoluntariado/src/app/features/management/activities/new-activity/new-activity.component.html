@@ -1,7 +1,8 @@
 <div
     class="container-fluid min-vh-100 d-flex flex-column align-items-center justify-content-center py-5 page-container">
     <app-activity-form mode="create" (save)="onSave($event)" (draft)="onDraft($event)"
-        (previewAction)="onPreview($event)">
+        (previewAction)="onPreview($event)" [odsList]="odsList" [typesList]="typesList" [entitiesList]="entitiesList"
+        [gradosList]="gradosList">
     </app-activity-form>
 
     <app-activity-modal [isOpen]="isModalOpen" [activity]="previewActivity" mode="preview" (close)="closeModal()">
