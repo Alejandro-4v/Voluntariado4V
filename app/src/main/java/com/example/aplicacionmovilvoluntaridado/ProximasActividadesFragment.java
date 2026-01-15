@@ -76,21 +76,15 @@ public class ProximasActividadesFragment extends Fragment {
                             List<Actividad> todas = response.body();
                             List<Actividad> proximas = new ArrayList<>();
 
-                            // DEBUG: Mostrar toast con cantidad recibida
-                            Toast.makeText(getContext(), "Recibidas: " + todas.size(), Toast.LENGTH_SHORT).show();
-
                             // Filtrar por fecha > hoy
-                            // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
-                            // Locale.getDefault());
-                            // String ahora = sdf.format(new Date());
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                            String ahora = sdf.format(new Date());
 
                             for (Actividad a : todas) {
-                                // DEBUG: Añadir todas para probar
-                                proximas.add(a);
-
-                                // if (a.getInicio() != null && a.getInicio().compareTo(ahora) > 0) {
-                                // proximas.add(a);
-                                // }
+                                // Comparación lexicográfica de ISO 8601 funciona
+                                if (a.getInicio() != null && a.getInicio().compareTo(ahora) > 0) {
+                                    proximas.add(a);
+                                }
                             }
                             adapter.setDatos(proximas);
                         } else {
