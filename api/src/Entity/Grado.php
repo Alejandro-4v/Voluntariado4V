@@ -14,15 +14,15 @@ class Grado
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id_grado', type: 'smallint')]
-    #[Groups(['grado:read', 'actividad:read'])]
+    #[Groups(['grado:read', 'actividad:read', 'voluntario:read'])]
     private ?int $idGrado = null;
 
     #[ORM\Column(name: 'nivel', type: 'string', length: 1)]
-    #[Groups(groups: ['grado:read', 'grado:update', 'actividad:read'])]
+    #[Groups(groups: ['grado:read', 'grado:update', 'actividad:read', 'voluntario:read'])]
     private string $nivel;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 50, unique: true)]
-    #[Groups(['grado:read', 'grado:update', 'actividad:read'])]
+    #[Groups(['grado:read', 'grado:update', 'actividad:read', 'voluntario:read'])]
     private string $descripcion;
 
     public function getIdGrado(): ?int

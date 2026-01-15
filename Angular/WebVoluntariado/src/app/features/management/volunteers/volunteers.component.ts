@@ -35,13 +35,9 @@ export class ManagementVolunteersComponent implements OnInit {
 
     // Configuration for Generic List
     listColumns: ColumnConfig[] = [
-        { header: 'NIF', field: 'nif', className: 'col-1' },
-        { header: 'Nombre', field: 'nombre', className: 'col-1' },
-        { header: 'Apellido 1', field: 'apellido1', className: 'col-1' },
-        { header: 'Apellido 2', field: 'apellido2', className: 'col-1' },
-        { header: 'Grado', field: 'grado.descripcion', className: 'col-2' },
-        { header: 'Email', field: 'mail', className: 'col-3 text-truncate' },
-        { header: 'Estado', field: 'estado', className: 'col-1' }
+        { header: 'Nombre Completo', field: 'nombreCompleto', className: 'col-3' },
+        { header: 'Email', field: 'mail', className: 'col-5' },
+        { header: 'Estado', field: 'estadoLabel', className: 'col-2' }
     ];
 
     // Configuration for Generic Detail
@@ -54,7 +50,7 @@ export class ManagementVolunteersComponent implements OnInit {
             { label: 'Apellido 2', field: 'apellido2' },
             { label: 'Grado', field: 'grado.descripcion' },
             { label: 'Email', field: 'mail' },
-            { label: 'Estado', field: 'estado' }
+            { label: 'Estado', field: 'estadoLabel' }
         ],
         listField: 'tiposActividad',
         listLabel: 'Intereses',
@@ -92,7 +88,17 @@ export class ManagementVolunteersComponent implements OnInit {
 
         this.volunteersService.getAll().subscribe({
             next: (data) => {
-                this.volunteers = data;
+                console.log('Volunteers data received:', data);
+                console.log('First volunteer:', data[0]);
+                console.log('First volunteer grado:', data[0]?.grado);
+                console.log('First volunteer tiposActividad:', data[0]?.tiposActividad);
+
+                // Add computed fields for display
+                this.volunteers = data.map(v => ({
+                    ...v,
+                    nombreCompleto: `${v.nombre} ${v.apellido1}${v.apellido2 ? ' ' + v.apellido2 : ''}`,
+                    estadoLabel: this.getEstadoLabel(v.estado)
+                }));
                 this.displayVolunteers = [...this.volunteers];
                 if (this.volunteers.length > 0) {
                     this.selectedVolunteer = this.volunteers[0];
@@ -226,5 +232,15 @@ export class ManagementVolunteersComponent implements OnInit {
         }));
 
         this.excelService.exportAsExcelFile(dataToExport, 'voluntarios');
+    }
+
+    getEstadoLabel(estado: string): string {
+        const estadoMap: { [key: string]: string } = {
+            'P': 'Pendiente',
+            'A': 'Activo',
+            'I': 'Inactivo',
+            'R': 'Rechazado'
+        };
+        return estadoMap[estado] || estado;
     }
 }

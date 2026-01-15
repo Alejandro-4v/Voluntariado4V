@@ -26,4 +26,8 @@ export interface DetailConfig {
 export class GenericDetailComponent {
     @Input() item: any | null = null;
     @Input() config: DetailConfig | null = null;
+
+    getFieldValue(item: any, field: string): any {
+        return field.split('.').reduce((obj, key) => obj?.[key], item);
+    }
 }

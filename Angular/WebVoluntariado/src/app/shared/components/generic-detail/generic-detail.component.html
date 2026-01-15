@@ -18,21 +18,22 @@
                 <span class="text-muted small" style="font-size: 0.8rem;">{{ field.label }}</span>
                 <div class="fw-bold text-dark small text-break">
                     @if (field.pipe === 'date') {
-                    {{ item[field.field] | date:'dd/MM/yyyy' }}
+                    {{ getFieldValue(item, field.field) | date:'dd/MM/yyyy' }}
                     } @else {
-                    {{ item[field.field] }}
+                    {{ getFieldValue(item, field.field) }}
                     }
                 </div>
             </div>
             }
 
             <!-- List (Interests/Types) -->
-            @if (config.listField && item[config.listField]) {
+            @if (config.listField && getFieldValue(item, config.listField)) {
             <div class="mb-3 mt-2">
                 <span class="fw-bold small d-block mb-1">{{ config.listLabel }}</span>
                 <ul class="list-unstyled small mb-0">
-                    @for (listItem of item[config.listField]; track listItem) {
-                    <li>• {{ config.listDisplayField ? listItem[config.listDisplayField] : listItem }}</li>
+                    @for (listItem of getFieldValue(item, config.listField); track listItem) {
+                    <li>• {{ config.listDisplayField ? getFieldValue(listItem, config.listDisplayField) : listItem }}
+                    </li>
                     }
                 </ul>
             </div>
