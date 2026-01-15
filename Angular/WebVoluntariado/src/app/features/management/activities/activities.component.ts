@@ -33,6 +33,7 @@ export class ManagementActivitiesComponent implements OnInit {
     private activitiesService = inject(ActivitiesService);
     private tipoActividadService = inject(TipoActividadService);
     private entitiesService = inject(EntitiesService);
+    private router = inject(Router);
 
     allActivities: any[] = [];
     filteredActivities: any[] = [];
@@ -51,14 +52,24 @@ export class ManagementActivitiesComponent implements OnInit {
         this.activitiesService.getAll().subscribe({
             next: (data) => {
                 this.allActivities = data;
+                const now = new Date();
 
-                // Filter activities based on state for carousels
-                this.upcomingActivities = data.filter(a => a.estado === 'A');
-                this.pastActivities = data.filter(a => a.estado === 'F');
+                // Filter activities based on real criteria
+                this.upcomingActivities = data.filter(a => new Date(a.inicio) > now);
+
+                this.pastActivities = data.filter(a => {
+                    const endDate = a.fin ? new Date(a.fin) : new Date(a.inicio);
+                    return endDate < now;
+                });
+
                 this.pendingActivities = data.filter(a => a.estado === 'P');
 
-                // Assuming proposals are also pending or another state, for now using pending
-                this.proposals = []; // Or filter differently if needed
+                // Filter for Cuatrovientos proposals
+                this.proposals = data.filter(a =>
+                    a.convoca?.nombre?.toLowerCase().includes('cuatrovientos') ||
+                    a.convoca?.nombre?.toLowerCase().includes('4v')
+                );
+
                 this.isLoading = false;
             },
             error: (err) => {
@@ -150,8 +161,6 @@ export class ManagementActivitiesComponent implements OnInit {
         this.isModalOpen = false;
         this.selectedActivity = null;
     }
-
-    private router = inject(Router);
 
     onEditActivity() {
         if (this.selectedActivity && this.selectedActivity.idActividad) {

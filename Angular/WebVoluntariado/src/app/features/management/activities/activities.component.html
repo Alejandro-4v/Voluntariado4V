@@ -58,29 +58,54 @@
             <!-- Próximas actividades -->
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
+                @if (upcomingActivities.length > 0) {
                 <app-carrousel [items]="upcomingActivities" (cardClick)="openActivityModal($event)">
                 </app-carrousel>
+                } @else {
+                <div class="alert alert-light text-center text-muted border-0 shadow-sm" role="alert">
+                    No hay próximas actividades programadas.
+                </div>
+                }
             </section>
 
             <!-- Actividades pasadas -->
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
+                @if (pastActivities.length > 0) {
                 <app-carrousel [items]="pastActivities" (cardClick)="openActivityModal($event)">
                 </app-carrousel>
+                } @else {
+                <div class="alert alert-light text-center text-muted border-0 shadow-sm" role="alert">
+                    No hay actividades pasadas registradas.
+                </div>
+                }
             </section>
 
             <!-- Actividades pendiente de aprobación -->
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
+                @if (pendingActivities.length > 0) {
                 <app-carrousel [items]="pendingActivities" (cardClick)="openActivityModal($event)">
                 </app-carrousel>
+                } @else {
+                <div class="alert alert-success text-center border-0 shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    No hay actividades pendientes de aprobación.
+                </div>
+                }
             </section>
 
             <!-- Propuestas desde Cuatrovientos -->
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
+                @if (proposals.length > 0) {
                 <app-carrousel [items]="proposals" cardType="proposal" (cardClick)="openActivityModal($event)">
                 </app-carrousel>
+                } @else {
+                <div class="alert alert-light text-center text-muted border-0 shadow-sm" role="alert">
+                    No hay propuestas de Cuatrovientos activas.
+                </div>
+                }
             </section>
             } @else {
             <!-- Grid View for Search Results -->

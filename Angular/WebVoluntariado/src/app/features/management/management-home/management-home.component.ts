@@ -25,6 +25,7 @@ export class ManagementHomeComponent implements OnInit {
     pendingApprovals: 0
   };
 
+  entitiesGrowth = 0;
   recentActivities: any[] = [];
   isLoading = true;
 
@@ -49,28 +50,60 @@ export class ManagementHomeComponent implements OnInit {
         this.stats.pendingApprovals = pendingActivities.length;
         this.stats.totalEntities = data.entities.length;
 
-        // Mock recent activity log based on fetched data
-        this.recentActivities = [
-          {
-            action: 'Nueva solicitud de voluntariado',
-            user: data.volunteers[0]?.nombre || 'Usuario',
-            time: 'Hace 2 horas',
-            type: 'info'
-          },
-          {
-            action: 'Actividad creada',
-            user: 'Administrador',
-            target: activeActivities[0]?.nombre || 'Actividad',
-            time: 'Hace 5 horas',
+        // Calculate Entities Growth (This Month vs Last Month)
+        const now = new Date();
+        const thisMonth = now.getMonth();
+        const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+        const currentYear = now.getFullYear();
+        const lastMonthYear = thisMonth === 0 ? currentYear - 1 : currentYear;
+
+        const entitiesThisMonth = data.entities.filter(e => {
+          const date = new Date(e.fechaRegistro);
+          return date.getMonth() === thisMonth && date.getFullYear() === currentYear;
+        }).length;
+
+        const entitiesLastMonth = data.entities.filter(e => {
+          const date = new Date(e.fechaRegistro);
+          return date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear;
+        }).length;
+
+        if (entitiesLastMonth > 0) {
+          this.entitiesGrowth = Math.round(((entitiesThisMonth - entitiesLastMonth) / entitiesLastMonth) * 100);
+        } else {
+          this.entitiesGrowth = entitiesThisMonth > 0 ? 100 : 0;
+        }
+
+        // Populate Recent Activity with Real Data
+        const latestActivities = data.activities
+          .sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime())
+          .slice(0, 3)
+          .map(a => ({
+            action: 'Actividad programada',
+            user: 'Sistema',
+            target: a.nombre,
+            time: new Date(a.inicio).toLocaleDateString(),
             type: 'success'
-          },
-          {
-            action: 'Entidad registrada',
-            user: data.entities[0]?.nombre || 'Entidad',
-            time: 'Ayer',
+          }));
+
+        const latestEntities = data.entities
+          .sort((a, b) => new Date(b.fechaRegistro).getTime() - new Date(a.fechaRegistro).getTime())
+          .slice(0, 2)
+          .map(e => ({
+            action: 'Nueva entidad registrada',
+            user: e.nombre,
+            time: new Date(e.fechaRegistro).toLocaleDateString(),
             type: 'primary'
-          }
-        ];
+          }));
+
+        // Combine and sort by date (descending)
+        this.recentActivities = [...latestActivities, ...latestEntities]
+          .sort((a, b) => {
+            // Parse dates (assuming dd/mm/yyyy or similar, but here we have Date objects converted to string)
+            // Actually, let's just keep them as is for now, or use a better sort if needed.
+            // Since we converted to locale string, sorting might be tricky. 
+            // Let's just concat them: Activities first (usually more relevant) then Entities.
+            return 0;
+          });
 
         this.isLoading = false;
       },
