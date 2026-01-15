@@ -27,10 +27,6 @@ public class Actividad {
 
     // Formatted date string (could be improved with a proper Date formatter)
     public String getFechaFormatted() {
-        // Return start time as a simple string or "inicio - fin"
-        // For now, returning raw string or simplified version.
-        // If the API returns "2025-12-01T16:00:00", we might want to substring or
-        // format it.
         return inicio != null ? inicio.replace("T", " ") : "";
     }
 
