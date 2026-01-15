@@ -20,12 +20,33 @@
         <!-- Date and Time -->
         <div class="info-section">
           <h3 class="info-label">Fecha y hora</h3>
-          <div class="info-row">
-            <span class="date">{{ (activity.inicio || activity.date) | date : 'dd/MM/yyyy' }}</span>
-            @if (activity.inicio || activity.time) {
-            <span class="time">{{ (activity.inicio || activity.time) | date : 'HH:mm' }}</span>
-            }
+          <div class="d-flex flex-column gap-1">
+            <div class="info-row">
+              <span class="fw-bold me-2">Inicio:</span>
+              <span class="date">{{ (activity.inicio || activity.date) | date : 'dd/MM/yyyy' }}</span>
+              <span class="time ms-2">{{ (activity.inicio || activity.date) | date : 'HH:mm' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="fw-bold me-2">Fin:</span>
+              <span class="date">{{ (activity.fin || activity.endDate || activity.inicio) | date : 'dd/MM/yyyy'
+                }}</span>
+              <span class="time ms-2">{{ (activity.fin || activity.endDate || activity.inicio) | date : 'HH:mm'
+                }}</span>
+            </div>
           </div>
+        </div>
+
+        <!-- Status -->
+        <div class="info-section">
+          <h3 class="info-label">Estado</h3>
+          <span class="badge rounded-pill" [ngClass]="{
+            'bg-warning text-dark': (activity.estado || activity.status) === 'P',
+            'bg-success': (activity.estado || activity.status) === 'A',
+            'bg-secondary': (activity.estado || activity.status) === 'C' || (activity.estado || activity.status) === 'F',
+            'bg-danger': (activity.estado || activity.status) === 'R' || (activity.estado || activity.status) === 'E'
+          }">
+            {{ getStatusLabel(activity.estado || activity.status) }}
+          </span>
         </div>
 
         <!-- Location -->

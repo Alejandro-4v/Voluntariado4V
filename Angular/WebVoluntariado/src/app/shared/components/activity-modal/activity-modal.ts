@@ -58,5 +58,16 @@ export class ActivityModalComponent {
         return 'Participar';
     }
   }
+  getStatusLabel(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'P': 'Pendiente',
+      'A': 'Abierta',
+      'C': 'Cerrada',
+      'F': 'Finalizada',
+      'R': 'Rechazada',
+      'E': 'Eliminada'
+    };
+    return statusMap[status] || status;
+  }
 }
 
