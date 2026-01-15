@@ -134,6 +134,14 @@ final class ActividadController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        if (isset($json['lugar'])) {
+            $actividad->setLugar($json['lugar']);
+        } else {
+            return $this->json([
+                'error' => 'Missing lugar',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             /** @var DateTimeImmutable $inicio */
             $inicio = new DateTimeImmutable($json['inicio']);
@@ -303,6 +311,15 @@ final class ActividadController extends AbstractController
 
             if ($descripcion != $actividad->getDescripcion()) {
                 $actividad->setDescripcion($descripcion);
+            }
+        }
+
+        if (isset($json['lugar'])) {
+            /** @var string $lugar */
+            $lugar = $json['lugar'];
+
+            if ($lugar != $actividad->getLugar()) {
+                $actividad->setLugar($lugar);
             }
         }
 
