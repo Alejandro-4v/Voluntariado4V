@@ -32,6 +32,10 @@ class Actividad
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private string $lugar;
 
+    #[ORM\Column(name: 'plazas', type: 'smallint', nullable: true)]
+    #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
+    private ?int $plazas = null;
+
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private string $estado = 'P';
@@ -123,6 +127,18 @@ class Actividad
     public function setLugar(string $lugar): self
     {
         $this->lugar = $lugar;
+
+        return $this;
+    }
+
+    public function getPlazas(): ?int
+    {
+        return $this->plazas;
+    }
+
+    public function setPlazas(?int $plazas): self
+    {
+        $this->plazas = $plazas;
 
         return $this;
     }

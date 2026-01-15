@@ -790,6 +790,9 @@ components:
         lugar:
           type: string
           example: Residencia Amavir
+        plazas:
+          type: integer
+          example: 10
         estado:
           type: string
           example: A
@@ -833,6 +836,9 @@ components:
         lugar:
           type: string
           example: Residencia Amavir
+        plazas:
+          type: integer
+          example: 10
         estado:
           type: string
           example: A
@@ -1102,7 +1108,7 @@ components:
           example: B7012345A
         nombre:
           type: string
-          example: Residencias Amabir
+          example: Residencias Amavir
         nombreResponsable:
           type: string
           example: Laura
