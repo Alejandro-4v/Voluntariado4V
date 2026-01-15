@@ -131,6 +131,7 @@ INSERT INTO
     inicio,
     fin,
     grado,
+    lugar,
     imagen_url
     )
 VALUES
@@ -142,6 +143,7 @@ VALUES
         '2025-12-01 16:00:00',
         '2025-12-01 18:00:00',
         5,
+        'Pamplona',
         'https://placehold.co/600x400/png?text=Tardes+de+Compa%C3%B1ia'
     ),
     (
@@ -152,6 +154,7 @@ VALUES
         '2025-12-03 18:30:00',
         '2025-12-03 20:00:00',
         2,
+        'Pamplona',
         'https://placehold.co/600x400/png?text=Apoyo+en+Comedor'
     ),
     (
@@ -162,6 +165,7 @@ VALUES
         '2025-12-04 17:00:00',
         '2025-12-04 19:30:00',
         3,
+        'Madrid',
         'https://placehold.co/600x400/png?text=Clases+de+Programaci%C3%B3n'
     ),
     (
@@ -172,6 +176,7 @@ VALUES
         '2025-12-05 15:30:00',
         '2025-12-05 17:00:00',
         5,
+        'Berriozar',
         'https://placehold.co/600x400/png?text=Mantenimiento+de+Jardines'
     );
 

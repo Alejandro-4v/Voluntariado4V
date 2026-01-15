@@ -28,6 +28,10 @@ class Actividad
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private ?string $descripcion = null;
 
+    #[ORM\Column(name: 'lugar', type: 'string', length: 255)]
+    #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
+    private string $lugar;
+
     #[ORM\Column(name: 'estado', type: 'string', length: 1, options: ['default' => 'P'])]
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
     private string $estado = 'P';
@@ -35,7 +39,7 @@ class Actividad
     #[ORM\ManyToOne(targetEntity: Entidad::class, inversedBy: 'actividades')]
     #[ORM\JoinColumn(name: 'convoca', referencedColumnName: 'id_entidad', nullable: false)]
     #[Groups(['actividad:read', 'actividad:update'])]
-    private ?Entidad $convoca = null;
+    private ?Entidad $convoca;
 
     #[ORM\Column(name: 'inicio', type: 'datetime_immutable')]
     #[Groups(['actividad:read', 'actividad:update', 'entidad:read'])]
@@ -50,7 +54,7 @@ class Actividad
     private ?string $imagenUrl = null;
 
     #[ORM\ManyToOne(targetEntity: Grado::class, inversedBy: 'actividades')]
-    #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: false)]
+    #[ORM\JoinColumn(name: 'grado', referencedColumnName: 'id_grado', nullable: true)]
     #[Groups(['actividad:read', 'actividad:update'])]
     private ?Grado $grado = null;
 
@@ -107,6 +111,18 @@ class Actividad
     public function setDescripcion(?string $descripcion): self
     {
         $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getLugar(): string
+    {
+        return $this->lugar;
+    }
+
+    public function setLugar(string $lugar): self
+    {
+        $this->lugar = $lugar;
 
         return $this;
     }

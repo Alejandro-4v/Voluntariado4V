@@ -3,7 +3,7 @@ info:
   title: Volutariado 4V - OpenAPI 1.0
   contact:
     email: alejandrolopez2048@gmail.com
-  version: 1.0.0
+  version: beta
 servers:
   - url: http://localhost:80
 tags:
@@ -42,6 +42,12 @@ paths:
           required: false
           description: Filtro por nombre de la actividad
         - in: query
+          name: lugar
+          schema:
+            type: string
+          required: false
+          description: Filtro por lugar de la actividad
+        - in: query
           name: estado
           schema:
             type: string
@@ -68,6 +74,8 @@ paths:
           description: Filtro por ID del grado
         - in: query
           name: tiposActividad
+          style: form
+          explode: false
           schema:
             type: array
             items:
@@ -76,6 +84,8 @@ paths:
           description: Filtro por IDs de tipos de actividad
         - in: query
           name: ods
+          style: form
+          explode: false
           schema:
             type: array
             items:
@@ -124,6 +134,32 @@ paths:
       responses:
         '200':
           description: Actividad encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actividad'
+        '404':
+          description: Actividad no encontrada
+    put:
+      tags:
+        - Actividades
+      summary: Actualiza una actividad existente
+      parameters:
+        - in: path
+          name: idActividad
+          schema:
+            type: integer
+          required: true
+          description: ID de la actividad a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actividad_DTO'
+      responses:
+        '200':
+          description: Actividad actualizada
           content:
             application/json:
               schema:
@@ -179,6 +215,8 @@ paths:
           description: Filtro por estado del voluntario
         - in: query
           name: dias
+          style: form
+          explode: false
           schema:
             type: array
             items:
@@ -201,6 +239,8 @@ paths:
           description: Filtro por hora de fin de disponibilidad
         - in: query
           name: tiposActividad
+          style: form
+          explode: false
           schema:
             type: array
             items:
@@ -354,6 +394,27 @@ paths:
                 $ref: '#/components/schemas/Entidad'
 
   /entidad/{id}:
+    get:
+      tags:
+        - Entidad
+      summary: Devuelve una entidad por su ID
+      parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+            description: ID de la entidad
+      responses:
+        '200':
+          description: Entidad encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entidad'
+        '404':
+          description: Entidad no encontrada
+
     put:
       tags:
         - Entidad
@@ -448,6 +509,32 @@ paths:
                 $ref: '#/components/schemas/TipoActividad'
         '404':
           description: Tipo de actividad no encontrado
+    put:
+      tags:
+        - Tipos de actividad
+      summary: Actualiza un tipo de actividad existente
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del tipo de actividad a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoActividad_DTO'
+      responses:
+        '200':
+          description: Tipo de actividad actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoActividad'
+        '404':
+          description: Tipo de actividad no encontrado
     delete:
       tags:
         - Tipos de actividad
@@ -512,6 +599,32 @@ paths:
       responses:
         '200':
           description: Grado encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grado'
+        '404':
+          description: Grado no encontrado
+    put:
+      tags:
+        - Grado
+      summary: Actualiza un grado existente
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del grado a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grado_DTO'
+      responses:
+        '200':
+          description: Grado actualizado
           content:
             application/json:
               schema:
@@ -588,6 +701,32 @@ paths:
                 $ref: '#/components/schemas/Ods'
         '404':
           description: ODS no encontrada
+    put:
+      tags:
+        - ODS
+      summary: Actualiza una ODS existente
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID de la ODS a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ods_DTO'
+      responses:
+        '200':
+          description: ODS actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ods'
+        '404':
+          description: ODS no encontrada
     delete:
       tags:
         - ODS
@@ -601,7 +740,7 @@ paths:
           description: ID de la ODS a eliminar
       responses:
         '204':
-          description: ODS eliminada
+          description: ODS eliminado
         '404':
           description: ODS no encontrada
 
@@ -610,6 +749,14 @@ paths:
       tags:
         - Log in
       summary: Autenticación de usuario y obtención de token JWT
+      parameters:
+        - in: query
+          name: usuario
+          schema:
+            type: string
+            enum: [voluntario, entidad, administrador]
+          required: false
+          description: Tipo de usuario que inicia sesión (opcional)
       requestBody:
         required: true
         content:
@@ -640,6 +787,9 @@ components:
         descripcion:
           type: string
           example: Talleres sencillos de informática con residentes de la tercera edad.
+        lugar:
+          type: string
+          example: Residencia Amavir
         estado:
           type: string
           example: A
@@ -680,6 +830,9 @@ components:
         descripcion:
           type: string
           example: Talleres sencillos de informática con residentes de la tercera edad.
+        lugar:
+          type: string
+          example: Residencia Amavir
         estado:
           type: string
           example: A
