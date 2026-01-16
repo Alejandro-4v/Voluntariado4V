@@ -37,7 +37,7 @@ class Voluntario implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['voluntario:read', 'actividad:read'])]
     private ?Grado $grado;
 
-    #[ORM\Column(name: 'mail', type: 'string', length: 255)]
+    #[ORM\Column(name: 'mail', type: 'string', length: 255, unique: true)]
     #[Groups(['voluntario:read', 'voluntario: login', 'actividad:read'])]
     private string $mail;
 

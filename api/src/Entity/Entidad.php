@@ -45,7 +45,7 @@ class Entidad implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['entidad:read', 'actividad:read'])]
     private string $contactMail;
 
-    #[ORM\Column(name: 'login_mail', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'login_mail', type: 'string', length: 255, unique: true, nullable: true)]
     #[Groups(['entidad:read', 'entidad:login'])]
     private ?string $loginMail = null;
 
