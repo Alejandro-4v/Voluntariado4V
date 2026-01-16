@@ -81,6 +81,9 @@ final class EntidadController extends AbstractController
                     'details' => 'Nombre cannot be empty'
                 ], Response::HTTP_BAD_REQUEST);
             }
+            if ($entidadRepository->findOneBy(['nombre' => $nombre])) {
+                return $this->json(['error' => 'Entidad with this nombre already exists'], Response::HTTP_CONFLICT);
+            }
             $entidad->setNombre($nombre);
         } else {
             return $this->json([
@@ -122,7 +125,10 @@ final class EntidadController extends AbstractController
         if (isset($json['cif'])) {
             $cif = strtoupper(trim($json['cif']));
 
-            if (preg_match('/^(?:[A-Z]\d{8}[A-Z]|[A-Z]\d{8}|\d{8}[A-Z])$/', $cif)) {
+            if (preg_match('/^[A-Z]\d{7}[A-Z]$/', $cif)) {
+                if ($entidadRepository->findOneBy(['cif' => $cif])) {
+                    return $this->json(['error' => 'Entidad with this CIF already exists'], Response::HTTP_CONFLICT);
+                }
                 $entidad->setCif($cif);
             } else {
                 return $this->json([
@@ -136,10 +142,20 @@ final class EntidadController extends AbstractController
         if (isset($json['loginMail'])) {
             /** @var string $loginMail */
             $loginMail = $json['loginMail'];
-            if (!empty($loginMail) && !filter_var($loginMail, FILTER_VALIDATE_EMAIL)) {
-                return $this->json([
-                    'error' => 'Invalid loginMail format'
-                ], Response::HTTP_BAD_REQUEST);
+
+            if (empty($loginMail)) {
+                $loginMail = null;
+            }
+
+            if ($loginMail !== null) {
+                if (!filter_var($loginMail, FILTER_VALIDATE_EMAIL)) {
+                    return $this->json([
+                        'error' => 'Invalid loginMail format'
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+                if ($entidadRepository->findOneBy(['loginMail' => $loginMail])) {
+                    return $this->json(['error' => 'Entidad with this login email already exists'], Response::HTTP_CONFLICT);
+                }
             }
             $entidad->setLoginMail($loginMail);
         } else {
@@ -193,7 +209,7 @@ final class EntidadController extends AbstractController
 
         $entidadRepository->add($entidad);
 
-        return $this->json($entidad, context: ['groups' => ['entidad:read']], status: Response::HTTP_CREATED);
+        return $this->json($entidad, status: Response::HTTP_CREATED, context: ['groups' => ['entidad:read']]);
     }
 
     #[Route(path: '/entidad/{id}', name: 'entidad_update', methods: ['PUT'])]
@@ -228,6 +244,10 @@ final class EntidadController extends AbstractController
             }
 
             if ($nombre != $entidad->getNombre()) {
+                $existingEntidad = $entidadRepository->findOneBy(['nombre' => $nombre]);
+                if ($existingEntidad && $existingEntidad->getIdEntidad() !== $entidad->getIdEntidad()) {
+                    return $this->json(['error' => 'Entidad with this nombre already exists'], Response::HTTP_CONFLICT);
+                }
                 $entidad->setNombre($nombre);
             }
         }
@@ -235,8 +255,14 @@ final class EntidadController extends AbstractController
         if (isset($json['cif'])) {
             $cif = strtoupper(trim($json['cif']));
 
-            if (preg_match('/^(?:[A-Z]\d{8}[A-Z]|[A-Z]\d{8}|\d{8}[A-Z])$/', $cif)) {
-                $entidad->setCif($cif);
+            if (preg_match('/^[A-Z]\d{7}[A-Z]$/', $cif)) {
+                if ($cif != $entidad->getCif()) {
+                    $existingEntidad = $entidadRepository->findOneBy(['cif' => $cif]);
+                    if ($existingEntidad && $existingEntidad->getIdEntidad() !== $entidad->getIdEntidad()) {
+                        return $this->json(['error' => 'Entidad with this CIF already exists'], Response::HTTP_CONFLICT);
+                    }
+                    $entidad->setCif($cif);
+                }
             } else {
                 return $this->json([
                     'error' => 'Invalid cif format'
@@ -304,6 +330,12 @@ final class EntidadController extends AbstractController
             }
 
             if ($newLoginMail != $entidad->getLoginMail()) {
+                if ($newLoginMail !== null) {
+                    $existingEntidad = $entidadRepository->findOneBy(['loginMail' => $newLoginMail]);
+                    if ($existingEntidad && $existingEntidad->getIdEntidad() !== $entidad->getIdEntidad()) {
+                        return $this->json(['error' => 'Entidad with this login email already exists'], Response::HTTP_CONFLICT);
+                    }
+                }
                 $entidad->setLoginMail($newLoginMail);
             }
         }

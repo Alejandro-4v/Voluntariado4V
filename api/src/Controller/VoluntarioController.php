@@ -76,6 +76,10 @@ final class VoluntarioController extends AbstractController
             return $this->json(['error' => 'Voluntario with this NIF already exists'], Response::HTTP_CONFLICT);
         }
 
+        if ($voluntarioRepository->findOneBy(['mail' => $data['mail']])) {
+            return $this->json(['error' => 'Voluntario with this email already exists'], Response::HTTP_CONFLICT);
+        }
+
         $voluntario = new Voluntario();
         $voluntario->setNif($data['nif']);
         $voluntario->setNombre($data['nombre']);
@@ -106,6 +110,7 @@ final class VoluntarioController extends AbstractController
             $voluntario->setTiposActividad($tipos);
         }
 
+        // Persist the Voluntario entity first
         $voluntarioRepository->add($voluntario);
 
         if (isset($data['disponibilidades'])) {
@@ -113,12 +118,20 @@ final class VoluntarioController extends AbstractController
                 /** @var DiaSemana $dia */
                 $dia = $diaSemanaRepository->find($dispData['idDia']);
                 if ($dia) {
-                    $disponibilidad = new Disponibilidad();
-                    $disponibilidad->setVoluntario($voluntario);
-                    $disponibilidad->setDiaSemana($dia);
-                    $disponibilidad->setHoraInicio(new DateTimeImmutable($dispData['horaInicio']));
-                    $disponibilidad->setHoraFin(new DateTimeImmutable($dispData['horaFin']));
-                    $disponibilidadRepository->add($disponibilidad);
+                    // Check if availability already exists for this volunteer and day
+                    $existingDisp = $disponibilidadRepository->findOneBy([
+                        'voluntario' => $voluntario,
+                        'diaSemana' => $dia
+                    ]);
+
+                    if (!$existingDisp) {
+                        $disponibilidad = new Disponibilidad();
+                        $disponibilidad->setVoluntario($voluntario);
+                        $disponibilidad->setDiaSemana($dia);
+                        $disponibilidad->setHoraInicio(new DateTimeImmutable($dispData['horaInicio']));
+                        $disponibilidad->setHoraFin(new DateTimeImmutable($dispData['horaFin']));
+                        $disponibilidadRepository->add($disponibilidad);
+                    }
                 }
             }
         }
@@ -155,6 +168,10 @@ final class VoluntarioController extends AbstractController
             $voluntario->setApellido2($data['apellido2']);
         }
         if (isset($data['mail'])) {
+            $existingVoluntario = $voluntarioRepository->findOneBy(['mail' => $data['mail']]);
+            if ($existingVoluntario && $existingVoluntario->getNif() !== $voluntario->getNif()) {
+                return $this->json(['error' => 'Voluntario with this email already exists'], Response::HTTP_CONFLICT);
+            }
             $voluntario->setMail($data['mail']);
         }
         if (isset($data['password'])) {
