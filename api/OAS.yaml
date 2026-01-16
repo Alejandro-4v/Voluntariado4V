@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Volutariado 4V - OpenAPI 1.0
+  title: Voluntariado 4V - OpenAPI 1.0
   contact:
     email: alejandrolopez2048@gmail.com
   version: beta
@@ -1060,10 +1060,10 @@ components:
           example: 2026-01-12T21:48:37
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
         actividades:
           type: array
           items:
@@ -1086,16 +1086,16 @@ components:
           example: García Pérez
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         loginMail:
           type: string
-          example: login@amabir.org
+          example: login@amavir.org
         password:
           type: string
           example: password
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
 
     Entidad_Actividad:
       type: object
@@ -1117,10 +1117,10 @@ components:
           example: García Pérez
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
 
     Ods:
       type: object
