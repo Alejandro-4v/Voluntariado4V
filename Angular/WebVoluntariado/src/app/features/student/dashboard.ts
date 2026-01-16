@@ -35,8 +35,7 @@ export class DashboardComponent implements OnInit {
 
   // Data
   myUpcomingActivities: any[] = [];
-  groupedActivities: { entityName: string, activities: any[] }[] = [];
-  proposalsFromCuatrovientos: any[] = [];
+  allAvailableActivities: any[] = [];
   otherEntities: any[] = [];
 
   // Modal state
@@ -65,33 +64,11 @@ export class DashboardComponent implements OnInit {
           .filter(a => new Date(a.inicio) >= now && a.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif))
           .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
-        // Filter and Group "New Activities" by Entity (Excluding enrolled ones if desired, or keeping them. 
-        // Usually discovery shows all, but let's keep it as showing available ones. 
-        // We won't filter out enrolled ones from discovery to avoid confusion if they look for it, 
-        // but we could mark them. For now, just standard discovery.)
-        const upcomingActivities = activities
-          .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre !== 'Cuatrovientos')
+        // All Available Activities (Discovery)
+        // Show all active upcoming activities
+        this.allAvailableActivities = activities
+          .filter(a => new Date(a.inicio) >= now && a.estado === 'A')
           .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
-
-        const groups: { [key: string]: any[] } = {};
-        upcomingActivities.forEach(a => {
-          const entityName = a.convoca?.nombre || 'Otras';
-          if (!groups[entityName]) {
-            groups[entityName] = [];
-          }
-          groups[entityName].push(a);
-        });
-
-        this.groupedActivities = Object.keys(groups).map(key => ({
-          entityName: key,
-          activities: groups[key]
-        }));
-
-        // Filter for "Proposals from Cuatrovientos"
-        this.proposalsFromCuatrovientos = activities
-          .filter(a => new Date(a.inicio) >= now && a.estado === 'A' && a.convoca?.nombre === 'Cuatrovientos')
-          .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime())
-          .slice(0, 5);
 
         this.checkLoadingComplete();
       },
