@@ -52,8 +52,19 @@ final class LoginController extends AbstractController
             }
         }
 
-        if ($user instanceof UserInterface && $passwordHasher->isPasswordValid($user, $password)) {
-            return $this->json(['token' => $JWTManager->create($user)]);
+        if ($user instanceof UserInterface) {
+            error_log("DEBUG LOGIN: User found: " . $user->getUserIdentifier());
+            error_log("DEBUG LOGIN: Raw password: '" . $password . "'");
+            error_log("DEBUG LOGIN: Stored hash: '" . $user->getPassword() . "'");
+
+            $isValid = $passwordHasher->isPasswordValid($user, $password);
+            error_log("DEBUG LOGIN: Password valid: " . ($isValid ? 'YES' : 'NO'));
+
+            if ($isValid) {
+                return $this->json(['token' => $JWTManager->create($user)]);
+            }
+        } else {
+            error_log("DEBUG LOGIN: User not found for mail: " . $loginMail);
         }
 
         return $this->json(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
