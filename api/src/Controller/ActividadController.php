@@ -174,6 +174,12 @@ final class ActividadController extends AbstractController
             /** @var Grado $grado*/
             $grado = $gradoRepository->find($json['grado']);
 
+            if ($grado == null) {
+                return $this->json([
+                    'error' => "Grado with id {$json['grado']} not found"
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $actividad->setGrado($grado);
         } else {
             return $this->json([
@@ -413,13 +419,13 @@ final class ActividadController extends AbstractController
             /** @var Grado $grado */
             $grado = $gradoRepository->find($json['grado']);
 
-            if (!$grado) {
+            if ($grado == null) {
                 return $this->json([
                     'error' => "Grado with id {$json['grado']} not found"
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            if ($grado != $actividad->getGrado()) {
+            if ($grado !== $actividad->getGrado()) {
                 $actividad->setGrado($grado);
             }
         }
