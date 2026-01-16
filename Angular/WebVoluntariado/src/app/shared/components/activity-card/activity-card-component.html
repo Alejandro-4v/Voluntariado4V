@@ -1,34 +1,46 @@
-<div class="card border-0 shadow-sm overflow-hidden card-custom"
-	[style.background]="customBackground || '#fff'" (click)="onCardClick()">
+<div class="card border-0 shadow-sm card-custom" (click)="onCardClick()">
 	<!-- Image Container -->
 	<div class="image-wrapper">
-		<div class="w-100 h-100" [style.background]="image ? 'url(' + image + ') center/' + imageFit + ' no-repeat' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'"></div>
+		<div class="card-image"
+			[style.background]="image ? 'url(' + image + ') center/' + imageFit + ' no-repeat' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
+		</div>
 
-		<!-- Overlay Icon (Dynamic) -->
-		@if (showIcon) {
-		<div class="icon-wrapper">
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fd7e14" class="bi"
+		<!-- Gradient Overlay -->
+		<div class="image-overlay"></div>
+
+		<!-- Type Badge (Top Right) -->
+		<div class="type-badge">
+			@if (showIcon) {
+			<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi"
 				viewBox="0 0 16 16">
 				<path [attr.d]="getIconPath()" />
 			</svg>
+			}
+			<span>{{ type }}</span>
 		</div>
-		}
 	</div>
 
-	<div class="card-body p-3">
-		<h5 class="card-title fw-bold mb-2 text-dark card-title-custom">{{ name }}</h5>
-		@if (slots > 0) {
-		<p class="text-muted mb-2 card-text-custom">{{ slots }}
-			plazas - {{ type }}</p>
-		}
-		@if (slots === 0) {
-		<p class="text-muted mb-2 card-text-custom">{{ type }}</p>
-		}
+	<div class="card-body">
+		<h5 class="card-title-custom" title="{{ name }}">{{ name }}</h5>
+
+		<div class="slots-info">
+			@if (slots > 0) {
+			<span>{{ filled }} / {{ slots }} plazas</span>
+			<span [class.text-success]="getProgressPercentage() < 80"
+				[class.text-warning]="getProgressPercentage() >= 80 && getProgressPercentage() < 100"
+				[class.text-danger]="getProgressPercentage() >= 100">
+				{{ getProgressPercentage() }}%
+			</span>
+			} @else {
+			<span>Plazas ilimitadas</span>
+			}
+		</div>
 
 		@if (slots > 0) {
 		<div class="progress progress-custom">
 			<div class="progress-bar" role="progressbar" [style.width.%]="getProgressPercentage()"
-				[style.background-color]="'#0d47a1'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+				[class.bg-success]="getProgressPercentage() < 80" [class.bg-warning]="getProgressPercentage() >= 80"
+				[class.bg-danger]="getProgressPercentage() >= 100" aria-valuemin="0" aria-valuemax="100"></div>
 		</div>
 		}
 	</div>
