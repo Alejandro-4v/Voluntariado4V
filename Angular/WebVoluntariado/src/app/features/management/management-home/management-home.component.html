@@ -25,7 +25,7 @@
         <div class="row g-4 mb-5">
             <!-- Volunteers Card -->
             <div class="col-md-6 col-xl-3">
-                <div class="stats-card p-4">
+                <div class="stats-card p-4" (click)="navigateTo('/management/voluntarios')">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="stat-value mb-1">{{ stats.totalVolunteers }}</div>
@@ -44,7 +44,7 @@
 
             <!-- Active Activities Card -->
             <div class="col-md-6 col-xl-3">
-                <div class="stats-card p-4">
+                <div class="stats-card p-4" (click)="navigateTo('/management/actividades')">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="stat-value mb-1">{{ stats.activeActivities }}</div>
@@ -63,7 +63,7 @@
 
             <!-- Entities Card -->
             <div class="col-md-6 col-xl-3">
-                <div class="stats-card p-4">
+                <div class="stats-card p-4" (click)="navigateTo('/management/entidades')">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="stat-value mb-1">{{ stats.totalEntities }}</div>
@@ -82,7 +82,7 @@
 
             <!-- Pending Approvals Card -->
             <div class="col-md-6 col-xl-3">
-                <div class="stats-card p-4">
+                <div class="stats-card p-4" (click)="navigateTo('/management/actividades')">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <div class="stat-value mb-1">{{ stats.pendingApprovals }}</div>
