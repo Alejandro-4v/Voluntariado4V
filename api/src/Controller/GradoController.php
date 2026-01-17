@@ -6,16 +6,12 @@ use App\Entity\Grado;
 use App\Repository\GradoRepository;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use \Symfony\Component\Serializer\Exception\ExceptionInterface;
-
-use Exception;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class GradoController extends AbstractController
 {
@@ -24,7 +20,6 @@ final class GradoController extends AbstractController
     public function index(
         GradoRepository $gradoRepository
     ): JsonResponse {
-        /** @var Grado[] $grados */
         $grados = $gradoRepository->findAll();
 
         return $this->json(
@@ -38,12 +33,11 @@ final class GradoController extends AbstractController
         GradoRepository $gradoRepository,
         int $id
     ): JsonResponse {
-        /** @var Grado $grado */
         $grado = $gradoRepository->find($id);
 
         if (!$grado) {
             return $this->json(
-                ['error' => 'Grado not found'],
+                ['error' => 'Grado not found', 'details' => "Grado with id $id not found"],
                 status: Response::HTTP_NOT_FOUND
             );
         }
@@ -57,61 +51,72 @@ final class GradoController extends AbstractController
     #[Route('/grado', name: 'grado_create', methods: ['POST'])]
     public function create(
         Request $request,
-        GradoRepository $gradoRepository,
-        SerializerInterface $serializer
+        GradoRepository $gradoRepository
     ): JsonResponse {
-        $data = $request->getContent();
+        $json = json_decode($request->getContent(), true);
 
-        try {
-            /** @var Grado $grado */
-            $grado = $serializer->deserialize($data, Grado::class, 'json');
-            $gradoRepository->add($grado);
-        } catch (UniqueConstraintViolationException $e) {
+        $grado = new Grado();
+
+        if (isset($json['descripcion'])) {
+            if ($gradoRepository->findOneBy(['descripcion' => $json['descripcion']])) {
+                return $this->json([
+                    'error' => 'Grado already exists',
+                    'details' => "Grado with descripcion {$json['descripcion']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $grado->setDescripcion($json['descripcion']);
+        } else {
             return $this->json([
-                'error' => 'Unique constraint violation',
-                'details' => $e->getMessage()
+                'error' => 'Missing descripcion',
+                'details' => 'The field descripcion is required'
             ], Response::HTTP_BAD_REQUEST);
-        } catch (ExceptionInterface $e) {
-            return $this->json([
-                'error' => 'Internal server error',
-                'details' => $e->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
-        } catch (Exception $e) {
-            return $this->json([
-                'error' => 'Internal server error',
-                'details' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        if (isset($json['nivel'])) {
+            $grado->setNivel($json['nivel']);
+        } else {
+            return $this->json([
+                'error' => 'Missing nivel',
+                'details' => 'The field nivel is required'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $gradoRepository->add($grado);
 
         return $this->json($grado, context: ['groups' => ['grado:read']], status: Response::HTTP_CREATED);
     }
 
-    #[Route('/grado/{id}', name: 'grado_update', methods: ['PUT'])] // Note: OAS doesn't specify PUT for Grado, but I'm fixing the route just in case or if it was intended. Wait, OAS DOES NOT specify PUT for Grado.
+    #[Route('/grado/{id}', name: 'grado_update', methods: ['PUT'])]
     public function update(
         int $id,
         Request $request,
-        GradoRepository $gradoRepository,
-        SerializerInterface $serializer
+        GradoRepository $gradoRepository
     ): JsonResponse {
-        $data = $request->getContent();
+        $json = json_decode($request->getContent(), true);
 
         $grado = $gradoRepository->find($id);
 
         if (!$grado) {
             return $this->json([
-                'error' => 'Grado not found'
+                'error' => 'Grado not found',
+                'details' => "Grado with id $id not found"
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $serializer->deserialize(
-            $data,
-            Grado::class,
-            'json',
-            [
-                'object_to_populate' => $grado,
-                'groups' => ['grado:update']
-            ]
-        );
+        if (isset($json['descripcion'])) {
+            $existing = $gradoRepository->findOneBy(['descripcion' => $json['descripcion']]);
+            if ($existing && $existing->getIdGrado() !== $id) {
+                return $this->json([
+                    'error' => 'Grado already exists',
+                    'details' => "Grado with descripcion {$json['descripcion']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $grado->setDescripcion($json['descripcion']);
+        }
+
+        if (isset($json['nivel'])) {
+            $grado->setNivel($json['nivel']);
+        }
 
         $gradoRepository->update($grado);
 
@@ -129,6 +134,7 @@ final class GradoController extends AbstractController
         if (!$grado) {
             return $this->json([
                 'error' => 'Grado not found',
+                'details' => "Grado with id $id not found"
             ], Response::HTTP_NOT_FOUND);
         }
 

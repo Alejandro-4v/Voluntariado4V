@@ -53,7 +53,7 @@ class Voluntario implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['voluntario:read', 'actividad:read'])]
     private ?string $perfilUrl = null;
 
-    #[ORM\OneToMany(targetEntity: Disponibilidad::class, mappedBy: 'voluntario')]
+    #[ORM\OneToMany(targetEntity: Disponibilidad::class, mappedBy: 'voluntario', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[Groups(['voluntario:read'])]
     private Collection $disponibilidades;
 
@@ -201,12 +201,39 @@ class Voluntario implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // No sensitive data to clear
     }
 
     public function getUserIdentifier(): string
     {
         return $this->mail;
+    }
+
+    public function setDisponibilidades(Collection $disponibilidades): self
+    {
+        $this->disponibilidades = $disponibilidades;
+        return $this;
+    }
+
+    public function addDisponibilidad(Disponibilidad $disponibilidad): self
+    {
+        if (!$this->disponibilidades->contains($disponibilidad)) {
+            $this->disponibilidades[] = $disponibilidad;
+            $disponibilidad->setVoluntario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDisponibilidad(Disponibilidad $disponibilidad): self
+    {
+        if ($this->disponibilidades->removeElement($disponibilidad)) {
+            if ($disponibilidad->getVoluntario() === $this) {
+                $disponibilidad->setVoluntario(null);
+            }
+        }
+
+        return $this;
     }
 
     public function getPassword(): ?string

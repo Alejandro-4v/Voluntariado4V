@@ -189,7 +189,7 @@ class Entidad implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // No sensitive data to clear
     }
 
     public function getUserIdentifier(): string
