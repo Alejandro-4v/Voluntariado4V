@@ -93,7 +93,7 @@
 -->
 @if (selectedEntity) {
 <div class="modal-overlay" (click)="closeEntityModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()" style="max-width: 500px;">
+  <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="modal-close" (click)="closeEntityModal()">×</button>
     <div class="modal-body text-center p-4">
       @if (selectedEntity.perfilUrl) {
@@ -101,10 +101,14 @@
         style="object-fit: cover;">
       }
       <h2 class="fw-bold mb-1">{{ selectedEntity.nombre }}</h2>
-      <p class="text-muted mb-4">{{ selectedEntity.type || 'Entidad Colaboradora' }}</p>
+      <p class="text-muted mb-4">
+        {{ selectedEntity.nombreResponsable }} {{ selectedEntity.apellidosResponsable }}
+        <br>
+        <small>Responsable</small>
+      </p>
 
       <div class="d-grid gap-3">
-        <a [href]="'mailto:' + (selectedEntity.contactMail || selectedEntity.email)" class="btn btn-primary btn-lg">
+        <a [href]="'mailto:' + selectedEntity.contactMail" class="btn btn-primary btn-lg">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="bi bi-envelope-fill me-2" viewBox="0 0 16 16">
             <path
@@ -112,16 +116,6 @@
           </svg>
           Enviar Correo
         </a>
-        @if (selectedEntity.telefono) {
-        <a [href]="'tel:' + selectedEntity.telefono" class="btn btn-outline-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-telephone-fill me-2" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
-          </svg>
-          Llamar
-        </a>
-        }
       </div>
     </div>
   </div>

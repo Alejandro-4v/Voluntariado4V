@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,4 +12,10 @@ export class EntityCardComponent {
     @Input() name!: string;
     @Input() type!: string;
     @Input() image?: string;
+
+    @Output() cardClick = new EventEmitter<void>();
+
+    onCardClick() {
+        this.cardClick.emit();
+    }
 }
