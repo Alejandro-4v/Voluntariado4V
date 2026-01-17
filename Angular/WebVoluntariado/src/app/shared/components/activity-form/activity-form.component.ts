@@ -44,7 +44,24 @@ export class ActivityFormComponent implements OnInit {
             image: [''], // URL input
             ods: [[]],
             types: [[]]
-        });
+        }, { validators: this.dateRangeValidator });
+    }
+
+    dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
+        const date = group.get('date')?.value;
+        const startTime = group.get('startTime')?.value;
+        const endDate = group.get('endDate')?.value;
+        const endTime = group.get('endTime')?.value;
+
+        if (date && startTime && endDate && endTime) {
+            const start = new Date(`${date}T${startTime}`);
+            const end = new Date(`${endDate}T${endTime}`);
+
+            if (start >= end) {
+                return { dateRangeInvalid: true };
+            }
+        }
+        return null;
     }
 
     ngOnInit(): void {
