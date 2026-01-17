@@ -3,11 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Actividad;
-use App\Entity\Entidad;
-use App\Entity\Grado;
-use App\Entity\Ods;
-use App\Entity\TipoActividad;
-use App\Entity\Voluntario;
 
 use App\Repository\ActividadRepository;
 use App\Repository\EntidadRepository;
@@ -77,6 +72,10 @@ final class ActividadController extends AbstractController
         OdsRepository $odsRepository,
         TipoActividadRepository $tipoActividadRepository
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR') && !$this->isGranted('ROLE_ENTIDAD')) {
+            throw $this->createAccessDeniedException('Only Admin or Entidad can create activities');
+        }
 
         $data = $request->getContent();
 
@@ -122,8 +121,16 @@ final class ActividadController extends AbstractController
                 ], Response::HTTP_BAD_REQUEST);
             }
 
+            if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+                // Ensure Entidad can only create for themselves
+                if ($user instanceof \App\Entity\Entidad && $entidad->getIdEntidad() !== $user->getIdEntidad()) {
+                    throw $this->createAccessDeniedException('You can only create activities for yourself');
+                }
+            }
+
             $actividad->setConvoca($entidad);
         } else {
+            // If Entidad is creating, maybe autofill convoca? Default behavior: require it.
             return $this->json([
                 'error' => 'Missing entidad',
                 'details' => 'The field convoca is required'
@@ -278,6 +285,10 @@ final class ActividadController extends AbstractController
         OdsRepository $odsRepository,
         TipoActividadRepository $tipoActividadRepository
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR') && !$this->isGranted('ROLE_ENTIDAD')) {
+            throw $this->createAccessDeniedException('Only Admin or Entidad can update activities');
+        }
         $data = $request->getContent();
         $json = json_decode($data, true);
 
@@ -288,6 +299,13 @@ final class ActividadController extends AbstractController
                 'error' => 'Actividad not found',
                 'details' => "Actividad with id $id not found"
             ], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+            // Ensure ownership
+            if ($user instanceof \App\Entity\Entidad && $actividad->getConvoca()->getIdEntidad() !== $user->getIdEntidad()) {
+                throw $this->createAccessDeniedException('You can only update your own activities');
+            }
         }
 
         if (isset($json['nombre'])) {
@@ -356,6 +374,12 @@ final class ActividadController extends AbstractController
                     'error' => 'Entidad not found',
                     'details' => "Entidad with id {$json['convoca']} not found"
                 ], Response::HTTP_BAD_REQUEST);
+            }
+
+            if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+                if ($user instanceof \App\Entity\Entidad && $entidad->getIdEntidad() !== $user->getIdEntidad()) {
+                    throw $this->createAccessDeniedException('You cannot transfer activities to another entity');
+                }
             }
 
             if ($entidad != $actividad->getConvoca()) {
@@ -497,6 +521,10 @@ final class ActividadController extends AbstractController
         ActividadRepository $actividadRepository,
         int $id
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR') && !$this->isGranted('ROLE_ENTIDAD')) {
+            throw $this->createAccessDeniedException('Only Admin or Entidad can delete activities');
+        }
         $actividad = $actividadRepository->find($id);
 
         if (!$actividad) {
@@ -504,6 +532,12 @@ final class ActividadController extends AbstractController
                 'error' => 'Actividad not found',
                 'details' => "Actividad with id $id not found"
             ], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if ($user instanceof \App\Entity\Entidad && $actividad->getConvoca()->getIdEntidad() !== $user->getIdEntidad()) {
+                throw $this->createAccessDeniedException('You can only delete your own activities');
+            }
         }
 
         $actividad->setEstado('E');

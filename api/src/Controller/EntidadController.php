@@ -22,6 +22,9 @@ final class EntidadController extends AbstractController
         EntidadRepository $entidadRepository,
         Request $request
     ): JsonResponse {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $filters = $request->query->all();
 
         $entidades = $entidadRepository->findByFilters($filters);
@@ -37,6 +40,9 @@ final class EntidadController extends AbstractController
         EntidadRepository $entidadRepository,
         int $id
     ): JsonResponse {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $entidad = $entidadRepository->find($id);
 
         if (!$entidad) {
@@ -58,6 +64,9 @@ final class EntidadController extends AbstractController
         EntidadRepository $entidadRepository,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $json = json_decode($request->getContent(), true);
 
         $entidad = new Entidad();
@@ -183,6 +192,12 @@ final class EntidadController extends AbstractController
         EntidadRepository $entidadRepository,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if (!($user instanceof Entidad) || $user->getIdEntidad() !== $id) {
+                throw $this->createAccessDeniedException('Access denied');
+            }
+        }
         $json = json_decode($request->getContent(), true);
         $entidad = $entidadRepository->find($id);
 
@@ -278,6 +293,12 @@ final class EntidadController extends AbstractController
         int $id,
         EntidadRepository $entidadRepository
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if (!($user instanceof Entidad) || $user->getIdEntidad() !== $id) {
+                throw $this->createAccessDeniedException('Access denied');
+            }
+        }
         $entidad = $entidadRepository->find($id);
 
         if (!$entidad) {

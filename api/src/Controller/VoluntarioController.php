@@ -33,6 +33,10 @@ final class VoluntarioController extends AbstractController
         VoluntarioRepository $voluntarioRepository,
         Request $request
     ): JsonResponse {
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
+
         $filters = $request->query->all();
 
         $voluntarios = $voluntarioRepository->findByFilters($filters);
@@ -48,6 +52,15 @@ final class VoluntarioController extends AbstractController
         VoluntarioRepository $voluntarioRepository,
         string $nif
     ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if ($user instanceof Voluntario && $user->getNif() === $nif) {
+                // Allow self
+            } else {
+                throw $this->createAccessDeniedException('Access denied');
+            }
+        }
+
         $voluntario = $voluntarioRepository->find($nif);
 
         if (!$voluntario) {
@@ -72,6 +85,11 @@ final class VoluntarioController extends AbstractController
         DiaSemanaRepository $diaSemanaRepository,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            // Assuming create is Admin only based on "Admin ... EVERYTHING", "Voluntario ... only be allowed to..."
+            // If this should be public registration, we would allow it, but logic suggests strict RBAC.
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['nif'])) {
@@ -262,6 +280,26 @@ final class VoluntarioController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
+
+        $user = $this->getUser();
+        $isSelf = false;
+
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if ($user instanceof Voluntario && $user->getNif() === $nif) {
+                $isSelf = true;
+
+                // Restrict fields for self update
+                // Allowed: disponibilidades, tiposActividad, perfilUrl
+                // Allowed keys: 'disponibilidades', 'tiposActividad', 'perfilUrl'
+                $allowed = ['disponibilidades', 'tiposActividad', 'perfilUrl'];
+                // Filter data
+                $data = array_intersect_key($data, array_flip($allowed));
+
+            } else {
+                throw $this->createAccessDeniedException('Access denied');
+            }
+        }
+
         $voluntario = $voluntarioRepository->find($nif);
 
         if (!$voluntario) {
@@ -402,6 +440,9 @@ final class VoluntarioController extends AbstractController
         string $nif,
         VoluntarioRepository $voluntarioRepository
     ): JsonResponse {
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $voluntario = $voluntarioRepository->find($nif);
 
         if (!$voluntario) {
