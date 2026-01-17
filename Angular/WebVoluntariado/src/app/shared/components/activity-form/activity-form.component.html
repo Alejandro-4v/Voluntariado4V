@@ -205,8 +205,14 @@
                 <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="onPreview()">
                     Previsualizar
                 </button>
-                <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="activityForm.invalid">
+                <button type="submit" class="btn btn-primary btn-lg px-4"
+                    [disabled]="activityForm.invalid || isLoading">
+                    @if (isLoading) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Guardando...
+                    } @else {
                     {{ submitButtonLabel }}
+                    }
                 </button>
             </div>
         </div>

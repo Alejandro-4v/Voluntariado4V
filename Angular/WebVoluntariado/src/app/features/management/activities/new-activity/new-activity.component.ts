@@ -40,19 +40,24 @@ export class NewActivityComponent {
         this.gradoService.getAll().subscribe(data => this.gradosList = data);
     }
 
+    isLoading = false;
+
     onSave(activityData: any): void {
         console.log('NewActivityComponent: onSave called', activityData);
+        this.isLoading = true;
         const newActivity = this.mapToActivity(activityData, 'A');
         console.log('Mapped Activity:', newActivity);
 
         this.activitiesService.create(newActivity).subscribe({
             next: () => {
                 console.log('Activity published successfully');
+                alert('Actividad guardada correctamente');
                 this.router.navigate(['/management/actividades']);
             },
             error: (err) => {
                 console.error('Error creating activity:', err);
                 alert('Error al crear la actividad. Consulta la consola para más detalles.');
+                this.isLoading = false;
             }
         });
     }

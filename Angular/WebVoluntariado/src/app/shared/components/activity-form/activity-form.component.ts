@@ -14,9 +14,11 @@ import { fadeIn } from '../../animations/animations';
 export class ActivityFormComponent implements OnInit {
     @Input() mode: 'create' | 'edit' = 'create';
     @Input() initialData: any = null; // Replace 'any' with an interface if available
+    @Input() isLoading: boolean = false;
     @Output() save = new EventEmitter<any>();
 
     @Output() previewAction = new EventEmitter<any>();
+
 
     activityForm: FormGroup;
     entities = ['Cuatrovientos Voluntariado', 'Cruz Roja', 'Banco de Alimentos'];
@@ -111,6 +113,6 @@ export class ActivityFormComponent implements OnInit {
     }
 
     get submitButtonLabel(): string {
-        return this.mode === 'create' ? 'Crear nueva Actividad' : 'Guardar nueva Actividad'; // Or 'Guardar cambios'
+        return this.mode === 'create' ? 'Crear nueva Actividad' : 'Editar Actividad';
     }
 }

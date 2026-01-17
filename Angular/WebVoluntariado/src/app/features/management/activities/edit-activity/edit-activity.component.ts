@@ -60,13 +60,24 @@ export class EditActivityComponent implements OnInit {
         }
     }
 
+    isLoading = false;
+
     onSave(updatedData: any): void {
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
+            this.isLoading = true;
             const updatedActivity = this.mapToActivity(updatedData, 'A');
-            this.activitiesService.update(+id, updatedActivity).subscribe(() => {
-                console.log('Activity updated');
-                this.router.navigate(['/management/actividades']);
+            this.activitiesService.update(+id, updatedActivity).subscribe({
+                next: () => {
+                    console.log('Activity updated');
+                    alert('Actividad guardada correctamente');
+                    this.router.navigate(['/management/actividades']);
+                },
+                error: (err: any) => {
+                    console.error('Error updating activity:', err);
+                    alert('Error al actualizar la actividad.');
+                    this.isLoading = false;
+                }
             });
         }
     }
