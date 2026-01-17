@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted('ROLE_ADMINISTRADOR')]
 final class AdministradorController extends AbstractController
 {
     #[Route('/administrador', name: 'administrador_index', methods: ['GET'])]
