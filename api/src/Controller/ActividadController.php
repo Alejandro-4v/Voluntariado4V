@@ -31,9 +31,6 @@ final class ActividadController extends AbstractController
 {
     private const ESTADOS_VALIDOS = ['A', 'F', 'P', 'C', 'R', 'E'];
 
-    /**
-     * @throws Exception
-     */
     #[Route('/actividad', name: 'actividad_index', methods: ['GET'])]
     public function index(
         ActividadRepository $actividadRepository,
@@ -54,12 +51,11 @@ final class ActividadController extends AbstractController
         ActividadRepository $actividadRepository,
         int $id
     ): JsonResponse {
-        /** @var Actividad $actividad */
         $actividad = $actividadRepository->find($id);
 
         if (!$actividad) {
             return $this->json(
-                ['error' => 'Actividad not found'],
+                ['error' => 'Actividad not found', 'details' => "Actividad with id $id not found"],
                 status: Response::HTTP_NOT_FOUND
             );
         }
@@ -86,7 +82,6 @@ final class ActividadController extends AbstractController
 
         $json = json_decode($data, true);
 
-        /** @var Actividad $actividad */
         $actividad = new Actividad();
 
         if (isset($json['nombre'])) {
@@ -94,6 +89,7 @@ final class ActividadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing nombre',
+                'details' => 'The field nombre is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -104,7 +100,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['estado'])) {
-            /** @var string $estado*/
             $estado = $json['estado'];
             if (!\in_array($estado, self::ESTADOS_VALIDOS)) {
                 return $this->json([
@@ -118,12 +113,12 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['convoca'])) {
-            /** @var Entidad $entidad */
             $entidad = $entidadRepository->find($json['convoca']);
 
             if (!$entidad) {
                 return $this->json([
-                    'error' => "Entidad with id {$json['convoca']} not found"
+                    'error' => 'Entidad not found',
+                    'details' => "Entidad with id {$json['convoca']} not found"
                 ], Response::HTTP_BAD_REQUEST);
             }
 
@@ -131,6 +126,7 @@ final class ActividadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing entidad',
+                'details' => 'The field convoca is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -139,24 +135,25 @@ final class ActividadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing lugar',
+                'details' => 'The field lugar is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            /** @var DateTimeImmutable $inicio */
             $inicio = new DateTimeImmutable($json['inicio']);
         } catch (Exception $e) {
             return $this->json([
-                'error' => 'Invalid inicio datetime format'
+                'error' => 'Invalid inicio datetime format',
+                'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            /** @var DateTimeImmutable $fin */
             $fin = new DateTimeImmutable($json['fin']);
         } catch (Exception $e) {
             return $this->json([
-                'error' => 'Invalid fin datetime format'
+                'error' => 'Invalid fin datetime format',
+                'details' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -171,12 +168,12 @@ final class ActividadController extends AbstractController
         $actividad->setFin($fin);
 
         if (isset($json['grado'])) {
-            /** @var Grado $grado*/
             $grado = $gradoRepository->find($json['grado']);
 
-            if ($grado == null) {
+            if (!$grado) {
                 return $this->json([
-                    'error' => "Grado with id {$json['grado']} not found"
+                    'error' => 'Grado not found',
+                    'details' => "Grado with id {$json['grado']} not found"
                 ], Response::HTTP_BAD_REQUEST);
             }
 
@@ -184,29 +181,27 @@ final class ActividadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing grado',
+                'details' => 'The field grado is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
         if (isset($json['imagenUrl'])) {
-            /** @var string $imagenUrl */
             $imagenUrl = $json['imagenUrl'];
-
             $actividad->setImagenUrl($imagenUrl);
         } else {
             $actividad->setImagenUrl(null);
         }
 
         if (isset($json['voluntarios'])) {
-            /** @var ArrayCollection $voluntarios */
             $voluntarios = new ArrayCollection();
 
             foreach ($json["voluntarios"] as $idVoluntario) {
-                /** @var Voluntario $voluntario */
                 $voluntario = $voluntarioRepository->find($idVoluntario);
 
                 if (!$voluntario) {
                     return $this->json([
-                        'error' => "Voluntario with id {$idVoluntario} not found",
+                        'error' => 'Voluntario not found',
+                        'details' => "Voluntario with id {$idVoluntario} not found",
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -219,7 +214,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['ods'])) {
-            /** @var ArrayCollection $ods */
             $odss = new ArrayCollection();
 
             foreach ($json['ods'] as $idOds) {
@@ -227,7 +221,8 @@ final class ActividadController extends AbstractController
 
                 if (!$ods) {
                     return $this->json([
-                        'error' => "Ods with id {$idOds} not found"
+                        'error' => 'Ods not found',
+                        'details' => "Ods with id {$idOds} not found"
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -241,16 +236,15 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['tiposActividad'])) {
-            /** @var ArrayCollection $tiposActividad */
             $tiposActividad = new ArrayCollection();
 
             foreach ($json['tiposActividad'] as $idTipoActividad) {
-                /** @var TipoActividad $tipoActividad */
                 $tipoActividad = $tipoActividadRepository->find($idTipoActividad);
 
                 if (!$tipoActividad) {
                     return $this->json([
-                        'error' => "TipoActividad with id {$idTipoActividad} not found",
+                        'error' => 'TipoActividad not found',
+                        'details' => "TipoActividad with id {$idTipoActividad} not found",
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -263,7 +257,7 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['plazas'])) {
-            $actividad->setPlazas((int)$json['plazas']);
+            $actividad->setPlazas((int) $json['plazas']);
         }
 
         $actividadRepository->add($actividad);
@@ -291,12 +285,12 @@ final class ActividadController extends AbstractController
 
         if (!$actividad) {
             return $this->json([
-                'error' => 'Actividad not found'
+                'error' => 'Actividad not found',
+                'details' => "Actividad with id $id not found"
             ], Response::HTTP_NOT_FOUND);
         }
 
         if (isset($json['nombre'])) {
-            /** @var string $nombre */
             $nombre = $json['nombre'];
 
             if ($nombre === '') {
@@ -312,7 +306,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['descripcion'])) {
-            /** @var string $descripcion */
             $descripcion = $json['descripcion'];
 
             if ($descripcion != $actividad->getDescripcion()) {
@@ -321,7 +314,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['lugar'])) {
-            /** @var string $lugar */
             $lugar = $json['lugar'];
 
             if ($lugar != $actividad->getLugar()) {
@@ -330,7 +322,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['estado'])) {
-            /** @var string $estado */
             $estado = strtoupper($json['estado']);
 
             if ($estado === '') {
@@ -354,16 +345,16 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['plazas'])) {
-            $actividad->setPlazas((int)$json['plazas']);
+            $actividad->setPlazas((int) $json['plazas']);
         }
 
         if (isset($json['convoca'])) {
-            /** @var Entidad $entidad */
             $entidad = $entidadRepository->find($json['convoca']);
 
             if (!$entidad) {
                 return $this->json([
-                    'error' => "Entidad with id {$json['convoca']} not found"
+                    'error' => 'Entidad not found',
+                    'details' => "Entidad with id {$json['convoca']} not found"
                 ], Response::HTTP_BAD_REQUEST);
             }
 
@@ -372,30 +363,27 @@ final class ActividadController extends AbstractController
             }
         }
 
-        /** @var DateTimeImmutable $inicio */
         $inicio = $actividad->getInicio();
-
-        /** @var DateTimeImmutable $fin */
         $fin = $actividad->getFin();
 
         if (isset($json['inicio'])) {
             try {
-                /** @var DateTimeImmutable $inicio */
                 $inicio = new DateTimeImmutable($json['inicio']);
             } catch (Exception $e) {
                 return $this->json([
-                    'error' => 'Invalid inicio datetime format'
+                    'error' => 'Invalid inicio datetime format',
+                    'details' => $e->getMessage()
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
 
         if (isset($json['fin'])) {
             try {
-                /** @var DateTimeImmutable $fin */
                 $fin = new DateTimeImmutable($json['fin']);
             } catch (Exception $e) {
                 return $this->json([
-                    'error' => 'Invalid fin datetime format'
+                    'error' => 'Invalid fin datetime format',
+                    'details' => $e->getMessage()
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -416,12 +404,12 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['grado'])) {
-            /** @var Grado $grado */
             $grado = $gradoRepository->find($json['grado']);
 
-            if ($grado == null) {
+            if (!$grado) {
                 return $this->json([
-                    'error' => "Grado with id {$json['grado']} not found"
+                    'error' => 'Grado not found',
+                    'details' => "Grado with id {$json['grado']} not found"
                 ], Response::HTTP_BAD_REQUEST);
             }
 
@@ -431,7 +419,6 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['imagenUrl'])) {
-            /** @var string $imagenUrl */
             $imagenUrl = $json['imagenUrl'];
 
             if ($imagenUrl != $actividad->getImagenUrl()) {
@@ -440,16 +427,15 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['voluntarios'])) {
-            /** @var ArrayCollection $voluntarios */
             $voluntarios = new ArrayCollection();
 
             foreach ($json['voluntarios'] as $idVoluntario) {
-                /** @var Voluntario $voluntario */
                 $voluntario = $voluntarioRepository->find($idVoluntario);
 
                 if (!$voluntario) {
                     return $this->json([
-                        'error' => "Voluntario with id {$idVoluntario} not found"
+                        'error' => 'Voluntario not found',
+                        'details' => "Voluntario with id {$idVoluntario} not found"
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -460,16 +446,15 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['ods'])) {
-            /** @var ArrayCollection $odss */
             $odss = new ArrayCollection();
 
             foreach ($json['ods'] as $idOds) {
-                /** @var Ods $ods*/
                 $ods = $odsRepository->find($idOds);
 
                 if (!$ods) {
                     return $this->json([
-                        'error' => "Ods with id {$idOds} not found"
+                        'error' => 'Ods not found',
+                        'details' => "Ods with id {$idOds} not found"
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -480,16 +465,15 @@ final class ActividadController extends AbstractController
         }
 
         if (isset($json['tiposActividad'])) {
-            /** @var ArrayCollection $tiposActividad */
             $tiposActividad = new ArrayCollection();
 
             foreach ($json['tiposActividad'] as $idTipoActividad) {
-                /** @var TipoActividad $tipoActividad */
                 $tipoActividad = $tipoActividadRepository->find($idTipoActividad);
 
                 if (!$tipoActividad) {
                     return $this->json([
-                        'error' => "TipoActividad with id {$idTipoActividad} not found",
+                        'error' => 'TipoActividad not found',
+                        'details' => "TipoActividad with id {$idTipoActividad} not found",
                     ], Response::HTTP_BAD_REQUEST);
                 }
 
@@ -513,12 +497,12 @@ final class ActividadController extends AbstractController
         ActividadRepository $actividadRepository,
         int $id
     ): JsonResponse {
-        /** @var Actividad $actividad */
         $actividad = $actividadRepository->find($id);
 
         if (!$actividad) {
             return $this->json([
                 'error' => 'Actividad not found',
+                'details' => "Actividad with id $id not found"
             ], Response::HTTP_NOT_FOUND);
         }
 

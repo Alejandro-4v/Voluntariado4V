@@ -15,7 +15,7 @@ class DiaSemana
     #[ORM\Id]
     #[ORM\Column(name: 'id_dia', type: 'smallint')]
     #[Groups(['diaSemana:read', 'disponibilidad:read'])]
-    private ?int $idDia = null;
+    private ?int $diaSemana = null;
 
     #[ORM\Column(name: 'descripcion', type: 'string', length: 10, unique: true)]
     #[Groups(['diaSemana:read', 'disponibilidad:read'])]
@@ -30,14 +30,14 @@ class DiaSemana
         $this->disponibilidades = new ArrayCollection();
     }
 
-    public function getIdDia(): ?int
+    public function getdiaSemana(): ?int
     {
-        return $this->idDia;
+        return $this->diaSemana;
     }
 
-    public function setIdDia(int $idDia): self
+    public function setdiaSemana(int $diaSemana): self
     {
-        $this->idDia = $idDia;
+        $this->diaSemana = $diaSemana;
         return $this;
     }
 

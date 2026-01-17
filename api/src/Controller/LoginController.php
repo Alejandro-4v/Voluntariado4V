@@ -43,28 +43,18 @@ final class LoginController extends AbstractController
         } elseif ($type === 'administrador') {
             $user = $administradorRepository->findOneBy(['loginMail' => $loginMail]);
         } else {
-            $user = $voluntarioRepository->findOneBy(['mail' => $loginMail]);
-            if (!$user) {
-                $user = $entidadRepository->findOneBy(['loginMail' => $loginMail]);
-            }
-            if (!$user) {
-                $user = $administradorRepository->findOneBy(['loginMail' => $loginMail]);
-            }
+            return $this->json([
+                'error' => 'Invalid or missing user type. Available types: voluntario, entidad, administrador'
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if ($user instanceof UserInterface) {
-            error_log("DEBUG LOGIN: User found: " . $user->getUserIdentifier());
-            error_log("DEBUG LOGIN: Raw password: '" . $password . "'");
-            error_log("DEBUG LOGIN: Stored hash: '" . $user->getPassword() . "'");
 
             $isValid = $passwordHasher->isPasswordValid($user, $password);
-            error_log("DEBUG LOGIN: Password valid: " . ($isValid ? 'YES' : 'NO'));
 
             if ($isValid) {
                 return $this->json(['token' => $JWTManager->create($user)]);
             }
-        } else {
-            error_log("DEBUG LOGIN: User not found for mail: " . $loginMail);
         }
 
         return $this->json(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);

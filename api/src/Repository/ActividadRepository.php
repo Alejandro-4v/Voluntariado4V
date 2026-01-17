@@ -72,6 +72,12 @@ class ActividadRepository extends ServiceEntityRepository
                 ->setParameter('gradoId', $filters['grado']);
         }
 
+        if (isset($filters['fecha'])) {
+            // Cast datetime to date for comparison
+            $qb->andWhere('DATE(a.inicio) = :fecha')
+                ->setParameter('fecha', $filters['fecha']);
+        }
+
         if (isset($filters['ods'])) {
             $odsIds = array_map(
                 'intval',
@@ -106,7 +112,7 @@ class ActividadRepository extends ServiceEntityRepository
         }
 
         if (isset($filters['limit']) && is_numeric($filters['limit'])) {
-            $qb->setMaxResults((int)$filters['limit']);
+            $qb->setMaxResults((int) $filters['limit']);
         }
 
         $qb->orderBy('a.inicio', 'DESC');
