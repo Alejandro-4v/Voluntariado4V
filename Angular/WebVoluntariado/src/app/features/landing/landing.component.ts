@@ -52,4 +52,8 @@ export class LandingComponent implements OnInit {
     handleLogin() {
         this.router.navigate(['/auth/iniciar-sesion']);
     }
+
+    handleRegister() {
+        this.router.navigate(['/auth/registro-alumno']);
+    }
 }
