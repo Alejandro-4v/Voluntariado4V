@@ -18,8 +18,17 @@ public class HomeFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Configurar botón "Ver Actividades"
+        View btnViewActivities = view.findViewById(R.id.btnViewActivities);
+        btnViewActivities.setOnClickListener(v -> {
+            if (getActivity() instanceof ActividadesActivity) {
+                ((ActividadesActivity) getActivity()).viewPager.setCurrentItem(1, true);
+            }
+        });
+
+        return view;
     }
 }
