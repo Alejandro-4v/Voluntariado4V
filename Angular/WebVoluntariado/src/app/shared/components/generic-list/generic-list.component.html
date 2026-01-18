@@ -1,23 +1,23 @@
 <div class="bg-white rounded-4 shadow">
     <div class="list-group list-group-flush">
-        <!-- Header Row -->
+        
         <div class="list-group-item bg-transparent fw-bold py-3 border-bottom-2">
             <div class="row w-100 m-0 align-items-center">
-                <!-- Dynamic Columns -->
+                
                 @for (col of columns; track col.field) {
                 <div [class]="col.className || 'col'" class="text-truncate" [title]="col.header">{{ col.header }}</div>
                 }
-                <!-- Action Column Placeholder -->
+                
                 <div class="col-2 text-end"></div>
             </div>
         </div>
 
-        <!-- Items -->
+        
         @for (item of items; track item[keyField]) {
         <div class="list-group-item action-item py-3 border-bottom pointer"
             [class.bg-light]="selectedId === item[keyField]" (click)="onSelect(item)">
             <div class="row w-100 m-0 align-items-center">
-                <!-- Dynamic Cells -->
+                
                 @for (col of columns; track col.field) {
                 <div [class]="col.className || 'col'" [class.fw-medium]="$first" [class.text-muted]="!$first"
                     class="text-truncate" [title]="getFieldValue(item, col.field)">

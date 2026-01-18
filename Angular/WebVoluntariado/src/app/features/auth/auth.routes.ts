@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router'; // turbo
+import { Routes } from '@angular/router'; 
 import { LoginComponent } from './login/login';
 import { RegisterStudentComponent } from './register-student/register-student';
 import { RegisterEntityComponent } from './register-entity/register-entity';

@@ -5,7 +5,7 @@ export interface ColumnConfig {
     header: string;
     field: string;
     pipe?: 'date';
-    className?: string; // Bootstrap classes like 'col-2', 'col-md-3'
+    className?: string; 
 }
 
 @Component({

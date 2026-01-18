@@ -1,7 +1,7 @@
-<!-- Main content -->
+
 <main class="dashboard-content bg-light py-5">
   <div class="container-lg">
-    <!-- Main title -->
+    
     <div class="mb-5">
       <h1 class="display-5 fw-bold mb-2 text-dark">
         Tu Historial
@@ -11,7 +11,7 @@
       </p>
     </div>
 
-    <!-- Rated activities section -->
+    
     <section class="mb-5">
       <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="fs-4 fw-bold text-dark m-0">
@@ -28,7 +28,7 @@
       }
     </section>
 
-    <!-- Unrated activities section (Placeholder for future logic) -->
+    
     @if (unratedActivities.length > 0) {
     <section class="mb-5">
       <h2 class="fs-4 fw-bold mb-4 text-dark">
@@ -39,7 +39,7 @@
     </section>
     }
 
-    <!-- Empty state -->
+    
     @if (allActivities.length === 0 && unratedActivities.length === 0) {
     <div class="card border-0 shadow-sm p-5 text-center bg-white rounded-4">
       <div class="mb-3">
@@ -60,7 +60,7 @@
   </div>
 </main>
 
-<!-- Activity Modal -->
+
 <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" buttonType="valorar"
   (close)="closeActivityModal()" (action)="onActivityAction()">
 </app-activity-modal>

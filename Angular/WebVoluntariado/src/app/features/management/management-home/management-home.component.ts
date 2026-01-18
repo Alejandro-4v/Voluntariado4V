@@ -42,7 +42,7 @@ export class ManagementHomeComponent implements OnInit {
       next: (data) => {
         this.stats.totalVolunteers = data.volunteers.length;
 
-        // Filter activities
+        
         const activeActivities = data.activities.filter(a => a.estado === 'A');
         const pendingActivities = data.activities.filter(a => a.estado === 'P');
 
@@ -50,7 +50,7 @@ export class ManagementHomeComponent implements OnInit {
         this.stats.pendingApprovals = pendingActivities.length;
         this.stats.totalEntities = data.entities.length;
 
-        // Calculate Entities Growth (This Month vs Last Month)
+        
         const now = new Date();
         const thisMonth = now.getMonth();
         const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
@@ -73,7 +73,7 @@ export class ManagementHomeComponent implements OnInit {
           this.entitiesGrowth = entitiesThisMonth > 0 ? 100 : 0;
         }
 
-        // Populate Recent Activity with Real Data
+        
         const latestActivities = data.activities
           .sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime())
           .slice(0, 3)
@@ -95,13 +95,9 @@ export class ManagementHomeComponent implements OnInit {
             type: 'primary'
           }));
 
-        // Combine and sort by date (descending)
+        
         this.recentActivities = [...latestActivities, ...latestEntities]
           .sort((a, b) => {
-            // Parse dates (assuming dd/mm/yyyy or similar, but here we have Date objects converted to string)
-            // Actually, let's just keep them as is for now, or use a better sort if needed.
-            // Since we converted to locale string, sorting might be tricky. 
-            // Let's just concat them: Activities first (usually more relevant) then Entities.
             return 0;
           });
 
@@ -135,7 +131,7 @@ export class ManagementHomeComponent implements OnInit {
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "reporte_dashboard.csv");
-    document.body.appendChild(link); // Required for FF
+    document.body.appendChild(link); 
     link.click();
     document.body.removeChild(link);
   }

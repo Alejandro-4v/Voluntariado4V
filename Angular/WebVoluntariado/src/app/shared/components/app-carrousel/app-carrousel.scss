@@ -1,4 +1,4 @@
-/* Ocultar scrollbar pero permitir scroll */
+
 .carrousel-track::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
@@ -15,7 +15,7 @@
     overflow-y: hidden;
 }
 
-/* Desktop Styles */
+
 @media (min-width: 768px) {
     .carousel-width {
         width: 100%;
@@ -24,12 +24,12 @@
 
     .card-width {
         width: calc(33.333% - 1rem);
-        /* 3 cards minus gap */
+        
         scroll-snap-align: start;
     }
 }
 
-/* Mobile Styles */
+
 @media (max-width: 767.98px) {
     .carousel-width {
         width: 100%;
@@ -38,20 +38,20 @@
     }
 
     .card-width {
-        /* Exactamente el ancho de la pantalla */
+        
         width: 100%;
         min-width: 100%;
         flex: 0 0 100%;
-        /* Forzar flex item a no encogerse ni crecer */
+        
         scroll-snap-align: center;
         scroll-snap-stop: always;
         margin-right: 0;
         padding: 0 1rem;
-        /* Padding interno para que no pegue a los bordes si se quiere */
+        
         box-sizing: border-box;
     }
 
-    /* Asegurar que el contenedor de la card ocupe todo */
+    
     activity-card,
     proposal-card,
     entity-card {

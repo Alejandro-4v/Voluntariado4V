@@ -50,8 +50,8 @@ export class EditActivityComponent implements OnInit {
                     date: data.inicio,
                     location: data.lugar || 'Ubicación no especificada',
                     slots: data.plazas,
-                    entity: data.convoca?.idEntidad, // Use ID
-                    grado: data.grado?.idGrado, // Use ID
+                    entity: data.convoca?.idEntidad, 
+                    grado: data.grado?.idGrado, 
                     image: data.imagenUrl,
                     ods: data.ods,
                     types: data.tiposActividad
@@ -86,24 +86,24 @@ export class EditActivityComponent implements OnInit {
 
     onPreview(updatedData: any): void {
         const activity = this.mapToActivity(updatedData, 'P');
-        // Enrich with entity name for preview
+        
         const entity = this.entitiesList.find(e => e.idEntidad === activity.convoca.idEntidad);
         if (entity) {
             activity.convoca.nombre = entity.nombre;
             activity.convoca.contactMail = entity.contactMail;
         }
-        // Enrich with grado description
+        
         const grado = this.gradosList.find(g => g.idGrado === activity.grado.idGrado);
         if (grado) {
             activity.grado.descripcion = grado.descripcion;
             activity.grado.nivel = grado.nivel;
         }
-        // Enrich types
+        
         activity.tiposActividad = activity.tiposActividad.map((t: any) => {
             const type = this.typesList.find(tl => tl.idTipoActividad === t.idTipoActividad);
             return type ? type : t;
         });
-        // Enrich ODS
+        
         activity.ods = activity.ods.map((o: any) => {
             const ods = this.odsList.find(ol => ol.idOds === o.idOds);
             return ods ? ods : o;
@@ -119,7 +119,7 @@ export class EditActivityComponent implements OnInit {
     }
 
     private mapToActivity(formData: any, status: string): any {
-        // Combine date and time
+        
         const inicio = formData.date && formData.startTime ? `${formData.date}T${formData.startTime}:00` : null;
         const fin = formData.endDate && formData.endTime ? `${formData.endDate}T${formData.endTime}:00` : null;
 

@@ -151,7 +151,7 @@ export class FilterSortComponent {
   @Output() groupChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
 
-  // Backward compatibility inputs (optional, can be removed if refactoring all usages)
+  
   @Input() filterOptions: { label: string, value: string }[] = [];
   @Input() currentFilter: string = '';
   @Output() filterChange = new EventEmitter<string>();
@@ -160,7 +160,7 @@ export class FilterSortComponent {
     const newFilters = { ...this.activeFilters, [key]: value };
     this.activeFiltersChange.emit(newFilters);
 
-    // Backward compatibility
+    
     if (key === 'status' || this.filterOptions.length > 0) {
       this.filterChange.emit(value);
     }
@@ -202,7 +202,7 @@ export class FilterSortComponent {
       }
     });
     this.activeFiltersChange.emit(newFilters);
-    this.filterChange.emit('all'); // Backward compatibility
+    this.filterChange.emit('all'); 
   }
 
   getOptionLabel(section: FilterSection, value: any): string {

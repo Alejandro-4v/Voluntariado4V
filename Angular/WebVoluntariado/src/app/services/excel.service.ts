@@ -15,7 +15,7 @@ export class ExcelService {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('data');
 
-        // Add headers and data
+        
         if (json.length > 0) {
             const columns = Object.keys(json[0]).map(key => ({ header: key, key: key, width: 20 }));
             worksheet.columns = columns;

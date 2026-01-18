@@ -1,40 +1,33 @@
 .auth-wrapper {
-  /* Ocupar toda la pantalla */
+  
   min-height: 100vh;
   width: 100%;
   position: relative;
   overflow-x: hidden;
-  /* IMPORTANTE: Esto es lo que te falta para recuperar el scroll y que el SVG se vea grande.
-     'content-box' hace que el padding (160px + 40px) se SUME a la altura de la pantalla,
-     forzando que la página sea más alta que el monitor y aparezca el scroll. */
+  
   box-sizing: content-box;
 
-  /* Fondo base */
+  
   background-color: #0F3F7A; 
 
-  /* CONFIGURACIÓN DE FONDO */
+  
   background-image: url('/assets/wave-bg.svg');
   background-repeat: no-repeat;
   
-  /* Posición: Centrado arriba */
+  
   background-position: top center;
   
-  /* Tamaño: COVER. Al hacer la caja más alta con el truco de arriba,
-     el navegador hará "zoom" en el SVG para cubrir la nueva altura,
-     haciendo que se vea más grande/imponente. */
+  
   background-size: cover;
 
-  /* Espaciado interior */
-  /* AJUSTE: Aumentamos de 160px a 260px. 
-     Al hacer zoom el fondo, la ola azul bajó. Bajamos el texto para que vuelva a estar en lo blanco. */
   padding-top: 260px; 
   padding-bottom: 40px;
 }
 
-/* Ajuste para Móvil */
+
 @media (max-width: 991px) {
   .auth-wrapper {
-    /* Ajustamos también en móvil por si acaso */
+    
     padding-top: 180px;
     background-position: top center;
   }

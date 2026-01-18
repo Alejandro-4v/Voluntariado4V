@@ -28,14 +28,14 @@ export class ManagementEntitiesComponent implements OnInit {
 
     private entitiesService = inject(EntitiesService);
 
-    // Configuration for Generic List
+    
     listColumns: ColumnConfig[] = [
         { header: 'Nombre Entidad', field: 'nombre' },
         { header: 'Fecha de Inscripción', field: 'fechaRegistro', pipe: 'date' },
         { header: 'Responsable', field: 'nombreResponsable' }
     ];
 
-    // Configuration for Generic Detail
+    
     detailConfig: DetailConfig = {
         imageField: 'perfilUrl',
         titleField: 'nombre',
@@ -117,7 +117,7 @@ export class ManagementEntitiesComponent implements OnInit {
     applyFilters() {
         let temp = [...this.entities];
 
-        // 0. Filtering
+        
         const activityStatus = this.activeFilters['activityStatus'];
         if (activityStatus === 'with_activities') {
             temp = temp.filter(e => e.actividades && e.actividades.length > 0);
@@ -126,13 +126,13 @@ export class ManagementEntitiesComponent implements OnInit {
         }
 
         temp.sort((a, b) => {
-            // 1. Primary Sort: Grouping
+            
             if (this.groupBy === 'nombreResponsable') {
                 const groupCompare = (a.nombreResponsable || '').localeCompare(b.nombreResponsable || '');
                 if (groupCompare !== 0) return groupCompare;
             }
 
-            // 2. Secondary Sort: Sorting
+            
             if (this.sortBy === 'nombre') {
                 return a.nombre.localeCompare(b.nombre);
             } else if (this.sortBy === 'fechaRegistro') {

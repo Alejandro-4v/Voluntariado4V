@@ -1,6 +1,6 @@
 <div class="container-fluid min-vh-100 d-flex flex-column align-items-center py-5 page-container">
 
-    <!-- Search Card -->
+    
     <div class="card p-4 p-md-5 m-3 m-md-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
         <div
             class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-4 gap-3">
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <!-- Results Sections -->
+    
     <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
 
         @if (isLoading) {
@@ -54,7 +54,7 @@
         } @else {
         <div @fadeIn>
             @if (!isSearchActive) {
-            <!-- Próximas actividades -->
+            
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
                 @if (upcomingActivities.length > 0) {
@@ -67,7 +67,7 @@
                 }
             </section>
 
-            <!-- Actividades pasadas -->
+            
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
                 @if (pastActivities.length > 0) {
@@ -80,7 +80,7 @@
                 }
             </section>
 
-            <!-- Actividades pendiente de aprobación -->
+            
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
                 @if (pendingActivities.length > 0) {
@@ -94,7 +94,7 @@
                 }
             </section>
 
-            <!-- Propuestas desde Cuatrovientos -->
+            
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
                 @if (proposals.length > 0) {
@@ -107,7 +107,7 @@
                 }
             </section>
             } @else {
-            <!-- Grid View for Search Results -->
+            
             <section class="mb-5" @slideUp>
                 <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
                     <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})

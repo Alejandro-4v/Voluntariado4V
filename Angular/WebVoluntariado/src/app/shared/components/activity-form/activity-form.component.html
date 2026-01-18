@@ -2,7 +2,7 @@
     <h2 class="mb-4 fw-bold text-primary">{{ title }}</h2>
     <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
         <div class="row g-3">
-            <!-- Name -->
+            
             <div class="col-12">
                 <label for="name" class="form-label fw-semibold">Nombre de la Actividad</label>
                 <input type="text" id="name" class="form-control form-control-lg" formControlName="name"
@@ -15,7 +15,7 @@
                 }
             </div>
 
-            <!-- Description -->
+            
             <div class="col-12">
                 <label for="description" class="form-label fw-semibold">Descripción</label>
                 <textarea id="description" class="form-control" formControlName="description" rows="4"
@@ -28,7 +28,7 @@
                 }
             </div>
 
-            <!-- Date & Time Start -->
+            
             <div class="col-md-6">
                 <label for="date" class="form-label fw-semibold">Fecha Inicio</label>
                 <input type="date" id="date" class="form-control" formControlName="date"
@@ -50,7 +50,7 @@
                 }
             </div>
 
-            <!-- Date & Time End -->
+            
             <div class="col-md-6">
                 <label for="endDate" class="form-label fw-semibold">Fecha Fin</label>
                 <input type="date" id="endDate" class="form-control" formControlName="endDate"
@@ -72,7 +72,7 @@
                 }
             </div>
 
-            <!-- Location & Status -->
+            
             <div class="col-md-6">
                 <label for="location" class="form-label fw-semibold">Lugar</label>
                 <input type="text" id="location" class="form-control" formControlName="location"
@@ -102,7 +102,7 @@
                 }
             </div>
 
-            <!-- Slots & Entity -->
+            
             <div class="col-md-6">
                 <label for="slots" class="form-label fw-semibold">Plazas</label>
                 <input type="number" id="slots" class="form-control" formControlName="slots" min="1"
@@ -129,7 +129,7 @@
                 }
             </div>
 
-            <!-- Grado -->
+            
             <div class="col-md-6">
                 <label for="grado" class="form-label fw-semibold">Grado</label>
                 <select id="grado" class="form-select" formControlName="grado"
@@ -146,7 +146,7 @@
                 }
             </div>
 
-            <!-- Image -->
+            
             <div class="col-12">
                 <label for="image" class="form-label fw-semibold">URL de la Imagen de cabecera</label>
                 <input type="text" id="image" class="form-control" formControlName="image"
@@ -161,7 +161,7 @@
                 }
             </div>
 
-            <!-- ODS & Types -->
+            
             <div class="col-md-6">
                 <label for="ods" class="form-label fw-semibold">ODS Relacionados</label>
                 <select multiple id="ods" class="form-select" formControlName="ods" size="4"
@@ -183,7 +183,7 @@
                 <div class="form-text text-muted small">Mantén Ctrl (o Cmd) para seleccionar varios</div>
             </div>
 
-            <!-- Global Errors -->
+            
             @if (activityForm.errors?.['dateRangeInvalid'] && (activityForm.get('endDate')?.touched ||
             activityForm.get('endTime')?.touched)) {
             <div class="col-12">
@@ -200,7 +200,7 @@
             </div>
             }
 
-            <!-- Actions -->
+            
             <div class="col-12 d-flex justify-content-end gap-3 mt-5 pt-3 border-top">
                 <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="onPreview()">
                     Previsualizar

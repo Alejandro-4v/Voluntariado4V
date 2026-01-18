@@ -30,15 +30,15 @@ export class DashboardComponent implements OnInit {
 
   currentUser: User | null = null;
 
-  // Loading state
+  
   isLoading = true;
 
-  // Data
+  
   myUpcomingActivities: any[] = [];
   allAvailableActivities: any[] = [];
   otherEntities: any[] = [];
 
-  // Modal state
+  
   selectedActivity: any = null;
   isModalOpen = false;
   isEnrolling = false;
@@ -46,30 +46,22 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    // if (!this.currentUser) {
-    //   this.router.navigate(['/auth/iniciar-sesion']);
-    //   return;
-    // }
     this.loadData();
   }
 
   loadData() {
     this.isLoading = true;
 
-    // Fetch activities
+    
     this.activitiesService.getAll().subscribe({
       next: (activities) => {
         const now = new Date();
 
-        // My Upcoming Activities (Enrolled & Future)
+        
         this.myUpcomingActivities = activities
           .filter(a => new Date(a.inicio) >= now && a.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif))
           .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
-        // All Available Activities (Discovery)
-        // Show all active upcoming activities
-        // All Available Activities (Discovery)
-        // Show all active upcoming activities that match grade and are not enrolled
         this.allAvailableActivities = activities
           .filter(a => {
             const isFuture = new Date(a.inicio) >= now;
@@ -88,7 +80,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // Fetch entities
+    
     this.entitiesService.getAll().subscribe({
       next: (entities) => {
         this.otherEntities = entities;
@@ -128,7 +120,7 @@ export class DashboardComponent implements OnInit {
 
     if (!this.selectedActivity) return;
 
-    // Check if already enrolled
+    
     const isEnrolled = this.selectedActivity.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif);
     if (isEnrolled) {
       alert('Ya estás inscrito en esta actividad.');
@@ -141,7 +133,7 @@ export class DashboardComponent implements OnInit {
         alert('¡Te has inscrito correctamente en la actividad!');
         this.isEnrolling = false;
         this.closeActivityModal();
-        this.loadData(); // Reload to reflect changes (e.g. remove from list if logic changes, or just refresh)
+        this.loadData(); 
       },
       error: (err) => {
         console.error('Error enrolling in activity', err);

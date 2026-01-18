@@ -11,7 +11,7 @@ export class VolunteersService {
 
     private apiUrl = `${API_URL}/voluntario`;
 
-    // MOCK DATA REMOVED
+    
 
     constructor(private http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export class VolunteersService {
         return this.http.get<Voluntario>(`${this.apiUrl}/${nif}`);
     }
 
-    // Note: API might not support POST/PUT/DELETE for Voluntario yet based on controller analysis
+    
     create(voluntario: Voluntario): Observable<Voluntario> {
         return this.http.post<Voluntario>(this.apiUrl, voluntario);
     }

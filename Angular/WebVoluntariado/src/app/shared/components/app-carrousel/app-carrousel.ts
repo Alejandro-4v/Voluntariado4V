@@ -12,7 +12,7 @@ import { EntityCardComponent } from '../entity-card/entity-card.component';
   styleUrls: ['./app-carrousel.scss']
 })
 export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
-  // usamos setter para detectar cuando llegan items (útil si parent hace *ngIf o rellena después)
+  
   private _items: any[] = [];
   @Input()
   set items(v: any[]) {
@@ -32,19 +32,19 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
   constructor(private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
-    // podríamos no tener track aún si componente fue renderizado oculto; detectaremos en AfterViewChecked
+    
     this.tryInit();
   }
 
   ngAfterViewChecked() {
-    // se llama varias veces; solo hacemos la inicialización una vez
+    
     this.tryInit();
   }
 
   private onItemsChanged() {
-    // si el elemento ya existe, recalcula; si no, marca como pendiente
+    
     if (this.track && this.track.nativeElement) {
-      // esperar un tick para que Angular haya renderizado children
+      
       setTimeout(() => {
         this.updateActiveIndex();
       }, 0);
@@ -58,11 +58,8 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
     if (this.track && this.track.nativeElement) {
       this.initialized = true;
       this.pendingInit = false;
-      // opcional: debug
-      // console.log('Carrousel track inicializado', this.track.nativeElement);
-      // forzar CD si necesitamos
       this.cdr.detectChanges();
-      // si hay items ya, actualizamos índice
+      
       setTimeout(() => this.updateActiveIndex(), 0);
     }
   }
@@ -70,7 +67,7 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
   private updateActiveIndex() {
     const el = this.track?.nativeElement;
     if (!el) return;
-    // recalcula activeIndex en función del scroll actual
+    
     const cardWidth = this.getCardWidth(el);
     if (cardWidth > 0) {
       this.activeIndex = Math.round(el.scrollLeft / cardWidth);
@@ -80,12 +77,12 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
   }
 
   private getCardWidth(el: HTMLElement) {
-    // En desktop mostramos 3 tarjetas visibles; en mobile usamos el ancho del contenedor
+    
     const containerWidth = el.clientWidth;
-    // si hay card-width explícito, podemos intentar leer el primer hijo
+    
     const firstCard = el.querySelector('.card-width') as HTMLElement | null;
     if (firstCard) return firstCard.offsetWidth;
-    // fallback: asumimos container/3 en desktop
+    
     return containerWidth / 3;
   }
 
@@ -96,24 +93,24 @@ export class AppCarrouselComponent implements AfterViewInit, AfterViewChecked {
     const firstCard = el.querySelector('.card-width') as HTMLElement;
     if (!firstCard) return;
 
-    // Calcular ancho real de la card (incluyendo margenes)
+    
     const style = window.getComputedStyle(firstCard);
     const marginRight = parseFloat(style.marginRight) || 0;
     const marginLeft = parseFloat(style.marginLeft) || 0;
     const cardWidth = firstCard.offsetWidth + marginLeft + marginRight;
 
-    // Distancia a mover (positivo o negativo según dirección)
+    
     const amount = direction === 'left' ? -cardWidth : cardWidth;
 
-    // Posición actual y límites
+    
     const maxScrollLeft = el.scrollWidth - el.clientWidth;
     let newScrollLeft = el.scrollLeft + amount;
 
-    // Limitar scroll para que no pase los extremos
+    
     if (newScrollLeft < 0) newScrollLeft = 0;
     if (newScrollLeft > maxScrollLeft) newScrollLeft = maxScrollLeft;
 
-    // Scroll a la nueva posición
+    
     el.scrollTo({ left: newScrollLeft, behavior: 'smooth' });
 
     console.log('scrollBy cardWidth:', cardWidth);

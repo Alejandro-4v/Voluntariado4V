@@ -41,7 +41,7 @@ export class ManagementActivitiesComponent implements OnInit {
     entities: any[] = [];
     isSearchActive = false;
 
-    // Search filters
+    
     searchTerm: string = '';
     selectedType: string = '';
     selectedDate: string = '';
@@ -54,7 +54,7 @@ export class ManagementActivitiesComponent implements OnInit {
                 this.allActivities = data;
                 const now = new Date();
 
-                // Filter activities based on real criteria
+                
                 this.upcomingActivities = data.filter(a => new Date(a.inicio) > now);
 
                 this.pastActivities = data.filter(a => {
@@ -64,7 +64,7 @@ export class ManagementActivitiesComponent implements OnInit {
 
                 this.pendingActivities = data.filter(a => a.estado === 'P');
 
-                // Filter for Cuatrovientos proposals
+                
                 this.proposals = data.filter(a =>
                     a.convoca?.nombre?.toLowerCase().includes('cuatrovientos') ||
                     a.convoca?.nombre?.toLowerCase().includes('4v')
@@ -88,7 +88,7 @@ export class ManagementActivitiesComponent implements OnInit {
     }
 
     onSearch() {
-        // If no filters are active, show carousels
+        
         if (!this.selectedType && !this.selectedDate && !this.searchTerm && !this.selectedEntity) {
             this.isSearchActive = false;
             return;
@@ -101,7 +101,7 @@ export class ManagementActivitiesComponent implements OnInit {
             let matchesSearch = true;
             let matchesEntity = true;
 
-            // Filter by Type
+            
             if (this.selectedType && this.selectedType !== '') {
                 const selectedTypeObj = this.types.find(t => t.idTipoActividad == this.selectedType);
                 if (selectedTypeObj) {
@@ -111,19 +111,19 @@ export class ManagementActivitiesComponent implements OnInit {
                 }
             }
 
-            // Filter by Date
+            
             if (this.selectedDate) {
                 const activityDate = new Date(activity.inicio).toDateString();
                 const filterDate = new Date(this.selectedDate).toDateString();
                 matchesDate = activityDate === filterDate;
             }
 
-            // Filter by Entity
+            
             if (this.selectedEntity && this.selectedEntity !== '') {
                 matchesEntity = activity.convoca?.nombre === this.selectedEntity;
             }
 
-            // Filter by Search Term (Name or Description)
+            
             if (this.searchTerm) {
                 const term = this.searchTerm.toLowerCase();
                 matchesSearch = (activity.nombre?.toLowerCase().includes(term) ||
@@ -133,14 +133,14 @@ export class ManagementActivitiesComponent implements OnInit {
             return matchesType && matchesDate && matchesSearch && matchesEntity;
         });
 
-        // Sort by date descending
+        
         this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
     onViewAll() {
         this.isSearchActive = true;
         this.filteredActivities = [...this.allActivities];
-        // Sort by date descending
+        
         this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
@@ -175,7 +175,7 @@ export class ManagementActivitiesComponent implements OnInit {
                 this.activitiesService.delete(this.selectedActivity.idActividad).subscribe({
                     next: () => {
                         console.log('Activity deleted');
-                        // Refresh the list
+                        
                         this.ngOnInit();
                         this.closeActivityModal();
                     },

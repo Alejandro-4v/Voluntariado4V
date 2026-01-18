@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password.html',
-  styleUrls: [] // Usamos estilos globales
+  styleUrls: [] 
 })
 export class ForgotPasswordComponent {
   forgotForm: FormGroup;
@@ -24,10 +24,10 @@ export class ForgotPasswordComponent {
   onSubmit() {
     this.submitted = true;
     if (this.forgotForm.valid) {
-      // Aquí iría la lógica para conectar con tu backend
+      
       console.log('Enviando correo a:', this.forgotForm.value.email);
       
-      // Simulamos éxito para mostrar el mensaje
+      
       this.successMessage = true; 
     }
   }

@@ -13,7 +13,7 @@ import { fadeIn } from '../../animations/animations';
 })
 export class ActivityFormComponent implements OnInit {
     @Input() mode: 'create' | 'edit' = 'create';
-    @Input() initialData: any = null; // Replace 'any' with an interface if available
+    @Input() initialData: any = null; 
     @Input() isLoading: boolean = false;
     @Output() save = new EventEmitter<any>();
 
@@ -28,7 +28,7 @@ export class ActivityFormComponent implements OnInit {
     @Input() entitiesList: any[] = [];
     @Input() gradosList: any[] = [];
 
-    // Removed service injections
+    
 
     constructor(private fb: FormBuilder) {
         this.activityForm = this.fb.group({
@@ -43,7 +43,7 @@ export class ActivityFormComponent implements OnInit {
             endTime: ['', Validators.required],
             location: ['', Validators.required],
             status: ['P', Validators.required],
-            image: [''], // URL input
+            image: [''], 
             ods: [[]],
             types: [[]]
         }, { validators: this.dateRangeValidator });
@@ -67,7 +67,7 @@ export class ActivityFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // Data loading moved to parent component
+        
 
         if (this.initialData) {
             const start = this.initialData.inicio ? new Date(this.initialData.inicio) : null;
@@ -75,7 +75,7 @@ export class ActivityFormComponent implements OnInit {
 
             this.activityForm.patchValue({
                 ...this.initialData,
-                entity: this.initialData.convoca?.idEntidad || this.initialData.entity, // Handle object or string
+                entity: this.initialData.convoca?.idEntidad || this.initialData.entity, 
                 grado: this.initialData.grado?.idGrado || this.initialData.grado,
                 ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
                 types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || [],

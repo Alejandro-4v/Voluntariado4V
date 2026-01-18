@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router'; // turbo
+import { Routes } from '@angular/router'; 
 import { ManagementLayoutComponent } from '../../layout/management-layout/management-layout.component';
 import { ManagementHomeComponent } from './management-home/management-home.component';
 import { ManagementActivitiesComponent } from './activities/activities.component';

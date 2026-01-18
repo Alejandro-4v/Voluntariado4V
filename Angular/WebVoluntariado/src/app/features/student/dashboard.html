@@ -1,14 +1,14 @@
-<!-- Main content -->
+
 <main class="dashboard-content bg-light py-5">
   <div class="container-lg">
 
-    <!-- Loading Spinner -->
+    
     @if (isLoading) {
     <app-loading-spinner [text]="'Cargando panel de estudiante...'"></app-loading-spinner>
     } @else {
     <div @fadeIn>
 
-      <!-- Header -->
+      
       <div class="mb-5" @slideUp>
         <h1 class="display-5 fw-bold mb-2 text-dark">
           Hola, {{ currentUser?.name || 'Estudiante' }}
@@ -18,7 +18,7 @@
         </p>
       </div>
 
-      <!-- My Upcoming Activities -->
+      
       <section class="mb-5" @slideUp>
         <div class="d-flex align-items-center justify-content-between mb-4">
           <h2 class="fs-4 fw-bold text-dark m-0">
@@ -50,7 +50,7 @@
 
       <hr class="my-5 text-muted opacity-25">
 
-      <!-- Discovery Section Header -->
+      
       <div class="mb-4" @slideUp>
         <h2 class="fs-4 fw-bold text-dark">
           Descubre Nuevas Oportunidades
@@ -58,7 +58,7 @@
         <p class="text-muted">Todas las actividades disponibles para ti</p>
       </div>
 
-      <!-- All Available Activities -->
+      
       <section class="mb-5" @slideUp>
         @if (allAvailableActivities.length > 0) {
         <app-carrousel [items]="allAvailableActivities" (cardClick)="openActivityModal($event)">
@@ -78,7 +78,7 @@
         }
       </section>
 
-      <!-- Other Entities -->
+      
       <section class="mb-5" @slideUp>
         <h3 class="fs-5 fw-bold mb-3 text-secondary">
           Otras entidades que te pueden interesar
@@ -97,7 +97,7 @@
   </div>
 </main>
 
-<!-- Activity Modal -->
+
 <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" (close)="closeActivityModal()"
   (action)="onActivityAction()" [isLoading]="isEnrolling" [mode]="modalMode">
 </app-activity-modal>

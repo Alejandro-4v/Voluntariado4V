@@ -66,24 +66,24 @@ export class NewActivityComponent {
 
     onPreview(activityData: any): void {
         const activity = this.mapToActivity(activityData, 'P');
-        // Enrich with entity name for preview
+        
         const entity = this.entitiesList.find(e => e.idEntidad === activity.convoca.idEntidad);
         if (entity) {
             activity.convoca.nombre = entity.nombre;
-            activity.convoca.contactMail = entity.contactMail; // Also add contact mail for preview
+            activity.convoca.contactMail = entity.contactMail; 
         }
-        // Enrich with grado description
+        
         const grado = this.gradosList.find(g => g.idGrado === activity.grado.idGrado);
         if (grado) {
             activity.grado.descripcion = grado.descripcion;
             activity.grado.nivel = grado.nivel;
         }
-        // Enrich types
+        
         activity.tiposActividad = activity.tiposActividad.map((t: any) => {
             const type = this.typesList.find(tl => tl.idTipoActividad === t.idTipoActividad);
             return type ? type : t;
         });
-        // Enrich ODS
+        
         activity.ods = activity.ods.map((o: any) => {
             const ods = this.odsList.find(ol => ol.idOds === o.idOds);
             return ods ? ods : o;
@@ -101,23 +101,23 @@ export class NewActivityComponent {
     private mapToActivity(formData: any, status: string): any {
         console.log('Mapping formData to Activity:', formData);
 
-        // Combine date and time
+        
         const inicio = formData.date && formData.startTime ? `${formData.date}T${formData.startTime}:00` : null;
         const fin = formData.endDate && formData.endTime ? `${formData.endDate}T${formData.endTime}:00` : null;
 
         return {
             nombre: formData.name,
             descripcion: formData.description,
-            estado: formData.status || status, // Use form status if available, else default
+            estado: formData.status || status, 
             inicio: inicio,
             fin: fin,
-            imagenUrl: formData.image || 'https://via.placeholder.com/300', // Default image if none
+            imagenUrl: formData.image || 'https://via.placeholder.com/300', 
             convoca: { idEntidad: Number(formData.entity) },
             plazas: Number(formData.slots),
             grado: { idGrado: Number(formData.grado) },
             tiposActividad: formData.types.map((id: any) => ({ idTipoActividad: Number(id) })),
             ods: formData.ods.map((id: any) => ({ idOds: Number(id) })),
-            lugar: formData.location || 'Ubicación pendiente', // Fallback to prevent null error
+            lugar: formData.location || 'Ubicación pendiente', 
             voluntarios: []
         };
     }

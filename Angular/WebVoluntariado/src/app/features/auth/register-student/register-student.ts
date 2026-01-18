@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router'; // Importar Router
+import { RouterLink, Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-register-student',
@@ -12,7 +12,7 @@ import { RouterLink, Router } from '@angular/router'; // Importar Router
 })
 export class RegisterStudentComponent {
   private fb = inject(FormBuilder);
-  private router = inject(Router); // Inyectar Router
+  private router = inject(Router); 
 
   studentForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -22,7 +22,7 @@ export class RegisterStudentComponent {
   onSubmit() {
     if (this.studentForm.valid) {
       console.log('Registro Alumno:', this.studentForm.value);
-      // REDIRECCIÓN A LA PANTALLA DE ÉXITO
+      
       this.router.navigate(['/auth/solicitud-enviada']);
     } else {
       this.studentForm.markAllAsTouched();

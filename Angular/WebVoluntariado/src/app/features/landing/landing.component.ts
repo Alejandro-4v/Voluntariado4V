@@ -44,7 +44,7 @@ export class LandingComponent implements OnInit {
 
     ngOnInit() {
         this.activitiesService.getAll().subscribe(data => {
-            // Show active activities, limit to 6 for example
+            
             this.recentActivities = data.filter(a => a.estado === 'A').slice(0, 6);
         });
     }

@@ -21,10 +21,6 @@ export class TipoActividadService {
         return this.http.get<TipoActividad>(`${this.apiUrl}/${id}`);
     }
 
-    // getInUse endpoint does not exist in API
-    // getInUse(): Observable<TipoActividad[]> {
-    //     return this.http.get<TipoActividad[]>(`${this.apiUrl}EnUso`);
-    // }
 
     create(tipoActividad: TipoActividad): Observable<TipoActividad> {
         return this.http.post<TipoActividad>(this.apiUrl, tipoActividad);

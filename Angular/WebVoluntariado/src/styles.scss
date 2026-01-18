@@ -1,13 +1,13 @@
-/* 1. Bootstrap */
+
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
-/* 2. Fuentes y Variables */
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
   --cv-blue: #003399;
-  /* Azul Corporativo */
+  
   --cv-blue-hover: #002266;
   --cv-text-muted: #6c757d;
 }
@@ -20,22 +20,20 @@ html {
   background-color: var(--cv-blue);
 }
 
-/* 3. CLASE PRINCIPAL: LA TARJETA BLANCA (Auth Card) */
-/* Si esto falta, se ve transparente como en tu imagen */
 .auth-card {
   background: white;
   border-radius: 20px;
-  /* Bordes redondeados */
+  
   padding: 2.5rem;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  /* Sombra elegante */
+  
   border: none;
   width: 100%;
   position: relative;
   z-index: 10;
 }
 
-/* 4. Inputs redondeados */
+
 .form-control {
   border-radius: 10px;
   padding: 12px 15px;
@@ -76,7 +74,7 @@ html {
   border-radius: 8px;
 }
 
-/* 6. Enlaces */
+
 a {
   color: var(--cv-blue);
   cursor: pointer;
@@ -86,9 +84,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== DASHBOARD STYLES ===== */
 
-/* Card circular buttons */
 .btn-outline-secondary.rounded-circle {
   width: 2.5rem;
   height: 2.5rem;
@@ -109,19 +105,19 @@ a:hover {
   }
 }
 
-/* Responsive gap utility */
+
 .gap-3 {
   gap: 1rem !important;
 }
 
-/* Smooth overflow scroll */
+
 .overflow-x-auto {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 
-  /* Carousel scrollbar styling */
+  
   &::-webkit-scrollbar {
     height: 4px;
   }
@@ -140,7 +136,7 @@ a:hover {
   }
 }
 
-/* Dashboard wrapper and content */
+
 .dashboard-wrapper {
   display: flex;
   flex-direction: column;
@@ -154,7 +150,7 @@ a:hover {
   padding-bottom: 3rem;
 }
 
-/* Card animations */
+
 @keyframes gradient-float {
 
   0%,
@@ -169,7 +165,7 @@ a:hover {
   }
 }
 
-/* Cards specific styles */
+
 .card-activity,
 .card-proposal,
 .card-entity {
@@ -203,7 +199,7 @@ a:hover {
   }
 }
 
-/* Navbar custom styles */
+
 .navbar {
   border-bottom: 1px solid #e9ecef;
 
@@ -216,19 +212,19 @@ a:hover {
 
 .carousel-width {
   width: 80%;
-  /* ancho fijo */
+  
 }
 
 .card-width {
   width: calc((100% - 2 * 0.5rem) / 3);
-  /* 3 cards con gap = 0.5rem (8px) */
+  
 }
 
 .hand-btn {
   width: 48px;
   height: 48px;
   padding: 0;
-  margin-top: -24px; // lo sube sobre la imagen
+  margin-top: -24px; 
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
   z-index: 2;
 }
@@ -238,14 +234,14 @@ app-past-activities .carrousel-track {
   white-space: nowrap;
 }
 
-/* Responsive Utilities */
+
 @media (min-width: 768px) {
   .w-md-auto {
     width: auto !important;
   }
 }
 
-/* Display Contents Utility */
+
 .d-contents {
   display: contents;
 }

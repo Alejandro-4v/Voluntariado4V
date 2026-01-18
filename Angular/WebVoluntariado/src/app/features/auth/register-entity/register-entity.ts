@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router'; // Importar Router
+import { RouterLink, Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-register-entity',
@@ -12,7 +12,7 @@ import { RouterLink, Router } from '@angular/router'; // Importar Router
 })
 export class RegisterEntityComponent {
   private fb = inject(FormBuilder);
-  private router = inject(Router); // Inyectar Router
+  private router = inject(Router); 
 
   entityForm = this.fb.group({
     orgName: ['', [Validators.required, Validators.minLength(3)]],
@@ -23,7 +23,7 @@ export class RegisterEntityComponent {
   onSubmit() {
     if (this.entityForm.valid) {
       console.log('REGISTRO ENTIDAD ENVIADO:', this.entityForm.value);
-      // REDIRECCIÓN
+      
       this.router.navigate(['/auth/solicitud-enviada']);
     } else {
       this.entityForm.markAllAsTouched();

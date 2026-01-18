@@ -33,14 +33,14 @@ export class ManagementVolunteersComponent implements OnInit {
     private excelService = inject(ExcelService);
     private tipoActividadService = inject(TipoActividadService);
 
-    // Configuration for Generic List
+    
     listColumns: ColumnConfig[] = [
         { header: 'Nombre Completo', field: 'nombreCompleto', className: 'col-3' },
         { header: 'Email', field: 'mail', className: 'col-5' },
         { header: 'Estado', field: 'estadoLabel', className: 'col-2' }
     ];
 
-    // Configuration for Generic Detail
+    
     detailConfig: DetailConfig = {
         imageField: 'perfilUrl',
         titleField: 'nombre',
@@ -83,7 +83,7 @@ export class ManagementVolunteersComponent implements OnInit {
     activeFilters: { [key: string]: any } = {};
 
     ngOnInit() {
-        this.updateFilterSections(); // Initialize filters immediately
+        this.updateFilterSections(); 
         this.isLoading = true;
 
         this.volunteersService.getAll().subscribe({
@@ -93,7 +93,7 @@ export class ManagementVolunteersComponent implements OnInit {
                 console.log('First volunteer grado:', data[0]?.grado);
                 console.log('First volunteer tiposActividad:', data[0]?.tiposActividad);
 
-                // Add computed fields for display
+                
                 this.volunteers = data.map(v => ({
                     ...v,
                     nombreCompleto: `${v.nombre} ${v.apellido1}${v.apellido2 ? ' ' + v.apellido2 : ''}`,
@@ -148,7 +148,7 @@ export class ManagementVolunteersComponent implements OnInit {
             }
         ];
 
-        // Initialize defaults if not set
+        
         if (!this.activeFilters['status']) this.activeFilters['status'] = 'all';
         if (!this.activeFilters['interests']) this.activeFilters['interests'] = [];
         if (!this.activeFilters['availability']) this.activeFilters['availability'] = [];
@@ -176,19 +176,19 @@ export class ManagementVolunteersComponent implements OnInit {
     applyFilters() {
         let temp = [...this.volunteers];
 
-        // Filter by Status
+        
         const status = this.activeFilters['status'];
         if (status && status !== 'all') {
             temp = temp.filter(v => v.estado?.toLowerCase() === status);
         }
 
-        // Filter by Interest
+        
         const interests = this.activeFilters['interests'];
         if (interests && interests.length > 0) {
             temp = temp.filter(v => v.tiposActividad?.some(t => t.idTipoActividad !== undefined && interests.includes(t.idTipoActividad)));
         }
 
-        // Filter by Availability
+        
         const days = this.activeFilters['availability'];
         if (days && days.length > 0) {
             temp = temp.filter(v => v.disponibilidades?.some(d => {
@@ -198,7 +198,7 @@ export class ManagementVolunteersComponent implements OnInit {
         }
 
         temp.sort((a, b) => {
-            // 1. Primary Sort: Grouping
+            
             if (this.groupBy === 'grado.descripcion') {
                 const groupA = a.grado?.descripcion || '';
                 const groupB = b.grado?.descripcion || '';
@@ -206,7 +206,7 @@ export class ManagementVolunteersComponent implements OnInit {
                 if (groupCompare !== 0) return groupCompare;
             }
 
-            // 2. Secondary Sort: Sorting
+            
             if (this.sortBy === 'nombre') {
                 return a.nombre.localeCompare(b.nombre);
             } else if (this.sortBy === 'apellido1') {

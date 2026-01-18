@@ -28,28 +28,21 @@ export class PastActivitiesComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    // if (!this.currentUser) {
-    //   this.router.navigate(['/auth/iniciar-sesion']);
-    //   return;
-    // }
 
     this.activitiesService.getAll().subscribe(activities => {
       const now = new Date();
 
-      // Filter activities where user participated (by NIF) and are past (end date < now)
+      
       const userActivities = activities.filter(a => {
         const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
         const isPast = new Date(a.fin) < now;
         return isParticipant && isPast;
       });
 
-      // Sort by date descending
+      
       this.allActivities = userActivities
         .sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
 
-      // Unrated activities (assuming logic for rating exists, for now just showing all as unrated or based on some other field if available)
-      // Since API doesn't have 'rating' field in Actividad, we can't filter by it yet.
-      // We'll just leave it empty or show all for now.
       this.unratedActivities = [];
     });
   }

@@ -17,8 +17,8 @@
 .sticky-sidebar {
     position: sticky;
     top: 2rem;
-    /* Adjust based on navbar height if needed */
+    
     height: fit-content;
     z-index: 100;
-    /* Ensure it stays above other content if necessary */
+    
 }

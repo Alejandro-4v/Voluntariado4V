@@ -12,7 +12,7 @@ $text-blue: #1e3a8a;
 
     &.navbar-mode-white {
         background-color: white !important;
-        border-bottom: 1px solid #f8f9fa; // border-light
+        border-bottom: 1px solid #f8f9fa; 
 
         .nav-link-custom {
             color: $text-blue;
@@ -53,8 +53,8 @@ $text-blue: #1e3a8a;
         }
 
         .btn-custom {
-            background-color: white; // White button on blue bg
-            color: $primary-blue; // Blue text
+            background-color: white; 
+            color: $primary-blue; 
 
             &:hover {
                 background-color: #f0f0f0;
@@ -90,7 +90,7 @@ $text-blue: #1e3a8a;
             background-color: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 
-            // Force dark text on mobile white background
+            
             .nav-link-custom {
                 color: $text-blue !important;
                 padding: 0.5rem 0;
@@ -104,7 +104,7 @@ $text-blue: #1e3a8a;
                 }
             }
 
-            // Adjust button styles for mobile
+            
             .btn-custom {
                 width: 100%;
                 margin-top: 0.5rem;
@@ -113,7 +113,7 @@ $text-blue: #1e3a8a;
                 text-align: center;
             }
 
-            // Adjust logout button
+            
             .logout-btn {
                 color: $text-blue !important;
                 width: 100%;
@@ -131,7 +131,7 @@ $text-blue: #1e3a8a;
 
     .ms-auto {
         flex-direction: column;
-        align-items: stretch !important; // Stretch items to full width
+        align-items: stretch !important; 
         gap: 0.5rem !important;
     }
 }

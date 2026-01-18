@@ -10,10 +10,10 @@ export interface DetailField {
 export interface DetailConfig {
     imageField: string;
     titleField: string;
-    subtitles: DetailField[]; // Use for rows (label above, value below) or key-value pairs
+    subtitles: DetailField[]; 
     listField?: string;
     listLabel?: string;
-    listDisplayField?: string; // Field to display for list items (e.g., 'descripcion')
+    listDisplayField?: string; 
 }
 
 @Component({

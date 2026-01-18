@@ -10,21 +10,21 @@
       </svg>
     </button>
 
-    <!-- Left side - Image -->
+    
     <div class="modal-image">
       <div class="image-container" [style.background]="(activity.imagenUrl || activity.image)
             ? 'url(' + (activity.imagenUrl || activity.image) + ') center/cover'
             : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'"></div>
     </div>
 
-    <!-- Right side - Content -->
+    
     <div class="modal-info">
       <h2 class="modal-title">{{ activity.nombre || activity.name }}</h2>
       <p class="modal-subtitle">Organizado por {{ activity.convoca?.nombre || activity.entity || 'Entidad Colaboradora'
         }}</p>
 
       <div class="info-grid">
-        <!-- Date -->
+        
         <div class="info-item">
           <span class="info-label">Fecha Inicio</span>
           <div class="info-value">
@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <!-- Location -->
+        
         <div class="info-item">
           <span class="info-label">Lugar</span>
           <div class="info-value">
@@ -52,7 +52,7 @@
           </div>
         </div>
 
-        <!-- Slots -->
+        
         <div class="info-item">
           <span class="info-label">Plazas Disponibles</span>
           <div class="info-value">
@@ -65,7 +65,7 @@
           </div>
         </div>
 
-        <!-- Status -->
+        
         <div class="info-item">
           <span class="info-label">Estado</span>
           <div>
@@ -81,13 +81,13 @@
         </div>
       </div>
 
-      <!-- Description -->
+      
       <div class="description-box">
         <span class="info-label d-block mb-2">Acerca de la actividad</span>
         <p>{{ activity.descripcion || activity.description || 'Sin descripción disponible' }}</p>
       </div>
 
-      <!-- Categories / Tags -->
+      
       @if (activity.tiposActividad?.length || activity.ods?.length) {
       <div class="tags-container">
         @for (tipo of activity.tiposActividad; track tipo) {
@@ -99,7 +99,7 @@
       </div>
       }
 
-      <!-- Action Buttons -->
+      
       @if (mode === 'student') {
       <div class="modal-buttons">
         <button type="button" class="btn-action w-100" (click)="onAction()" [disabled]="isLoading">

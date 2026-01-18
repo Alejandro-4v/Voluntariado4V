@@ -14,13 +14,13 @@ export class ActivityModalComponent {
   @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
   @Input() isLoading = false;
 
-  // New input for mode
+  
   @Input() mode: 'student' | 'management' | 'preview' | 'readonly' = 'student';
 
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();
 
-  // New outputs for management
+  
   @Output() edit = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();
 

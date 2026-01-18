@@ -15,9 +15,9 @@ export interface Actividad {
     tiposActividad: TipoActividad[];
     ods: Ods[];
     voluntarios: VoluntarioActividad[];
-    // Future fields
+    
     lugar: string;
-    // Future fields or UI specific
+    
     plazas?: number;
     valoracion?: number;
 }

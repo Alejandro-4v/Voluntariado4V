@@ -26,5 +26,5 @@ export interface ActividadEntidad {
     grado: Grado;
     tiposActividad: TipoActividad[];
     ods: Ods[];
-    // voluntarios: VoluntarioActividad[]; // Avoiding deep nesting for now unless needed
+    
 }

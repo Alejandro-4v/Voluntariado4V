@@ -21,7 +21,7 @@ export class LoginComponent {
   isLoading = false;
   errorMessage: string | null = null;
 
-  // Formulario con validaciones
+  
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -35,14 +35,14 @@ export class LoginComponent {
       this.isLoading = true;
       const { email, password, userType } = this.loginForm.value;
 
-      // Cast userType to the specific union type expected by login
+      
       const type = (userType as 'voluntario' | 'entidad' | 'administrador') || 'voluntario';
 
       this.authService.login(email || '', password || '', type).subscribe({
         next: (response) => {
           if (response.success) {
             console.log('✓ Login exitoso:', response.user);
-            // Redirigir al dashboard según el rol
+            
             if (response.user?.role === 'admin') {
               this.router.navigate(['/management/panel']);
             } else if (response.user?.role === 'entity') {

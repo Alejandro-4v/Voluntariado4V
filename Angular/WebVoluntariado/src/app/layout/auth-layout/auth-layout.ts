@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators';
 export class AuthLayoutComponent implements OnInit {
   private router = inject(Router);
   
-  // Inicializamos con valores por defecto para evitar errores
+  
   layoutData: any = {
     title: 'Cargando...', 
     text1: '',
@@ -22,10 +22,10 @@ export class AuthLayoutComponent implements OnInit {
   };
 
   ngOnInit() {
-    // 1. Carga inmediata al iniciar el componente
+    
     this.updateDataFromRoute();
 
-    // 2. Suscripción a cambios de navegación (para cuando cambias entre login y registro)
+    
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -34,17 +34,17 @@ export class AuthLayoutComponent implements OnInit {
   }
 
   private updateDataFromRoute() {
-    // Truco: Usar routerState.root busca desde la raíz global, no desde este componente
+    
     let currentRoute = this.router.routerState.root;
     
-    // Bajamos hasta encontrar la última ruta hija activa (Login, Register, etc.)
+    
     while (currentRoute.firstChild) {
       currentRoute = currentRoute.firstChild;
     }
 
-    // Si encontramos datos en esa ruta, actualizamos la variable
+    
     if (currentRoute.snapshot.data && Object.keys(currentRoute.snapshot.data).length > 0) {
-      console.log('Datos encontrados:', currentRoute.snapshot.data); // Mira la consola del navegador (F12)
+      console.log('Datos encontrados:', currentRoute.snapshot.data); 
       this.layoutData = currentRoute.snapshot.data;
     }
   }

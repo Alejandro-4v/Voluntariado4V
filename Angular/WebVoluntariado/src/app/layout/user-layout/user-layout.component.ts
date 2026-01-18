@@ -32,7 +32,7 @@ export class UserLayoutComponent implements OnInit {
     ];
 
     ngOnInit() {
-        // Static options
+        
     }
 
     handleLogout() {

@@ -8,7 +8,7 @@
   flex: 1;
 }
 
-// Modal Styles
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -19,7 +19,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; // Higher than navbar usually
+  z-index: 1050; 
   backdrop-filter: blur(2px);
   animation: fadeIn 0.2s ease-out;
 }
@@ -54,7 +54,7 @@
   }
 }
 
-// Responsive adjustments
+
 @media (max-width: 768px) {
   .dashboard-content {
     padding: 1.5rem 0 !important;

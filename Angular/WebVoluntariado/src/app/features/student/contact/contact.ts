@@ -24,7 +24,7 @@ export class ContactComponent implements OnInit {
   private entitiesService = inject(EntitiesService);
 
   currentUser: User | null = null;
-  allActivities: any[] = []; // Past activities
+  allActivities: any[] = []; 
   upcomingActivities: any[] = [];
   entities: any[] = [];
   selectedActivity: any = null;
@@ -34,19 +34,19 @@ export class ContactComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    // if (!this.currentUser) {
-    //   this.router.navigate(['/auth/iniciar-sesion']);
-    //   return;
-    // }
+    
+    
+    
+    
 
     this.isLoading = true;
 
-    // Fetch all activities
+    
     this.activitiesService.getAll().subscribe({
       next: (activities) => {
         const now = new Date();
 
-        // Past activities for the current user
+        
         this.allActivities = activities.filter(a => {
           const isPast = new Date(a.fin) < now;
           const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
@@ -54,9 +54,9 @@ export class ContactComponent implements OnInit {
         }).sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
 
 
-        // Upcoming activities (Available for everyone)
+        
         this.upcomingActivities = activities.filter(a => {
-          return new Date(a.inicio) >= now && a.estado === 'A'; // 'A' for Active/Approved
+          return new Date(a.inicio) >= now && a.estado === 'A'; 
         }).sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
         this.checkLoading();
@@ -67,7 +67,7 @@ export class ContactComponent implements OnInit {
       }
     });
 
-    // Fetch entities
+    
     this.entitiesService.getAll().subscribe({
       next: (entities) => {
         this.entities = entities;

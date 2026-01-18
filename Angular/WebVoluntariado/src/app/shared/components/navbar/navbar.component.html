@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg py-3"
     [ngClass]="{'navbar-mode-white': mode === 'white', 'navbar-mode-blue': mode === 'blue', 'navbar-light': mode === 'white', 'navbar-dark': mode === 'blue'}">
     <div class="container-fluid px-4 px-lg-5">
-        <!-- Logo -->
+        
         <a class="navbar-brand" routerLink="/">
             <img [src]="currentLogo" alt="Voluntariado4V" height="50">
         </a>
 
-        <!-- Toggler for mobile -->
+        
         <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -15,14 +15,14 @@
                     d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
             </svg>
         </button>
-        <!-- Navbar content -->
+        
         <div class="collapse navbar-collapse" id="navbarContent" [class.bg-white-mobile]="true">
-            <!-- bg-white-mobile forces white bg on mobile collapse for readability regardless of mode, or we can adapt -->
+            
 
             <div class="ms-auto d-flex align-items-center gap-4">
 
                 @for (opt of options; track opt) {
-                    <!-- Link Type -->
+                    
                     @if (opt.type !== 'button') {
                     <a [routerLink]="opt.path" (click)="opt.action ? opt.action() : null"
                         class="text-decoration-none fw-medium small nav-link-custom pointer" [style.cursor]="'pointer'">
@@ -30,7 +30,7 @@
                     </a>
                     }
 
-                    <!-- Button Type -->
+                    
                     @if (opt.type === 'button') {
                     <button (click)="opt.action ? opt.action() : null"
                         [routerLink]="opt.path" class="btn rounded-pill px-4 py-2 fw-bold small btn-custom">
@@ -39,7 +39,7 @@
                     }
                 }
 
-                <!-- Logout -->
+                
                 @if (showLogout) {
                 <button (click)="logout.emit()"
                     class="btn btn-link text-decoration-none fw-medium small d-flex align-items-center gap-2 logout-btn">
