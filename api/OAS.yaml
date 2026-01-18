@@ -21,6 +21,8 @@ tags:
     description: Todo en relación a las ODS que aparecen en las actividades
   - name: Log in
     description: Inicio de sesión de voluntarios, entidades o administradores.
+  - name: Utilidades
+    description: Endpoints de utilidad general
 paths:
   /actividad:
     get:
@@ -970,6 +972,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /upload:
+    post:
+      tags:
+        - Utilidades
+      summary: Sube un archivo al servidor
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: El archivo a subir
+      responses:
+        '200':
+          description: Archivo subido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          description: Error en la subida (archivo no enviado)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
 
@@ -1441,3 +1480,15 @@ components:
           type: string
           description: Detailed explanation of the error
           example: Resource with ID 123 not found
+
+    UploadResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL pública del archivo subido
+          example: http://localhost:80/uploads/file.jpg
+        filename:
+          type: string
+          description: Nombre del archivo en el servidor
+          example: file.jpg
