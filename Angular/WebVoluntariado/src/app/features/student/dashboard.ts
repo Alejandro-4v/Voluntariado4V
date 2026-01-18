@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
   selectedActivity: any = null;
   isModalOpen = false;
   isEnrolling = false;
+  modalMode: 'student' | 'readonly' = 'student';
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -108,8 +109,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  openActivityModal(activity: any) {
+  openActivityModal(activity: any, mode: 'student' | 'readonly' = 'student') {
     this.selectedActivity = activity;
+    this.modalMode = mode;
     this.isModalOpen = true;
   }
 

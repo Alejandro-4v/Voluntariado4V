@@ -125,6 +125,12 @@
       </div>
       }
 
+      @if (mode === 'readonly') {
+      <div class="modal-buttons">
+        <button type="button" class="btn-secondary-custom w-100" (click)="onClose()">Cerrar</button>
+      </div>
+      }
+
     </div>
   </div>
   }

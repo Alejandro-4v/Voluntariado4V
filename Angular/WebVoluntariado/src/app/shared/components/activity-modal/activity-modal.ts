@@ -15,7 +15,7 @@ export class ActivityModalComponent {
   @Input() isLoading = false;
 
   // New input for mode
-  @Input() mode: 'student' | 'management' | 'preview' = 'student';
+  @Input() mode: 'student' | 'management' | 'preview' | 'readonly' = 'student';
 
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();

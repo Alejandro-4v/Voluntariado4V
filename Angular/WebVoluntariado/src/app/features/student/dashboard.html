@@ -30,7 +30,7 @@
         </div>
 
         @if (myUpcomingActivities.length > 0) {
-        <app-carrousel [items]="myUpcomingActivities" (cardClick)="openActivityModal($event)">
+        <app-carrousel [items]="myUpcomingActivities" (cardClick)="openActivityModal($event, 'readonly')">
         </app-carrousel>
         } @else {
         <div class="card border-0 shadow-sm p-5 text-center bg-white rounded-4">
@@ -99,5 +99,5 @@
 
 <!-- Activity Modal -->
 <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" (close)="closeActivityModal()"
-  (action)="onActivityAction()" [isLoading]="isEnrolling">
+  (action)="onActivityAction()" [isLoading]="isEnrolling" [mode]="modalMode">
 </app-activity-modal>
