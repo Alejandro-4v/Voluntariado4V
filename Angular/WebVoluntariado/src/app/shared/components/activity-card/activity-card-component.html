@@ -1,9 +1,8 @@
 <div class="card border-0 shadow-sm card-custom" (click)="onCardClick()">
 	<!-- Image Container -->
 	<div class="image-wrapper">
-		<div class="card-image"
-			[style.background]="image ? 'url(' + image + ') center/' + imageFit + ' no-repeat' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
-		</div>
+		<img [src]="image || 'assets/images/placeholder.svg'" alt="Activity Image" class="card-image-img"
+			onerror="this.src='assets/images/placeholder.svg'">
 
 		<!-- Gradient Overlay -->
 		<div class="image-overlay"></div>

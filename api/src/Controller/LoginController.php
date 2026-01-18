@@ -77,6 +77,7 @@ final class LoginController extends AbstractController
             ]);
         }
 
+        error_log("Invalid credentials");
         return $this->json(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
     }
 }
