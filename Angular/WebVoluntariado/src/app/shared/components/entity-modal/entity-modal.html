@@ -1,0 +1,65 @@
+@if (isOpen) {
+<div class="modal-overlay" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <button class="modal-close" (click)="onClose()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg"
+                viewBox="0 0 16 16">
+                <path
+                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+        </button>
+
+        <!-- Premium Header Area -->
+        <div class="modal-header-banner"></div>
+
+        <div class="entity-profile-container">
+            <div class="entity-logo-wrapper">
+                <img [src]="entity?.perfilUrl || 'https://placehold.co/200x200/png?text=' + (entity?.nombre?.charAt(0) || 'E')"
+                    alt="Logo" class="img-fluid">
+            </div>
+            <div class="entity-info">
+                <h2 class="entity-name">{{ entity?.nombre || 'Entidad' }}</h2>
+                <div class="entity-meta">
+                    <span *ngIf="entity?.cif">CIF: {{ entity?.cif }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+
+            <!-- Contact Info Section -->
+            <h3 class="section-title">Información de Contacto</h3>
+            <div class="contact-card">
+                <div class="contact-item">
+                    <span class="label">Responsable</span>
+                    <span class="value">{{ entity?.nombreResponsable }} {{ entity?.apellidosResponsable }}</span>
+                </div>
+                <div class="contact-item">
+                    <span class="label">Email</span>
+                    <span class="value">
+                        <a [href]="'mailto:' + entity?.contactMail">{{ entity?.contactMail }}</a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Activities Section -->
+            <h3 class="section-title">Oportunidades de Voluntariado</h3>
+
+            @if (activities && activities.length > 0) {
+            <app-carrousel [items]="activities" (cardClick)="onActivityClick($event)">
+            </app-carrousel>
+            } @else {
+            <div class="alert alert-light text-center border-0 shadow-sm py-5 rounded-4">
+                <p class="mb-0 text-muted h6 font-weight-normal">
+                    <i class="bi bi-calendar-x me-2"></i>
+                    Esta entidad no tiene actividades disponibles actualmente.
+                </p>
+            </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+}

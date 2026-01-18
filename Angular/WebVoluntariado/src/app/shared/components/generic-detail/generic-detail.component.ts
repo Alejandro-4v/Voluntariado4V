@@ -10,10 +10,11 @@ export interface DetailField {
 export interface DetailConfig {
     imageField: string;
     titleField: string;
-    subtitles: DetailField[]; 
+    subtitles: DetailField[];
     listField?: string;
     listLabel?: string;
-    listDisplayField?: string; 
+    listDisplayField?: string;
+    emailField?: string;
 }
 
 @Component({
@@ -29,5 +30,19 @@ export class GenericDetailComponent {
 
     getFieldValue(item: any, field: string): any {
         return field.split('.').reduce((obj, key) => obj?.[key], item);
+    }
+
+    onContact() {
+        if (!this.item || !this.config || !this.config.emailField) {
+            console.warn('Cannot send email: configuration or item missing.');
+            return;
+        }
+
+        const email = this.getFieldValue(this.item, this.config.emailField);
+        if (email) {
+            window.location.href = `mailto:${email}`;
+        } else {
+            console.warn('No email found for field:', this.config.emailField);
+        }
     }
 }
