@@ -53,18 +53,31 @@ public class LoginActivity extends AppCompatActivity {
         LogIn loginData = new LogIn(email, password);
 
         // Realizamos la llamada asíncrona
-        ApiClient.getApiService().login(loginData).enqueue(new Callback<Token>() {
+        ApiClient.getApiService().login(loginData, "voluntario").enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Si el login es correcto, recibimos el token
-                    String token = response.body().getToken();
+                    // Si el login es correcto, recibimos el token y el usuario
+                    Token tokenResponse = response.body();
+                    String token = tokenResponse.getToken();
+                    com.example.aplicacionmovilvoluntaridado.models.User user = tokenResponse.getUser();
 
                     // Guardar token en SharedPreferences para futuras peticiones
-                    getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE)
-                            .edit()
-                            .putString("auth_token", token)
-                            .apply();
+                    android.content.SharedPreferences.Editor editor = getSharedPreferences("VoluntariadoPrefs",
+                            MODE_PRIVATE).edit();
+                    editor.putString("auth_token", token);
+
+                    if (user != null) {
+                        editor.putString("user_email", user.getEmail());
+                        editor.putString("user_name", user.getName());
+                        editor.putString("user_role", user.getRole());
+                        if (user.getNif() != null)
+                            editor.putString("user_nif", user.getNif());
+                        if (user.getGradeId() != null)
+                            editor.putInt("user_grade_id", user.getGradeId());
+                    }
+
+                    editor.apply();
 
                     Toast.makeText(LoginActivity.this, "¡Bienvenido/a!", Toast.LENGTH_SHORT).show();
 
