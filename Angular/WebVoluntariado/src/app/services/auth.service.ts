@@ -46,7 +46,15 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Login error', error);
-        return of({ success: false, message: 'Credenciales incorrectas o error de servidor' });
+        // Extract the specific error message from the backend response if available
+        let message = error.error?.error || 'Credenciales incorrectas o error de servidor';
+
+        // Translate common errors to professional Spanish
+        if (message === 'Invalid credentials') {
+          message = 'El correo electrónico o la contraseña son incorrectos.';
+        }
+
+        return of({ success: false, message });
       })
     );
   }

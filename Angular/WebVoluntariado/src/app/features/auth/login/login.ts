@@ -50,6 +50,10 @@ export class LoginComponent {
             } else {
               this.router.navigate(['/student/panel']);
             }
+          } else {
+            console.error('✗ Fallo en login:', response.message);
+            this.isLoading = false;
+            this.errorMessage = response.message || 'Error al iniciar sesión';
           }
         },
         error: (err) => {
