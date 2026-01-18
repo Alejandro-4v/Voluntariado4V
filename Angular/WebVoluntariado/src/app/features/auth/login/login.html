@@ -15,12 +15,7 @@
   </div>
   }
 
-  <!-- Mock credentials info (helpful during development) -->
-  <div class="alert alert-info alert-sm mb-3" role="alert">
-    <small>
-      <strong>Demo:</strong> email: iryna_pavlenko@cuatrovientos.org | password: password123
-    </small>
-  </div>
+
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
@@ -43,7 +38,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Correo electrónico</label>
-      <input type="email" class="form-control" formControlName="email" placeholder="iryna_pavlenko@cuatrovientos.org"
+      <input type="email" class="form-control" formControlName="email" placeholder="nombre@correo.com"
         [class.is-invalid]="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
         [disabled]="isLoading">
 
