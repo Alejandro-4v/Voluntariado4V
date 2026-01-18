@@ -12,6 +12,7 @@ export class ActivityModalComponent {
   @Input() isOpen = false;
   @Input() activity: any = null;
   @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
+  @Input() isLoading = false;
 
   // New input for mode
   @Input() mode: 'student' | 'management' | 'preview' = 'student';

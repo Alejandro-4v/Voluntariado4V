@@ -102,8 +102,8 @@
       <!-- Action Buttons -->
       @if (mode === 'student') {
       <div class="modal-buttons">
-        <button type="button" class="btn-action w-100" (click)="onAction()">
-          {{ getButtonLabel() }}
+        <button type="button" class="btn-action w-100" (click)="onAction()" [disabled]="isLoading">
+          {{ isLoading && buttonType === 'participar' ? 'Inscribiendo...' : getButtonLabel() }}
         </button>
         <button type="button" class="btn-secondary-custom" (click)="onClose()">Cancelar</button>
       </div>

@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit {
   // Modal state
   selectedActivity: any = null;
   isModalOpen = false;
+  isEnrolling = false;
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
@@ -132,17 +133,18 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
+    this.isEnrolling = true;
     this.activitiesService.enrollVolunteer(this.selectedActivity.idActividad, this.currentUser.nif).subscribe({
       next: (updatedActivity) => {
         alert('¡Te has inscrito correctamente en la actividad!');
+        this.isEnrolling = false;
         this.closeActivityModal();
         this.loadData(); // Reload to reflect changes (e.g. remove from list if logic changes, or just refresh)
       },
       error: (err) => {
         console.error('Error enrolling in activity', err);
         alert('Hubo un error al inscribirse. Por favor, inténtalo de nuevo.');
-        this.isLoading = false;
+        this.isEnrolling = false;
       }
     });
   }

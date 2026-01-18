@@ -99,5 +99,5 @@
 
 <!-- Activity Modal -->
 <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" (close)="closeActivityModal()"
-  (action)="onActivityAction()">
+  (action)="onActivityAction()" [isLoading]="isEnrolling">
 </app-activity-modal>
