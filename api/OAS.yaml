@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Volutariado 4V - OpenAPI 1.0
+  title: Voluntariado 4V - OpenAPI 1.0
   contact:
     email: alejandrolopez2048@gmail.com
-  version: beta
+  version: 0.1.0
 servers:
   - url: http://localhost:80
 tags:
@@ -140,6 +140,10 @@ paths:
                 $ref: '#/components/schemas/Actividad'
         '404':
           description: Actividad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - Actividades
@@ -166,6 +170,10 @@ paths:
                 $ref: '#/components/schemas/Actividad'
         '404':
           description: Actividad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Actividades
@@ -178,10 +186,14 @@ paths:
           required: true
           description: ID de la actividad a eliminar
       responses:
-        '204':
+        '200':
           description: Actividad eliminada
         '404':
           description: Actividad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /voluntario:
     get:
@@ -201,6 +213,18 @@ paths:
             type: string
           required: false
           description: Filtro por apellidos del voluntario
+        - in: query
+          name: nif
+          schema:
+            type: string
+          required: false
+          description: Filtro por NIF del voluntario
+        - in: query
+          name: mail
+          schema:
+            type: string
+          required: false
+          description: Filtro por mail del voluntario
         - in: query
           name: grado
           schema:
@@ -222,21 +246,7 @@ paths:
             items:
               type: integer
           required: false
-          description: Filtro por días de disponibilidad (IDs de días)
-        - in: query
-          name: horaInicio
-          schema:
-            type: string
-            format: time
-          required: false
-          description: Filtro por hora de inicio de disponibilidad
-        - in: query
-          name: horaFin
-          schema:
-            type: string
-            format: time
-          required: false
-          description: Filtro por hora de fin de disponibilidad
+          description: Filtro por días de disponibilidad (IDs de días 1-5)
         - in: query
           name: tiposActividad
           style: form
@@ -273,6 +283,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Voluntario'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Voluntario ya existente (NIF o Email)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /voluntario/{nif}:
     get:
@@ -295,6 +317,10 @@ paths:
                 $ref: '#/components/schemas/Voluntario'
         '404':
           description: Voluntario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - Voluntarios
@@ -319,6 +345,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Voluntario'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Voluntario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Email ya en uso por otro voluntario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Voluntarios
@@ -335,6 +379,10 @@ paths:
           description: Voluntario eliminado
         '404':
           description: Voluntario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /entidad:
     get:
@@ -392,6 +440,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entidad'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Entidad ya existente (Cif, Nombre o Email de Login)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /entidad/{id}:
     get:
@@ -414,6 +474,10 @@ paths:
                 $ref: '#/components/schemas/Entidad'
         '404':
           description: Entidad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
     put:
       tags:
@@ -439,6 +503,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entidad'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Entidad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflicto con otra entidad (Cif, Nombre o Email de Login)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Entidad
@@ -455,6 +537,10 @@ paths:
           description: Entidad eliminada
         '404':
           description: Entidad no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /tipoActividad:
     get:
@@ -487,6 +573,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TipoActividad'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Tipo de actividad ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /tipoActividad/{id}:
     get:
@@ -509,6 +607,10 @@ paths:
                 $ref: '#/components/schemas/TipoActividad'
         '404':
           description: Tipo de actividad no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - Tipos de actividad
@@ -533,8 +635,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TipoActividad'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Tipo de actividad no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Tipo de actividad ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Tipos de actividad
@@ -551,6 +669,10 @@ paths:
           description: Tipo de actividad eliminado
         '404':
           description: Tipo de actividad no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /grado:
     get:
@@ -583,6 +705,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Grado'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Grado ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /grado/{id}:
     get:
@@ -605,6 +739,10 @@ paths:
                 $ref: '#/components/schemas/Grado'
         '404':
           description: Grado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - Grado
@@ -629,8 +767,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Grado'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Grado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Grado ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Grado
@@ -647,6 +801,10 @@ paths:
           description: Grado eliminado
         '404':
           description: Grado no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /ods:
     get:
@@ -679,6 +837,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ods'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: ODS ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /ods/{id}:
     get:
@@ -701,6 +871,10 @@ paths:
                 $ref: '#/components/schemas/Ods'
         '404':
           description: ODS no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - ODS
@@ -725,8 +899,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ods'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: ODS no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: ODS ya existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - ODS
@@ -743,6 +933,10 @@ paths:
           description: ODS eliminado
         '404':
           description: ODS no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /login:
     post:
@@ -772,6 +966,10 @@ paths:
                 $ref: '#/components/schemas/Token'
         '401':
           description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
 
@@ -949,12 +1147,12 @@ components:
             $ref: '#/components/schemas/Disponibilidad'
           example:
             - diaSemana:
-                idDia: 1
+                diaSemana: 1
                 descripcion: Lunes
               horaInicio: 1970-01-01T15:30:00
               horaFin: 1970-01-01T17:00:00
             - diaSemana:
-                idDia: 4
+                diaSemana: 4
                 descripcion: Jueves
               horaInicio: 1970-01-01T16:00:00
               horaFin: 1970-01-01T18:00:00
@@ -995,7 +1193,7 @@ components:
           items:
             type: object
             properties:
-              idDia:
+              diaSemana:
                 type: integer
                 example: 1
               horaInicio:
@@ -1060,10 +1258,10 @@ components:
           example: 2026-01-12T21:48:37
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
         actividades:
           type: array
           items:
@@ -1086,16 +1284,16 @@ components:
           example: García Pérez
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         loginMail:
           type: string
-          example: login@amabir.org
+          example: login@amavir.org
         password:
           type: string
           example: password
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
 
     Entidad_Actividad:
       type: object
@@ -1117,10 +1315,10 @@ components:
           example: García Pérez
         contactMail:
           type: string
-          example: contacto@amabir.org
+          example: contacto@amavir.org
         perfilUrl:
           type: string
-          example: https://placehold.co/400/png?text=Amabir
+          example: https://placehold.co/400/png?text=amabir
 
     Ods:
       type: object
@@ -1176,7 +1374,7 @@ components:
         diaSemana:
           type: object
           properties:
-            idDia:
+            diaSemana:
               type: integer
               example: 1
               enum: [1, 2, 3, 4, 5]
@@ -1231,3 +1429,15 @@ components:
         token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Short title of the error
+          example: Not Found
+        details:
+          type: string
+          description: Detailed explanation of the error
+          example: Resource with ID 123 not found

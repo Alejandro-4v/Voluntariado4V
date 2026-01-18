@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Actividad;
 use App\Entity\Entidad;
 use App\Repository\EntidadRepository;
-use App\Repository\ActividadRepository;
 
-use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,17 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 final class EntidadController extends AbstractController
 {
     #[Route('/entidad', name: 'entidad_index', methods: ['GET'])]
     public function index(
         EntidadRepository $entidadRepository,
-        Request           $request
-    ): JsonResponse
-    {
+        Request $request
+    ): JsonResponse {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $filters = $request->query->all();
 
-        /** @var Entidad[] $entidades */
         $entidades = $entidadRepository->findByFilters($filters);
 
         return $this->json(
@@ -39,15 +38,16 @@ final class EntidadController extends AbstractController
     #[Route('/entidad/{id}', name: 'entidad_show', methods: ['GET'])]
     public function show(
         EntidadRepository $entidadRepository,
-        int               $id
-    ): JsonResponse
-    {
-        /** @var Entidad $entidad */
+        int $id
+    ): JsonResponse {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
         $entidad = $entidadRepository->find($id);
 
         if (!$entidad) {
             return $this->json(
-                ['error' => 'Entidad not found'],
+                ['error' => 'Entidad not found', 'details' => "Entidad with id $id not found"],
                 status: Response::HTTP_NOT_FOUND
             );
         }
@@ -60,31 +60,50 @@ final class EntidadController extends AbstractController
 
     #[Route('/entidad', name: 'entidad_create', methods: ['POST'])]
     public function create(
-        Request                     $request,
-        EntidadRepository           $entidadRepository,
-        ActividadRepository         $actividadRepository,
+        Request $request,
+        EntidadRepository $entidadRepository,
         UserPasswordHasherInterface $passwordHasher
-    ): JsonResponse
-    {
-        $data = $request->getContent();
-        $json = json_decode($data, true);
+    ): JsonResponse {
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
+        $json = json_decode($request->getContent(), true);
 
-        /** @var Entidad $entidad */
         $entidad = new Entidad();
 
         if (isset($json['nombre'])) {
-            /** @var string $nombre */
-            $nombre = $json['nombre'];
-            if (empty($nombre)) {
+            if ($entidadRepository->findOneBy(['nombre' => $json['nombre']])) {
                 return $this->json([
-                    'error' => 'Invalid nombre',
-                    'details' => 'Nombre cannot be empty'
-                ], Response::HTTP_BAD_REQUEST);
+                    'error' => 'Entidad already exists',
+                    'details' => "Entidad with nombre {$json['nombre']} already exists"
+                ], Response::HTTP_CONFLICT);
             }
-            $entidad->setNombre($nombre);
+            $entidad->setNombre($json['nombre']);
         } else {
             return $this->json([
                 'error' => 'Missing nombre',
+                'details' => 'The field nombre is required'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (isset($json['cif'])) {
+            if (!preg_match('/^[A-Z][0-9]{7}[A-Z0-9]$/', $json['cif'])) {
+                return $this->json([
+                    'error' => 'Invalid CIF format',
+                    'details' => 'CIF must consist of a letter, followed by 7 digits, and a control character'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            if ($entidadRepository->findOneBy(['cif' => $json['cif']])) {
+                return $this->json([
+                    'error' => 'CIF already exists',
+                    'details' => "Entidad with CIF {$json['cif']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $entidad->setCif($json['cif']);
+        } else {
+            return $this->json([
+                'error' => 'Missing CIF',
+                'details' => 'The field cif is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -93,6 +112,7 @@ final class EntidadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing nombreResponsable',
+                'details' => 'The field nombreResponsable is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -101,54 +121,57 @@ final class EntidadController extends AbstractController
         } else {
             return $this->json([
                 'error' => 'Missing apellidosResponsable',
+                'details' => 'The field apellidosResponsable is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
         if (isset($json['contactMail'])) {
-            /** @var string $contactMail */
-            $contactMail = $json['contactMail'];
-            if (!filter_var($contactMail, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($json['contactMail'], FILTER_VALIDATE_EMAIL)) {
                 return $this->json([
-                    'error' => 'Invalid contactMail format'
+                    'error' => 'Invalid email format',
+                    'details' => 'contactMail must be a valid email address'
                 ], Response::HTTP_BAD_REQUEST);
             }
-            $entidad->setContactMail($contactMail);
+            $entidad->setContactMail($json['contactMail']);
         } else {
             return $this->json([
                 'error' => 'Missing contactMail',
+                'details' => 'The field contactMail is required'
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if (isset($json['cif'])) {
-            $cif = strtoupper(trim($json['cif']));
-
-            if (preg_match('/^(?:[A-Z]\d{8}[A-Z]|[A-Z]\d{8}|\d{8}[A-Z])$/', $cif)) {
-                $entidad->setCif($cif);
-            } else {
-                return $this->json([
-                    'error' => 'Invalid cif format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        } else {
-            $entidad->setCif(null);
-        }
-
         if (isset($json['loginMail'])) {
-            /** @var string $loginMail */
-            $loginMail = $json['loginMail'];
-            if (!empty($loginMail) && !filter_var($loginMail, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($json['loginMail'], FILTER_VALIDATE_EMAIL)) {
                 return $this->json([
-                    'error' => 'Invalid loginMail format'
+                    'error' => 'Invalid email format',
+                    'details' => 'loginMail must be a valid email address'
                 ], Response::HTTP_BAD_REQUEST);
             }
-            $entidad->setLoginMail($loginMail);
+            if ($entidadRepository->findOneBy(['loginMail' => $json['loginMail']])) {
+                return $this->json([
+                    'error' => 'Login email already exists',
+                    'details' => "Entidad with loginMail {$json['loginMail']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $entidad->setLoginMail($json['loginMail']);
         } else {
-            $entidad->setLoginMail(null);
+            return $this->json([
+                'error' => 'Missing loginMail',
+                'details' => 'The field loginMail is required'
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if (isset($json['password'])) {
-            $hashedPassword = $passwordHasher->hashPassword($entidad, $json['password']);
+            $hashedPassword = $passwordHasher->hashPassword(
+                $entidad,
+                $json['password']
+            );
             $entidad->setPasswordHash($hashedPassword);
+        } else {
+            return $this->json([
+                'error' => 'Missing password',
+                'details' => 'The field password is required'
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if (isset($json['perfilUrl'])) {
@@ -157,216 +180,136 @@ final class EntidadController extends AbstractController
             $entidad->setPerfilUrl(null);
         }
 
-        if (isset($json['fechaRegistro'])) {
-            try {
-                /** @var DateTimeImmutable $fechaRegistro */
-                $fechaRegistro = new DateTimeImmutable($json['fechaRegistro']);
-                $entidad->setFechaRegistro($fechaRegistro);
-            } catch (\Exception $e) {
-                return $this->json([
-                    'error' => 'Invalid fechaRegistro datetime format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        if (isset($json['actividades'])) {
-            /** @var ArrayCollection $actividades */
-            $actividades = new ArrayCollection();
-
-            foreach ($json['actividades'] as $idActividad) {
-                /** @var Actividad $actividad */
-                $actividad = $actividadRepository->find($idActividad);
-
-                if (!$actividad) {
-                    return $this->json([
-                        'error' => "Actividad with id {$idActividad} not found",
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-
-                $actividades->add($actividad);
-            }
-
-            $entidad->setActividades($actividades);
-        } else {
-            $entidad->setActividades(new ArrayCollection());
-        }
-
         $entidadRepository->add($entidad);
 
         return $this->json($entidad, context: ['groups' => ['entidad:read']], status: Response::HTTP_CREATED);
     }
 
-    #[Route(path: '/entidad/{id}', name: 'entidad_update', methods: ['PUT'])]
+    #[Route('/entidad/{id}', name: 'entidad_update', methods: ['PUT'])]
     public function update(
-        int                         $id,
-        Request                     $request,
-        EntidadRepository           $entidadRepository,
-        ActividadRepository         $actividadRepository,
+        int $id,
+        Request $request,
+        EntidadRepository $entidadRepository,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
-        $data = $request->getContent();
-        $json = json_decode($data, true);
-
-        /** @var Entidad $entidad */
-        $entidad = $entidadRepository->find($id);
-
-        if (!$entidad) {
-            return $this->json([
-                'error' => 'Entidad not found'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        if (isset($json['nombre'])) {
-            /** @var string $nombre */
-            $nombre = $json['nombre'];
-
-            if (empty($nombre)) {
-                return $this->json([
-                    'error' => 'Invalid nombre',
-                    'details' => 'Nombre cannot be empty'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-
-            if ($nombre != $entidad->getNombre()) {
-                $entidad->setNombre($nombre);
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if (!($user instanceof Entidad) || $user->getIdEntidad() !== $id) {
+                throw $this->createAccessDeniedException('Access denied');
             }
         }
-
-        if (isset($json['cif'])) {
-            $cif = strtoupper(trim($json['cif']));
-
-            if (preg_match('/^(?:[A-Z]\d{8}[A-Z]|[A-Z]\d{8}|\d{8}[A-Z])$/', $cif)) {
-                $entidad->setCif($cif);
-            } else {
-                return $this->json([
-                    'error' => 'Invalid cif format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        if (isset($json['nombreResponsable'])) {
-            /** @var string $nombreResponsable */
-            $nombreResponsable = $json['nombreResponsable'];
-
-            if ($nombreResponsable != $entidad->getNombreResponsable()) {
-                $entidad->setNombreResponsable($nombreResponsable);
-            }
-        }
-
-        if (isset($json['apellidosResponsable'])) {
-            /** @var string $apellidosResponsable */
-            $apellidosResponsable = $json['apellidosResponsable'];
-
-            if ($apellidosResponsable != $entidad->getApellidosResponsable()) {
-                $entidad->setApellidosResponsable($apellidosResponsable);
-            }
-        }
-
-        if (isset($json['fechaRegistro'])) {
-            try {
-                /** @var DateTimeImmutable $fechaRegistro */
-                $fechaRegistro = new DateTimeImmutable($json['fechaRegistro']);
-
-                if ($fechaRegistro != $entidad->getFechaRegistro()) {
-                    $entidad->setFechaRegistro($fechaRegistro);
-                }
-            } catch (\Exception $e) {
-                return $this->json([
-                    'error' => 'Invalid fechaRegistro datetime format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        if (isset($json['contactMail'])) {
-            /** @var string $contactMail */
-            $contactMail = $json['contactMail'];
-
-            if (!filter_var($contactMail, FILTER_VALIDATE_EMAIL)) {
-                return $this->json([
-                    'error' => 'Invalid contactMail format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-
-            if ($contactMail != $entidad->getContactMail()) {
-                $entidad->setContactMail($contactMail);
-            }
-        }
-
-        if (isset($json['loginMail'])) {
-            /** @var ?string $loginMail */
-            $loginMail = $json['loginMail'];
-            $newLoginMail = empty($loginMail) ? null : $loginMail;
-
-            if ($newLoginMail !== null && !filter_var($newLoginMail, FILTER_VALIDATE_EMAIL)) {
-                return $this->json([
-                    'error' => 'Invalid loginMail format'
-                ], Response::HTTP_BAD_REQUEST);
-            }
-
-            if ($newLoginMail != $entidad->getLoginMail()) {
-                $entidad->setLoginMail($newLoginMail);
-            }
-        }
-
-        if (isset($json['password'])) {
-            $hashedPassword = $passwordHasher->hashPassword($entidad, $json['password']);
-            $entidad->setPasswordHash($hashedPassword);
-        }
-
-        if (isset($json['perfilUrl'])) {
-            /** @var ?string $perfilUrl */
-            $perfilUrl = $json['perfilUrl'];
-            $newPerfilUrl = empty($perfilUrl) ? null : $perfilUrl;
-
-            if ($newPerfilUrl != $entidad->getPerfilUrl()) {
-                $entidad->setPerfilUrl($newPerfilUrl);
-            }
-        }
-
-        if (isset($json['actividades'])) {
-            /** @var ArrayCollection $actividades */
-            $actividades = new ArrayCollection();
-
-            foreach ($json['actividades'] as $idActividad) {
-                /** @var Actividad $actividad */
-                $actividad = $actividadRepository->find($idActividad);
-
-                if (!$actividad) {
-                    return $this->json([
-                        'error' => "Actividad with id {$idActividad} not found"
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-
-                $actividades->add($actividad);
-            }
-
-            $entidad->setActividades($actividades);
-        }
-
-        $entidadRepository->update($entidad);
-
-        return $this->json($entidad, context: [
-            'groups' => ['entidad:read']
-        ], status: Response::HTTP_ACCEPTED);
-    }
-
-    #[Route('/entidad/{id}', name: 'entidad_delete', methods: ['DELETE'])]
-    public function delete(
-        int               $id,
-        EntidadRepository $entidadRepository
-    ): JsonResponse
-    {
-        /** @var Entidad $entidad */
+        $json = json_decode($request->getContent(), true);
         $entidad = $entidadRepository->find($id);
 
         if (!$entidad) {
             return $this->json([
                 'error' => 'Entidad not found',
+                'details' => "Entidad with id $id not found"
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        if (isset($json['nombre'])) {
+            $existing = $entidadRepository->findOneBy(['nombre' => $json['nombre']]);
+            if ($existing && $existing->getIdEntidad() !== $id) {
+                return $this->json([
+                    'error' => 'Entidad already exists',
+                    'details' => "Entidad with nombre {$json['nombre']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $entidad->setNombre($json['nombre']);
+        }
+
+        if (isset($json['cif'])) {
+            if (!preg_match('/^[A-Z][0-9]{7}[A-Z0-9]$/', $json['cif'])) {
+                return $this->json([
+                    'error' => 'Invalid CIF format',
+                    'details' => 'CIF must consist of a letter, followed by 7 digits, and a control character'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $existing = $entidadRepository->findOneBy(['cif' => $json['cif']]);
+            if ($existing && $existing->getIdEntidad() !== $id) {
+                return $this->json([
+                    'error' => 'CIF already exists',
+                    'details' => "Entidad with CIF {$json['cif']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $entidad->setCif($json['cif']);
+        }
+
+        if (isset($json['nombreResponsable'])) {
+            $entidad->setNombreResponsable($json['nombreResponsable']);
+        }
+
+        if (isset($json['apellidosResponsable'])) {
+            $entidad->setApellidosResponsable($json['apellidosResponsable']);
+        }
+
+        if (isset($json['contactMail'])) {
+            if (!filter_var($json['contactMail'], FILTER_VALIDATE_EMAIL)) {
+                return $this->json([
+                    'error' => 'Invalid email format',
+                    'details' => 'contactMail must be a valid email address'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $entidad->setContactMail($json['contactMail']);
+        }
+
+        if (isset($json['loginMail'])) {
+            if (!filter_var($json['loginMail'], FILTER_VALIDATE_EMAIL)) {
+                return $this->json([
+                    'error' => 'Invalid email format',
+                    'details' => 'loginMail must be a valid email address'
+                ], Response::HTTP_BAD_REQUEST);
+            }
+            $existing = $entidadRepository->findOneBy(['loginMail' => $json['loginMail']]);
+            if ($existing && $existing->getIdEntidad() !== $id) {
+                return $this->json([
+                    'error' => 'Login email already exists',
+                    'details' => "Entidad with loginMail {$json['loginMail']} already exists"
+                ], Response::HTTP_CONFLICT);
+            }
+            $entidad->setLoginMail($json['loginMail']);
+        }
+
+        if (isset($json['password'])) {
+            $hashedPassword = $passwordHasher->hashPassword(
+                $entidad,
+                $json['password']
+            );
+            $entidad->setPasswordHash($hashedPassword);
+        }
+
+        if (isset($json['perfilUrl'])) {
+            $entidad->setPerfilUrl($json['perfilUrl']);
+        }
+
+        $entidadRepository->update($entidad);
+
+        return $this->json($entidad, context: ['groups' => ['entidad:read']]);
+    }
+
+    #[Route('/entidad/{id}', name: 'entidad_delete', methods: ['DELETE'])]
+    public function delete(
+        int $id,
+        EntidadRepository $entidadRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
+            if (!($user instanceof Entidad) || $user->getIdEntidad() !== $id) {
+                throw $this->createAccessDeniedException('Access denied');
+            }
+        }
+        $entidad = $entidadRepository->find($id);
+
+        if (!$entidad) {
+            return $this->json([
+                'error' => 'Entidad not found',
+                'details' => "Entidad with id $id not found"
             ], Response::HTTP_NOT_FOUND);
         }
 
         $entidadRepository->remove($entidad);
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }

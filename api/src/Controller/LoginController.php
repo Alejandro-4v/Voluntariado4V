@@ -43,13 +43,9 @@ final class LoginController extends AbstractController
         } elseif ($type === 'administrador') {
             $user = $administradorRepository->findOneBy(['loginMail' => $loginMail]);
         } else {
-            $user = $voluntarioRepository->findOneBy(['mail' => $loginMail]);
-            if (!$user) {
-                $user = $entidadRepository->findOneBy(['loginMail' => $loginMail]);
-            }
-            if (!$user) {
-                $user = $administradorRepository->findOneBy(['loginMail' => $loginMail]);
-            }
+            return $this->json([
+                'error' => 'Invalid or missing user type. Available types: voluntario, entidad, administrador'
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         if ($user instanceof UserInterface && $passwordHasher->isPasswordValid($user, $password)) {

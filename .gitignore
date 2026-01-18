@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+# Android
 *.iml
 .gradle
 /local.properties
@@ -14,7 +14,10 @@
 .externalNativeBuild
 .cxx
 local.properties
-=======
+
+# Shell scripts for testing
+*.sh
+
 # IDE
 **/*.code-workspace
 
@@ -27,4 +30,3 @@ local.properties
 
 docker/*
 !docker/images
->>>>>>> main
