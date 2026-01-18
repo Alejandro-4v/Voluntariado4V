@@ -16,16 +16,18 @@ public class ActividadesPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new ProximasActividadesFragment(); // Primera pestaña
+                return new HomeFragment(); // Inicio (Nueva pestaña)
             case 1:
-                return new PasadasActividadesFragment();  // Segunda pestaña
+                return new ProximasActividadesFragment(); // Antes pestaña 0
+            case 2:
+                return new PasadasActividadesFragment(); // Antes pestaña 1
             default:
-                return new ProximasActividadesFragment();
+                return new HomeFragment();
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2; // Tenemos 2 pestañas
+        return 3; // Ahora tenemos 3 pestañas
     }
 }

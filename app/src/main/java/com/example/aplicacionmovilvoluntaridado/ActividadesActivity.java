@@ -28,19 +28,22 @@ public class ActividadesActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
         viewPager = findViewById(R.id.viewPager);
 
-
         ActividadesPagerAdapter pagerAdapter = new ActividadesPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
 
         // [cite: 400] Configurar listener del menú
+        // [cite: 400] Configurar listener del menú
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.nav_proximas) {
+                if (menuItem.getItemId() == R.id.nav_inicio) {
                     viewPager.setCurrentItem(0, true);
                     return true;
-                } else if (menuItem.getItemId() == R.id.nav_pasadas) {
+                } else if (menuItem.getItemId() == R.id.nav_proximas) {
                     viewPager.setCurrentItem(1, true);
+                    return true;
+                } else if (menuItem.getItemId() == R.id.nav_pasadas) {
+                    viewPager.setCurrentItem(2, true);
                     return true;
                 }
                 return false;
@@ -53,9 +56,12 @@ public class ActividadesActivity extends AppCompatActivity {
                 super.onPageSelected(position);
                 switch (position) {
                     case 0:
-                        bottomNavigation.setSelectedItemId(R.id.nav_proximas);
+                        bottomNavigation.setSelectedItemId(R.id.nav_inicio);
                         break;
                     case 1:
+                        bottomNavigation.setSelectedItemId(R.id.nav_proximas);
+                        break;
+                    case 2:
                         bottomNavigation.setSelectedItemId(R.id.nav_pasadas);
                         break;
                 }
@@ -76,7 +82,8 @@ public class ActividadesActivity extends AppCompatActivity {
             }
         });
     }
-    private void ejecutarBusqueda (String newText){
+
+    private void ejecutarBusqueda(String newText) {
         for (androidx.fragment.app.Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof ProximasActividadesFragment) {
                 ((ProximasActividadesFragment) fragment).filtrarLista(newText);
