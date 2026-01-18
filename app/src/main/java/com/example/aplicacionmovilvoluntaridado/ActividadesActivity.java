@@ -2,6 +2,8 @@ package com.example.aplicacionmovilvoluntaridado;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,6 +17,7 @@ public class ActividadesActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     ViewPager2 viewPager;
     androidx.appcompat.widget.SearchView searchView;
+    LinearLayout headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,13 @@ public class ActividadesActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
         viewPager = findViewById(R.id.viewPager);
 
+        headerLayout = findViewById(R.id.headerLayout);
+        headerLayout.setVisibility(View.GONE); // Default to hidden for Home tab
+
         ActividadesPagerAdapter pagerAdapter = new ActividadesPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
 
-        // [cite: 400] Configurar listener del menú
-        // [cite: 400] Configurar listener del menú
+      
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -57,12 +62,15 @@ public class ActividadesActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         bottomNavigation.setSelectedItemId(R.id.nav_inicio);
+                        headerLayout.setVisibility(View.GONE);
                         break;
                     case 1:
                         bottomNavigation.setSelectedItemId(R.id.nav_proximas);
+                        headerLayout.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         bottomNavigation.setSelectedItemId(R.id.nav_pasadas);
+                        headerLayout.setVisibility(View.VISIBLE);
                         break;
                 }
             }
