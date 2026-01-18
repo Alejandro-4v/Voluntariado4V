@@ -22,5 +22,5 @@ export const routes: Routes = [
     children: AUTH_ROUTES
   },
   { path: '', loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent) },
-  { path: '**', redirectTo: '' }
+  { path: '**', loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];
