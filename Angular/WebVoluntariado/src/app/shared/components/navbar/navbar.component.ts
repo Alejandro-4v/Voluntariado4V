@@ -18,7 +18,7 @@ export class NavbarComponent {
     @Output() logout = new EventEmitter<void>();
 
     get logoSrc(): string {
-        return this.mode === 'white' ? 'assets/logo-white.svg' : 'assets/logo-white.svg'; 
+        return this.mode === 'white' ? 'assets/logo-white.svg' : 'assets/logo-white.svg';
     }
 
 
@@ -26,8 +26,9 @@ export class NavbarComponent {
 
     get computedLogoSrc(): string {
         if (this.mode === 'white') {
-            return 'assets/logo-white.svg'; 
+            return 'assets/logo-white.svg';
         } else {
+            return 'assets/logo-blue.svg';
         }
     }
 
@@ -37,7 +38,7 @@ export class NavbarComponent {
         if (this.mode === 'white') {
             return 'assets/logo-white.svg';
         }
-        return 'assets/logo-white.svg'; 
+        return 'assets/logo-white.svg';
     }
 
 

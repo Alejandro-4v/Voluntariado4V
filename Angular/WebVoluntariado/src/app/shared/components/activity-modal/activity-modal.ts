@@ -11,16 +11,16 @@ import { CommonModule } from '@angular/common';
 export class ActivityModalComponent {
   @Input() isOpen = false;
   @Input() activity: any = null;
-  @Input() buttonType: 'participar' | 'valorar' | 'informar' = 'participar';
+  @Input() buttonType: 'participar' | 'valorar' | 'informar' | 'abandonar' = 'participar';
   @Input() isLoading = false;
 
-  
+
   @Input() mode: 'student' | 'management' | 'preview' | 'readonly' = 'student';
 
   @Output() close = new EventEmitter<void>();
   @Output() action = new EventEmitter<void>();
 
-  
+
   @Output() edit = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();
 
@@ -55,6 +55,8 @@ export class ActivityModalComponent {
         return 'Valorar';
       case 'informar':
         return 'Informar de un problema';
+      case 'abandonar':
+        return 'Abandonar Actividad';
       default:
         return 'Participar';
     }
