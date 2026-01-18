@@ -52,9 +52,6 @@ class DiaSemana
         return $this;
     }
 
-    /**
-     * @return Collection<int, Disponibilidad>
-     */
     public function getDisponibilidades(): Collection
     {
         return $this->disponibilidades;

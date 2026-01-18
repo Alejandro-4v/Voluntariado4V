@@ -122,7 +122,6 @@ final class ActividadController extends AbstractController
             }
 
             if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
-                // Ensure Entidad can only create for themselves
                 if ($user instanceof \App\Entity\Entidad && $entidad->getIdEntidad() !== $user->getIdEntidad()) {
                     throw $this->createAccessDeniedException('You can only create activities for yourself');
                 }
@@ -130,7 +129,6 @@ final class ActividadController extends AbstractController
 
             $actividad->setConvoca($entidad);
         } else {
-            // If Entidad is creating, maybe autofill convoca? Default behavior: require it.
             return $this->json([
                 'error' => 'Missing entidad',
                 'details' => 'The field convoca is required'
@@ -302,7 +300,6 @@ final class ActividadController extends AbstractController
         }
 
         if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
-            // Ensure ownership
             if ($user instanceof \App\Entity\Entidad && $actividad->getConvoca()->getIdEntidad() !== $user->getIdEntidad()) {
                 throw $this->createAccessDeniedException('You can only update your own activities');
             }

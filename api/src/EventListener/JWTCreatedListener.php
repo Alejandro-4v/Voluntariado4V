@@ -17,12 +17,11 @@ final class JWTCreatedListener
 
         if ($user instanceof Voluntario) {
             $payload['nif'] = $user->getNif();
-            $payload['roles'] = $user->getRoles(); // Ensure roles are present
+            $payload['roles'] = $user->getRoles(); 
         } elseif ($user instanceof Entidad) {
             $payload['id_entidad'] = $user->getIdEntidad();
             $payload['roles'] = $user->getRoles();
         } else {
-            // Admin or other users
             $payload['roles'] = $user->getRoles();
         }
 

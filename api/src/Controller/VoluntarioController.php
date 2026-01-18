@@ -55,7 +55,6 @@ final class VoluntarioController extends AbstractController
         $user = $this->getUser();
         if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
             if ($user instanceof Voluntario && $user->getNif() === $nif) {
-                // Allow self
             } else {
                 throw $this->createAccessDeniedException('Access denied');
             }
@@ -86,8 +85,6 @@ final class VoluntarioController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
         if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
-            // Assuming create is Admin only based on "Admin ... EVERYTHING", "Voluntario ... only be allowed to..."
-            // If this should be public registration, we would allow it, but logic suggests strict RBAC.
             throw $this->createAccessDeniedException('Access denied');
         }
         $data = json_decode($request->getContent(), true);
@@ -288,11 +285,7 @@ final class VoluntarioController extends AbstractController
             if ($user instanceof Voluntario && $user->getNif() === $nif) {
                 $isSelf = true;
 
-                // Restrict fields for self update
-                // Allowed: disponibilidades, tiposActividad, perfilUrl
-                // Allowed keys: 'disponibilidades', 'tiposActividad', 'perfilUrl'
                 $allowed = ['disponibilidades', 'tiposActividad', 'perfilUrl'];
-                // Filter data
                 $data = array_intersect_key($data, array_flip($allowed));
 
             } else {

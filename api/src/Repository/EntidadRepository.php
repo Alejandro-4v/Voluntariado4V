@@ -37,10 +37,6 @@ class EntidadRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /**
-     * @param array $filters
-     * @return Entidad[]
-     */
     public function findByFilters(array $filters): array
     {
         $qb = $this->createQueryBuilder('e');

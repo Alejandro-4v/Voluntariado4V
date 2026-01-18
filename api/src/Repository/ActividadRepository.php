@@ -39,10 +39,6 @@ class ActividadRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /**
-     * @return Actividad[] Returns an array of Actividad objects
-     * @throws Exception
-     */
     public function findByFilters(array $filters): array
     {
         $qb = $this->createQueryBuilder('a');
@@ -73,7 +69,6 @@ class ActividadRepository extends ServiceEntityRepository
         }
 
         if (isset($filters['fecha'])) {
-            // Cast datetime to date for comparison
             $qb->andWhere('DATE(a.inicio) = :fecha')
                 ->setParameter('fecha', $filters['fecha']);
         }

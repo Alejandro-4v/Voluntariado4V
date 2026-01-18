@@ -5,7 +5,7 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Voluntario;
-use App\Entity\Disponibilidad; // Import the Disponibilidad entity
+use App\Entity\Disponibilidad; 
 
 /**
  * @extends ServiceEntityRepository<Voluntario>

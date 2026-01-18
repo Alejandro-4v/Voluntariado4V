@@ -28,12 +28,6 @@ final class VoluntarioActivityController extends AbstractController
                 return $this->json(['error' => 'You cannot join an activity for another volunteer'], Response::HTTP_FORBIDDEN);
             }
         } else {
-            // If Admin tries to join for someone? The prompt says Voluntario gets himself in.
-            // Implies Admin might not be using this endpoint, or if they do, they might be able to.
-            // But "The voluntario... should only be allowed to get himself into..."
-            // Let's stick to restricting checking NIF matching JWT user if it is a Voluntario.
-            // If Admin, maybe allow? "Admin should be able to do EVERYTHING".
-            // If Admin, let them pass.
             if (!$this->isGranted('ROLE_ADMINISTRADOR')) {
                 return $this->json(['error' => 'Access Denied'], Response::HTTP_FORBIDDEN);
             }
