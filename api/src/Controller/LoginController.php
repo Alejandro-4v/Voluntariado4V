@@ -51,7 +51,7 @@ final class LoginController extends AbstractController
         if ($user instanceof UserInterface && $passwordHasher->isPasswordValid($user, $password)) {
             $userData = [
                 'email' => $loginMail,
-                'role' => match($type) {
+                'role' => match ($type) {
                     'voluntario' => 'volunteer',
                     'entidad' => 'entity',
                     'administrador' => 'admin',

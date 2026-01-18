@@ -252,4 +252,20 @@ class Actividad
         return $this;
     }
 
+    public function addVoluntario(Voluntario $voluntario): self
+    {
+        if (!$this->voluntarios->contains($voluntario)) {
+            $this->voluntarios->add($voluntario);
+        }
+
+        return $this;
+    }
+
+    public function removeVoluntario(Voluntario $voluntario): self
+    {
+        $this->voluntarios->removeElement($voluntario);
+
+        return $this;
+    }
+
 }

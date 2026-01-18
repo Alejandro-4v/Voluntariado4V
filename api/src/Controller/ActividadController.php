@@ -100,6 +100,12 @@ final class ActividadController extends AbstractController
 
         if (isset($json['estado'])) {
             $estado = $json['estado'];
+
+            // If Entity, force 'P' regardless of input
+            if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+                $estado = 'P';
+            }
+
             if (!\in_array($estado, self::ESTADOS_VALIDOS)) {
                 return $this->json([
                     'error' => 'Invalid estado',
@@ -122,17 +128,30 @@ final class ActividadController extends AbstractController
             }
 
             if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
-                if ($user instanceof \App\Entity\Entidad && $entidad->getIdEntidad() !== $user->getIdEntidad()) {
-                    throw $this->createAccessDeniedException('You can only create activities for yourself');
+                // If it's an entity, ignore the passed ID and use their own
+                if ($user instanceof \App\Entity\Entidad) {
+                    $entidad = $user;
                 }
             }
 
             $actividad->setConvoca($entidad);
         } else {
-            return $this->json([
-                'error' => 'Missing entidad',
-                'details' => 'The field convoca is required'
-            ], Response::HTTP_BAD_REQUEST);
+            // Allow missing 'convoca' if user is Entidad
+            if ($this->isGranted('ROLE_ENTIDAD') && !$this->isGranted('ROLE_ADMINISTRADOR')) {
+                if ($user instanceof \App\Entity\Entidad) {
+                    $actividad->setConvoca($user);
+                } else {
+                    return $this->json([
+                        'error' => 'Missing entidad',
+                        'details' => 'The field convoca is required'
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+            } else {
+                return $this->json([
+                    'error' => 'Missing entidad',
+                    'details' => 'The field convoca is required'
+                ], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         if (isset($json['lugar'])) {
