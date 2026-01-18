@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import { ActivitiesService } from '../../../services/activities.service';
 import { VolunteersService } from '../../../services/volunteers.service';
 import { EntitiesService } from '../../../services/entities.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-management-home',
   standalone: true,
@@ -17,6 +18,7 @@ export class ManagementHomeComponent implements OnInit {
   private activitiesService = inject(ActivitiesService);
   private volunteersService = inject(VolunteersService);
   private entitiesService = inject(EntitiesService);
+  private authService = inject(AuthService);
 
   stats = {
     totalVolunteers: 0,
@@ -28,21 +30,34 @@ export class ManagementHomeComponent implements OnInit {
   entitiesGrowth = 0;
   recentActivities: any[] = [];
   isLoading = true;
+  userRole: string = '';
 
   ngOnInit() {
     this.loadDashboardData();
   }
 
   private loadDashboardData() {
+    const currentUser = this.authService.getCurrentUser();
+    this.userRole = currentUser?.role || '';
+    const isEntity = this.userRole === 'entity';
+
     forkJoin({
-      volunteers: this.volunteersService.getAll(),
+      volunteers: isEntity ? of([]) : this.volunteersService.getAll(),
       activities: this.activitiesService.getAll(),
       entities: this.entitiesService.getAll()
     }).subscribe({
       next: (data) => {
         this.stats.totalVolunteers = data.volunteers.length;
 
-        
+
+        if (isEntity) {
+          // Filter activities for the logged-in entity
+          const entityId = currentUser?.id;
+          if (entityId) {
+            data.activities = data.activities.filter((a: any) => a.convoca?.idEntidad === entityId);
+          }
+        }
+
         const activeActivities = data.activities.filter(a => a.estado === 'A');
         const pendingActivities = data.activities.filter(a => a.estado === 'P');
 
@@ -50,7 +65,7 @@ export class ManagementHomeComponent implements OnInit {
         this.stats.pendingApprovals = pendingActivities.length;
         this.stats.totalEntities = data.entities.length;
 
-        
+
         const now = new Date();
         const thisMonth = now.getMonth();
         const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
@@ -73,7 +88,7 @@ export class ManagementHomeComponent implements OnInit {
           this.entitiesGrowth = entitiesThisMonth > 0 ? 100 : 0;
         }
 
-        
+
         const latestActivities = data.activities
           .sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime())
           .slice(0, 3)
@@ -95,7 +110,7 @@ export class ManagementHomeComponent implements OnInit {
             type: 'primary'
           }));
 
-        
+
         this.recentActivities = [...latestActivities, ...latestEntities]
           .sort((a, b) => {
             return 0;
@@ -131,7 +146,7 @@ export class ManagementHomeComponent implements OnInit {
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "reporte_dashboard.csv");
-    document.body.appendChild(link); 
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }

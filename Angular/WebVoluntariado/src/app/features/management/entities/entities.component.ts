@@ -28,14 +28,14 @@ export class ManagementEntitiesComponent implements OnInit {
 
     private entitiesService = inject(EntitiesService);
 
-    
+
     listColumns: ColumnConfig[] = [
         { header: 'Nombre Entidad', field: 'nombre' },
         { header: 'Fecha de Inscripción', field: 'fechaRegistro', pipe: 'date' },
         { header: 'Responsable', field: 'nombreResponsable' }
     ];
 
-    
+
     detailConfig: DetailConfig = {
         imageField: 'perfilUrl',
         titleField: 'nombre',
@@ -46,7 +46,8 @@ export class ManagementEntitiesComponent implements OnInit {
         ],
         listField: 'actividades',
         listLabel: 'Actividades',
-        listDisplayField: 'nombre'
+        listDisplayField: 'nombre',
+        emailField: 'contactMail'
     };
 
     filterSections: FilterSection[] = [
@@ -117,7 +118,7 @@ export class ManagementEntitiesComponent implements OnInit {
     applyFilters() {
         let temp = [...this.entities];
 
-        
+
         const activityStatus = this.activeFilters['activityStatus'];
         if (activityStatus === 'with_activities') {
             temp = temp.filter(e => e.actividades && e.actividades.length > 0);
@@ -126,13 +127,13 @@ export class ManagementEntitiesComponent implements OnInit {
         }
 
         temp.sort((a, b) => {
-            
+
             if (this.groupBy === 'nombreResponsable') {
                 const groupCompare = (a.nombreResponsable || '').localeCompare(b.nombreResponsable || '');
                 if (groupCompare !== 0) return groupCompare;
             }
 
-            
+
             if (this.sortBy === 'nombre') {
                 return a.nombre.localeCompare(b.nombre);
             } else if (this.sortBy === 'fechaRegistro') {

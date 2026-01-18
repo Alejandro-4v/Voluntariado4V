@@ -21,13 +21,19 @@ export class ManagementLayoutComponent {
     private router = inject(Router);
 
     get navbarOptions(): NavbarOption[] {
-        return [
+        const options: NavbarOption[] = [
             { label: 'Dashboard', path: '/management/panel' },
             { label: 'Actividades', path: '/management/actividades' },
             { label: 'Voluntarios', path: '/management/voluntarios' },
             { label: 'Entidades', path: '/management/entidades' },
             { label: 'Nueva actividad', type: 'button', path: '/management/actividades/nueva' }
         ];
+
+        if (this.authService.getCurrentUser()?.role === 'entity') {
+            return options.filter(o => o.label !== 'Voluntarios' && o.label !== 'Entidades');
+        }
+
+        return options;
     }
 
     handleLogout() {
