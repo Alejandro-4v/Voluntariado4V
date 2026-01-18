@@ -13,6 +13,7 @@ export interface User {
   email: string;
   name: string;
   role: 'volunteer' | 'entity' | 'admin';
+  gradeId?: number;
   details?: Voluntario | Entidad; // Store full details
 }
 

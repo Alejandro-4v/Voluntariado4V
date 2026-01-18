@@ -66,6 +66,7 @@ final class LoginController extends AbstractController
             if ($type === 'voluntario') {
                 $userData['nif'] = $user->getNif();
                 $userData['name'] = $user->getNombre() . ' ' . $user->getApellido1();
+                $userData['gradeId'] = $user->getGrado()->getIdGrado();
             } elseif ($type === 'entidad') {
                 $userData['id'] = $user->getIdEntidad();
                 $userData['cif'] = $user->getCif();

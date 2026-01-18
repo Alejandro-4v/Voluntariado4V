@@ -66,8 +66,16 @@ export class DashboardComponent implements OnInit {
 
         // All Available Activities (Discovery)
         // Show all active upcoming activities
+        // All Available Activities (Discovery)
+        // Show all active upcoming activities that match grade and are not enrolled
         this.allAvailableActivities = activities
-          .filter(a => new Date(a.inicio) >= now && a.estado === 'A')
+          .filter(a => {
+            const isFuture = new Date(a.inicio) >= now;
+            const isActive = a.estado === 'A';
+            const isNotEnrolled = !a.voluntarios?.some((v: any) => v.nif === this.currentUser?.nif);
+            const matchesGrade = !a.grado || !this.currentUser?.gradeId || a.grado.idGrado === this.currentUser.gradeId;
+            return isFuture && isActive && isNotEnrolled && matchesGrade;
+          })
           .sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
         this.checkLoadingComplete();
