@@ -53,7 +53,31 @@ final class LoginController extends AbstractController
         }
 
         if ($user instanceof UserInterface && $passwordHasher->isPasswordValid($user, $password)) {
-            return $this->json(['token' => $JWTManager->create($user)]);
+            $userData = [
+                'email' => $loginMail,
+                'role' => match($type) {
+                    'voluntario' => 'volunteer',
+                    'entidad' => 'entity',
+                    'administrador' => 'admin',
+                    default => 'volunteer'
+                }
+            ];
+
+            if ($type === 'voluntario') {
+                $userData['nif'] = $user->getNif();
+                $userData['name'] = $user->getNombre() . ' ' . $user->getApellido1();
+            } elseif ($type === 'entidad') {
+                $userData['id'] = $user->getIdEntidad();
+                $userData['cif'] = $user->getCif();
+                $userData['name'] = $user->getNombre();
+            } elseif ($type === 'administrador') {
+                $userData['name'] = $user->getNombre();
+            }
+
+            return $this->json([
+                'token' => $JWTManager->create($user),
+                'user' => $userData
+            ]);
         }
 
         return $this->json(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);

@@ -44,9 +44,9 @@ export class LoginComponent {
             console.log('✓ Login exitoso:', response.user);
             // Redirigir al dashboard según el rol
             if (response.user?.role === 'admin') {
-              this.router.navigate(['/management/dashboard']); // Example route
+              this.router.navigate(['/management/panel']);
             } else if (response.user?.role === 'entity') {
-              this.router.navigate(['/management/dashboard']); // Example route
+              this.router.navigate(['/management/panel']);
             } else {
               this.router.navigate(['/student/panel']);
             }

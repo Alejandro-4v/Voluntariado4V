@@ -33,77 +33,15 @@ export class AuthService {
    * Login contra la API
    */
   login(email: string, password: string, type: 'voluntario' | 'entidad' | 'administrador' = 'voluntario'): Observable<{ success: boolean; user?: User; message?: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}?usuario=${type}`, { loginMail: email, password }).pipe(
-      tap(response => {
-        if (response.token) {
+    return this.http.post<{ token: string; user: User }>(`${this.apiUrl}?usuario=${type}`, { loginMail: email, password }).pipe(
+      map(response => {
+        if (response.token && response.user) {
           localStorage.setItem('auth_token', response.token);
           this.isAuthenticated$.next(true);
+          this.saveUserSession(response.user);
+          return { success: true, user: response.user };
         }
-      }),
-      switchMap(response => {
-        // Fetch user details based on type
-        let userDetails$: Observable<any>;
-        if (type === 'voluntario') {
-          // Assuming we can search by email or we have to fetch all and filter (inefficient but consistent with previous logic if no specific search endpoint)
-          // Ideally: GET /voluntario?mail=email or GET /voluntario/{nif} if we knew NIF. 
-          // Since we only have email, we might need to fetch all or if there's a filter endpoint.
-          // The controller supports filters: $voluntarios = $voluntarioRepository->findByFilters($filters);
-          // So we can try: GET /voluntario?mail=email
-          userDetails$ = this.http.get<Voluntario[]>(`${API_URL}/voluntario?mail=${email}`).pipe(
-            map(volunteers => volunteers[0])
-          );
-        } else if (type === 'entidad') {
-          // EntidadController also supports filters.
-          // GET /entidad?loginMail=email (or contactMail?)
-          // Let's try loginMail first as it's the credential.
-          userDetails$ = this.http.get<Entidad[]>(`${API_URL}/entidad?loginMail=${email}`).pipe(
-            map(entities => entities[0])
-          );
-        } else {
-          // AdministradorController: GET /administrador/{loginMail}
-          userDetails$ = this.http.get<any>(`${API_URL}/administrador/${email}`);
-        }
-
-        return userDetails$.pipe(
-          map(details => {
-            if (!details) {
-              throw new Error('Usuario no encontrado tras login exitoso');
-            }
-
-            let user: User;
-            if (type === 'voluntario') {
-              const v = details as Voluntario;
-              user = {
-                nif: v.nif,
-                email: v.mail,
-                name: v.nombre + ' ' + v.apellido1,
-                role: 'volunteer',
-                details: v
-              };
-            } else if (type === 'entidad') {
-              const e = details as Entidad;
-              user = {
-                id: e.idEntidad,
-                cif: e.cif,
-                email: e.loginMail || e.contactMail,
-                name: e.nombre,
-                role: 'entity',
-                details: e
-              };
-            } else {
-              const a = details; // Admin
-              user = {
-                email: a.loginMail,
-                name: a.nombre,
-                role: 'admin',
-                details: a
-              };
-            }
-
-            this.saveUserSession(user);
-            return { success: true, user };
-          })
-        );
+        return { success: false, message: 'Respuesta inválida del servidor' };
       }),
       catchError(error => {
         console.error('Login error', error);
