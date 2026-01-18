@@ -1,6 +1,6 @@
 <div class="container-fluid min-vh-100 d-flex flex-column align-items-center py-5 page-container">
 
-    
+
     <div class="card p-4 p-md-5 m-3 m-md-4 shadow-lg rounded-4 activity-card w-100" style="max-width: 1000px;">
         <div
             class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-4 gap-3">
@@ -23,6 +23,7 @@
                     }
                 </select>
             </div>
+            @if (userRole !== 'entity') {
             <div class="col-12 col-md-4">
                 <label class="form-label fw-bold">Entidad</label>
                 <select class="form-select form-select-lg bg-light" [(ngModel)]="selectedEntity">
@@ -32,6 +33,7 @@
                     }
                 </select>
             </div>
+            }
             <div class="col-12 col-md-4">
                 <label class="form-label fw-bold">Fecha de Actividad</label>
                 <input type="date" class="form-control form-control-lg bg-light" [(ngModel)]="selectedDate">
@@ -46,7 +48,7 @@
         </div>
     </div>
 
-    
+
     <div class="container-fluid py-4 w-100" style="max-width: 1400px;">
 
         @if (isLoading) {
@@ -54,7 +56,16 @@
         } @else {
         <div @fadeIn>
             @if (!isSearchActive) {
-            
+
+            <!-- VOLUNTEER SPECIFIC SECTION -->
+            @if (userRole === 'volunteer' && joinedActivities.length > 0) {
+            <section class="mb-5" @slideUp>
+                <h2 class="h5 fw-normal text-dark mb-4 ps-2">Mis Actividades</h2>
+                <app-carrousel [items]="joinedActivities" (cardClick)="openActivityModal($event)">
+                </app-carrousel>
+            </section>
+            }
+
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Próximas actividades</h2>
                 @if (upcomingActivities.length > 0) {
@@ -67,7 +78,7 @@
                 }
             </section>
 
-            
+
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pasadas</h2>
                 @if (pastActivities.length > 0) {
@@ -80,7 +91,7 @@
                 }
             </section>
 
-            
+
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Actividades pendiente de aprobación</h2>
                 @if (pendingActivities.length > 0) {
@@ -94,7 +105,7 @@
                 }
             </section>
 
-            
+
             <section class="mb-5" @slideUp>
                 <h2 class="h5 fw-normal text-dark mb-4 ps-2">Propuestas desde Cuatrovientos</h2>
                 @if (proposals.length > 0) {
@@ -107,7 +118,7 @@
                 }
             </section>
             } @else {
-            
+
             <section class="mb-5" @slideUp>
                 <div class="d-flex justify-content-between align-items-center mb-4 ps-2">
                     <h2 class="h5 fw-normal text-dark mb-0">Resultados de búsqueda ({{ filteredActivities.length }})
@@ -136,7 +147,8 @@
     </div>
 
 
-    <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" mode="management"
-        (close)="closeActivityModal()" (edit)="onEditActivity()" (delete)="onDeleteActivity()">
+    <app-activity-modal [isOpen]="isModalOpen" [activity]="selectedActivity" [mode]="modalMode"
+        [buttonType]="modalButtonType" [isLoading]="isLoading" (close)="closeActivityModal()" (edit)="onEditActivity()"
+        (delete)="onDeleteActivity()" (action)="onActivityAction()">
     </app-activity-modal>
 </div>

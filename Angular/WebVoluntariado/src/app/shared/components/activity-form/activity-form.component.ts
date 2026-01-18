@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { fadeIn } from '../../animations/animations';
+import { UploadService } from '../../../services/upload.service';
 
 @Component({
     selector: 'app-activity-form',
@@ -13,7 +14,7 @@ import { fadeIn } from '../../animations/animations';
 })
 export class ActivityFormComponent implements OnInit {
     @Input() mode: 'create' | 'edit' = 'create';
-    @Input() initialData: any = null; 
+    @Input() initialData: any = null;
     @Input() isLoading: boolean = false;
     @Output() save = new EventEmitter<any>();
 
@@ -26,9 +27,17 @@ export class ActivityFormComponent implements OnInit {
     @Input() odsList: any[] = [];
     @Input() typesList: any[] = [];
     @Input() entitiesList: any[] = [];
+
     @Input() gradosList: any[] = [];
 
-    
+    @Input() userRole: string = '';
+    @Input() currentEntityId: any = null;
+
+
+
+    private uploadService = inject(UploadService);
+    isUploading = false;
+    imagePreview: string | null = null;
 
     constructor(private fb: FormBuilder) {
         this.activityForm = this.fb.group({
@@ -43,7 +52,7 @@ export class ActivityFormComponent implements OnInit {
             endTime: ['', Validators.required],
             location: ['', Validators.required],
             status: ['P', Validators.required],
-            image: [''], 
+            image: [''],
             ods: [[]],
             types: [[]]
         }, { validators: this.dateRangeValidator });
@@ -67,7 +76,15 @@ export class ActivityFormComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        
+
+        if (this.userRole === 'entity' && this.currentEntityId) {
+            this.activityForm.patchValue({
+                entity: this.currentEntityId,
+                status: 'P'
+            });
+            this.activityForm.get('entity')?.disable();
+            this.activityForm.get('status')?.disable();
+        }
 
         if (this.initialData) {
             const start = this.initialData.inicio ? new Date(this.initialData.inicio) : null;
@@ -75,7 +92,7 @@ export class ActivityFormComponent implements OnInit {
 
             this.activityForm.patchValue({
                 ...this.initialData,
-                entity: this.initialData.convoca?.idEntidad || this.initialData.entity, 
+                entity: this.initialData.convoca?.idEntidad || this.initialData.entity || (this.userRole === 'entity' ? this.currentEntityId : ''),
                 grado: this.initialData.grado?.idGrado || this.initialData.grado,
                 ods: this.initialData.ods?.map((o: any) => o.idOds) || [],
                 types: this.initialData.tiposActividad?.map((t: any) => t.idTipoActividad) || [],
@@ -86,6 +103,15 @@ export class ActivityFormComponent implements OnInit {
                 endTime: end ? end.toTimeString().slice(0, 5) : '',
                 status: this.initialData.estado || 'P'
             });
+
+            if (this.userRole === 'entity') {
+                this.activityForm.get('entity')?.disable();
+                this.activityForm.get('status')?.disable();
+            }
+        }
+
+        if (this.activityForm.get('image')?.value) {
+            this.imagePreview = this.activityForm.get('image')?.value;
         }
     }
 
@@ -97,7 +123,7 @@ export class ActivityFormComponent implements OnInit {
 
         if (this.activityForm.valid) {
             console.log('Emitting save event');
-            this.save.emit(this.activityForm.value);
+            this.save.emit(this.activityForm.getRawValue());
         } else {
             console.log('Form invalid, marking as touched');
             this.activityForm.markAllAsTouched();
@@ -105,7 +131,7 @@ export class ActivityFormComponent implements OnInit {
     }
 
     onPreview(): void {
-        this.previewAction.emit(this.activityForm.value);
+        this.previewAction.emit(this.activityForm.getRawValue());
     }
 
     get title(): string {
@@ -114,5 +140,37 @@ export class ActivityFormComponent implements OnInit {
 
     get submitButtonLabel(): string {
         return this.mode === 'create' ? 'Crear nueva Actividad' : 'Editar Actividad';
+    }
+
+
+    onFileSelected(event: any) {
+        console.log('onFileSelected triggered', event);
+        let file: File | undefined;
+        if (event.target?.files && event.target.files.length > 0) {
+            file = event.target.files[0]; // From input click
+            console.log('File selected from input:', file?.name);
+        } else if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+            file = event.dataTransfer.files[0]; // From drag & drop
+            console.log('File selected from drag & drop:', file?.name);
+        }
+
+        if (file) {
+            this.isUploading = true;
+            this.uploadService.uploadImage(file).subscribe({
+                next: (response) => {
+                    console.log('Upload success:', response);
+                    this.activityForm.patchValue({ image: response.url });
+                    this.imagePreview = response.url;
+                    this.isUploading = false;
+                },
+                error: (err) => {
+                    console.error('Upload failed - Full Error Object:', err);
+                    alert('Error al subir la imagen: ' + (err.error?.error || err.message || 'Unknown error'));
+                    this.isUploading = false;
+                }
+            });
+        } else {
+            console.warn('No file found in event');
+        }
     }
 }

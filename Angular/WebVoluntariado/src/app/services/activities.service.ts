@@ -34,16 +34,11 @@ export class ActivitiesService {
         return this.http.delete(`${this.apiUrl}/${id}`);
     }
 
-    enrollVolunteer(activityId: number, volunteerNif: string): Observable<Actividad> {
-        return this.getById(activityId).pipe(
-            switchMap(activity => {
-                const currentNifs = activity.voluntarios ? activity.voluntarios.map(v => v.nif) : [];
-                if (currentNifs.includes(volunteerNif)) {
-                    return of(activity);
-                }
-                const newNifs = [...currentNifs, volunteerNif];
-                return this.http.put<Actividad>(`${this.apiUrl}/${activityId}`, { voluntarios: newNifs });
-            })
-        );
+    joinActivity(idActividad: number, nif: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${idActividad}/join/${nif}`, {});
+    }
+
+    leaveActivity(idActividad: number, nif: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${idActividad}/leave/${nif}`);
     }
 }

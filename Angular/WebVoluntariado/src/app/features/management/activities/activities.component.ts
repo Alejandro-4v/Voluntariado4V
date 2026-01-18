@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ActivitiesService } from '../../../services/activities.service';
 import { TipoActividadService } from '../../../services/tipo-actividad.service';
 import { EntitiesService } from '../../../services/entities.service';
+import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/app-carrousel';
@@ -25,6 +26,7 @@ export class ManagementActivitiesComponent implements OnInit {
     pastActivities: any[] = [];
     pendingActivities: any[] = [];
     proposals: any[] = [];
+    joinedActivities: any[] = [];
 
     selectedActivity: any = null;
     isModalOpen = false;
@@ -33,6 +35,7 @@ export class ManagementActivitiesComponent implements OnInit {
     private activitiesService = inject(ActivitiesService);
     private tipoActividadService = inject(TipoActividadService);
     private entitiesService = inject(EntitiesService);
+    private authService = inject(AuthService);
     private router = inject(Router);
 
     allActivities: any[] = [];
@@ -41,7 +44,9 @@ export class ManagementActivitiesComponent implements OnInit {
     entities: any[] = [];
     isSearchActive = false;
 
-    
+    currentUser: any = null;
+    userRole: string = '';
+
     searchTerm: string = '';
     selectedType: string = '';
     selectedDate: string = '';
@@ -49,34 +54,12 @@ export class ManagementActivitiesComponent implements OnInit {
 
     ngOnInit() {
         this.isLoading = true;
-        this.activitiesService.getAll().subscribe({
-            next: (data) => {
-                this.allActivities = data;
-                const now = new Date();
+        this.currentUser = this.authService.getCurrentUser();
+        this.userRole = this.currentUser?.role || '';
 
-                
-                this.upcomingActivities = data.filter(a => new Date(a.inicio) > now);
+        // this.currentUser = this.currentUser?.details; // Removed incorrect flattening
 
-                this.pastActivities = data.filter(a => {
-                    const endDate = a.fin ? new Date(a.fin) : new Date(a.inicio);
-                    return endDate < now;
-                });
-
-                this.pendingActivities = data.filter(a => a.estado === 'P');
-
-                
-                this.proposals = data.filter(a =>
-                    a.convoca?.nombre?.toLowerCase().includes('cuatrovientos') ||
-                    a.convoca?.nombre?.toLowerCase().includes('4v')
-                );
-
-                this.isLoading = false;
-            },
-            error: (err) => {
-                console.error('Error loading activities', err);
-                this.isLoading = false;
-            }
-        });
+        this.loadActivities();
 
         this.tipoActividadService.getAll().subscribe(data => {
             this.types = data;
@@ -87,8 +70,50 @@ export class ManagementActivitiesComponent implements OnInit {
         });
     }
 
+    loadActivities() {
+        this.activitiesService.getAll().subscribe({
+            next: (data) => {
+                if (this.userRole === 'entity') {
+                    // Filter activities for the logged-in entity
+                    // The backend returns a flat user object where 'id' is the entity ID
+                    const entityId = this.currentUser?.id;
+                    if (entityId) {
+                        data = data.filter((a: any) => a.convoca?.idEntidad === entityId);
+                    }
+                }
+                this.allActivities = data;
+                const now = new Date();
+
+                this.upcomingActivities = data.filter(a => new Date(a.inicio) > now);
+
+                this.pastActivities = data.filter(a => {
+                    const endDate = a.fin ? new Date(a.fin) : new Date(a.inicio);
+                    return endDate < now;
+                });
+
+                this.pendingActivities = data.filter(a => a.estado === 'P');
+
+                this.proposals = data.filter(a =>
+                    a.convoca?.nombre?.toLowerCase().includes('cuatrovientos') ||
+                    a.convoca?.nombre?.toLowerCase().includes('4v')
+                );
+
+                if (this.userRole === 'volunteer' && this.currentUser?.nif) {
+                    this.joinedActivities = data.filter(a =>
+                        a.voluntarios?.some((v: any) => v.nif === this.currentUser.nif)
+                    );
+                }
+
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading activities', err);
+                this.isLoading = false;
+            }
+        });
+    }
+
     onSearch() {
-        
         if (!this.selectedType && !this.selectedDate && !this.searchTerm && !this.selectedEntity) {
             this.isSearchActive = false;
             return;
@@ -101,7 +126,6 @@ export class ManagementActivitiesComponent implements OnInit {
             let matchesSearch = true;
             let matchesEntity = true;
 
-            
             if (this.selectedType && this.selectedType !== '') {
                 const selectedTypeObj = this.types.find(t => t.idTipoActividad == this.selectedType);
                 if (selectedTypeObj) {
@@ -111,19 +135,16 @@ export class ManagementActivitiesComponent implements OnInit {
                 }
             }
 
-            
             if (this.selectedDate) {
                 const activityDate = new Date(activity.inicio).toDateString();
                 const filterDate = new Date(this.selectedDate).toDateString();
                 matchesDate = activityDate === filterDate;
             }
 
-            
             if (this.selectedEntity && this.selectedEntity !== '') {
                 matchesEntity = activity.convoca?.nombre === this.selectedEntity;
             }
 
-            
             if (this.searchTerm) {
                 const term = this.searchTerm.toLowerCase();
                 matchesSearch = (activity.nombre?.toLowerCase().includes(term) ||
@@ -133,14 +154,12 @@ export class ManagementActivitiesComponent implements OnInit {
             return matchesType && matchesDate && matchesSearch && matchesEntity;
         });
 
-        
         this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
     onViewAll() {
         this.isSearchActive = true;
         this.filteredActivities = [...this.allActivities];
-        
         this.filteredActivities.sort((a, b) => new Date(b.inicio).getTime() - new Date(a.inicio).getTime());
     }
 
@@ -162,6 +181,56 @@ export class ManagementActivitiesComponent implements OnInit {
         this.selectedActivity = null;
     }
 
+    get modalMode(): 'student' | 'management' | 'preview' | 'readonly' {
+        if (this.userRole === 'volunteer') return 'student';
+        return 'management';
+    }
+
+    get modalButtonType(): 'participar' | 'valorar' | 'informar' | 'abandonar' {
+        if (this.userRole === 'volunteer' && this.selectedActivity && this.currentUser?.nif) {
+            const isJoined = this.selectedActivity.voluntarios?.some((v: any) => v.nif === this.currentUser.nif);
+            if (isJoined) return 'abandonar';
+        }
+        return 'participar';
+    }
+
+    onActivityAction() {
+        if (this.userRole === 'volunteer' && this.selectedActivity && this.currentUser?.nif) {
+            const isJoined = this.selectedActivity.voluntarios?.some((v: any) => v.nif === this.currentUser.nif);
+
+            this.isLoading = true;
+
+            if (isJoined) {
+                this.activitiesService.leaveActivity(this.selectedActivity.idActividad, this.currentUser.nif).subscribe({
+                    next: () => {
+                        this.loadActivities(); // Refresh to update lists
+                        this.closeActivityModal();
+                        alert('Has abandonado la actividad correctamente.');
+                    },
+                    error: (err) => {
+                        console.error('Error leaving activity', err);
+                        this.isLoading = false;
+                        alert('Error al abandonar la actividad.');
+                    }
+                });
+            } else {
+                this.activitiesService.joinActivity(this.selectedActivity.idActividad, this.currentUser.nif).subscribe({
+                    next: () => {
+                        this.loadActivities(); // Refresh to update lists
+                        this.closeActivityModal();
+                        alert('Te has inscrito correctamente.');
+                    },
+                    error: (err) => {
+                        console.error('Error joining activity', err);
+                        this.isLoading = false;
+                        const msg = err.error?.error || 'Error al inscribirse en la actividad.';
+                        alert(msg);
+                    }
+                });
+            }
+        }
+    }
+
     onEditActivity() {
         if (this.selectedActivity && this.selectedActivity.idActividad) {
             this.router.navigate(['/management/actividades/editar', this.selectedActivity.idActividad]);
@@ -175,9 +244,9 @@ export class ManagementActivitiesComponent implements OnInit {
                 this.activitiesService.delete(this.selectedActivity.idActividad).subscribe({
                     next: () => {
                         console.log('Activity deleted');
-                        
-                        this.ngOnInit();
+                        this.loadActivities();
                         this.closeActivityModal();
+                        alert('Actividad eliminada correctamente.');
                     },
                     error: (err) => {
                         console.error('Error deleting activity', err);

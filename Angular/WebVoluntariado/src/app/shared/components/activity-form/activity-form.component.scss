@@ -39,13 +39,22 @@
     border: 2px dashed #dee2e6;
     background-color: #f8f9fa;
     cursor: pointer;
-    height: 80px;
+    min-height: 200px; /* Increased height */
     transition: all 0.2s ease;
+    border-radius: 1rem !important; /* Matches card */
 
     &:hover {
         background-color: #e9ecef;
         border-color: #0d3c83;
     }
+    
+    &.bg-light {
+        background-color: #e9ecef !important;
+    }
+}
+
+.border-dashed {
+    border-style: dashed !important;
 }
 
 .cursor-pointer {

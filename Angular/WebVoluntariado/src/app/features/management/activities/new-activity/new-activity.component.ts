@@ -8,6 +8,8 @@ import { OdsService } from '../../../../services/ods.service';
 import { TipoActividadService } from '../../../../services/tipo-actividad.service';
 import { EntitiesService } from '../../../../services/entities.service';
 import { GradoService } from '../../../../services/grado.service';
+import { AuthService } from '../../../../services/auth.service';
+import { Entidad } from '../../../../models/entidad.model';
 
 @Component({
     selector: 'app-new-activity',
@@ -24,6 +26,10 @@ export class NewActivityComponent {
     private tipoActividadService = inject(TipoActividadService);
     private entitiesService = inject(EntitiesService);
     private gradoService = inject(GradoService);
+    private authService = inject(AuthService);
+
+    userRole: string = '';
+    currentEntityId: any = null;
 
     odsList: any[] = [];
     typesList: any[] = [];
@@ -34,6 +40,12 @@ export class NewActivityComponent {
     previewActivity: any = null;
 
     ngOnInit(): void {
+        const currentUser = this.authService.getCurrentUser();
+        this.userRole = currentUser?.role || '';
+        if (this.userRole === 'entity') {
+            this.currentEntityId = currentUser?.id;
+        }
+
         this.odsService.getAll().subscribe(data => this.odsList = data);
         this.tipoActividadService.getAll().subscribe(data => this.typesList = data);
         this.entitiesService.getAll().subscribe(data => this.entitiesList = data);
@@ -66,24 +78,24 @@ export class NewActivityComponent {
 
     onPreview(activityData: any): void {
         const activity = this.mapToActivity(activityData, 'P');
-        
+
         const entity = this.entitiesList.find(e => e.idEntidad === activity.convoca.idEntidad);
         if (entity) {
             activity.convoca.nombre = entity.nombre;
-            activity.convoca.contactMail = entity.contactMail; 
+            activity.convoca.contactMail = entity.contactMail;
         }
-        
+
         const grado = this.gradosList.find(g => g.idGrado === activity.grado.idGrado);
         if (grado) {
             activity.grado.descripcion = grado.descripcion;
             activity.grado.nivel = grado.nivel;
         }
-        
+
         activity.tiposActividad = activity.tiposActividad.map((t: any) => {
             const type = this.typesList.find(tl => tl.idTipoActividad === t.idTipoActividad);
             return type ? type : t;
         });
-        
+
         activity.ods = activity.ods.map((o: any) => {
             const ods = this.odsList.find(ol => ol.idOds === o.idOds);
             return ods ? ods : o;
@@ -101,23 +113,23 @@ export class NewActivityComponent {
     private mapToActivity(formData: any, status: string): any {
         console.log('Mapping formData to Activity:', formData);
 
-        
+
         const inicio = formData.date && formData.startTime ? `${formData.date}T${formData.startTime}:00` : null;
         const fin = formData.endDate && formData.endTime ? `${formData.endDate}T${formData.endTime}:00` : null;
 
         return {
             nombre: formData.name,
             descripcion: formData.description,
-            estado: formData.status || status, 
+            estado: formData.status || status,
             inicio: inicio,
             fin: fin,
-            imagenUrl: formData.image || 'https://via.placeholder.com/300', 
+            imagenUrl: formData.image || 'https://via.placeholder.com/300',
             convoca: { idEntidad: Number(formData.entity) },
             plazas: Number(formData.slots),
             grado: { idGrado: Number(formData.grado) },
             tiposActividad: formData.types.map((id: any) => ({ idTipoActividad: Number(id) })),
             ods: formData.ods.map((id: any) => ({ idOds: Number(id) })),
-            lugar: formData.location || 'Ubicación pendiente', 
+            lugar: formData.location || 'Ubicación pendiente',
             voluntarios: []
         };
     }
