@@ -3,12 +3,17 @@ package com.example.aplicacionmovilvoluntaridado.models;
 import com.google.gson.annotations.SerializedName;
 
 public class EntidadActividad {
+    @SerializedName("id_entidad")
     private int idEntidad;
     private String cif;
     private String nombre;
+    @SerializedName("nombre_responsable")
     private String nombreResponsable;
+    @SerializedName("apellidos_responsable")
     private String apellidosResponsable;
+    @SerializedName("contact_mail")
     private String contactMail;
+    @SerializedName("perfil_url")
     private String perfilUrl;
 
     // Getters and Setters

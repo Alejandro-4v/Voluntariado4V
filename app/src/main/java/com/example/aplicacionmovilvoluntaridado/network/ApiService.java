@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @POST("login")
-    Call<Token> login(@Body LogIn login);
+    Call<Token> login(@Body LogIn login, @Query("usuario") String usuario);
 
     @GET("actividad")
     Call<List<Actividad>> getActividades(

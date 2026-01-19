@@ -50,7 +50,7 @@ public class PasadasActividadesFragment extends Fragment {
 
     private void cargarDatos() {
         progressBar.setVisibility(View.VISIBLE); // Show
-        ApiClient.getApiService().getActividades(50, null, null, null, null, null)
+        ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)
                 .enqueue(new Callback<List<Actividad>>() {
                     @Override
                     public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
