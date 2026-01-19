@@ -1,4 +1,4 @@
-.PHONY: up down restart build shell start stop install clean load-mock-data
+.PHONY: up down restart build shell start stop install clean load-mock-data load-db init
 
 BLUE := \033[0;34m
 RED := \033[0;31m
@@ -51,7 +51,18 @@ clean: down
 	docker compose down -v --rmi local
 	@echo "$(GREEN)Docker resources cleaned"
 
-load-mock-data:
-	@echo "$(BLUE)Loading mock data$(RESET)"
-	docker exec -it php php bin/console app:load-mock-data
-	@echo "$(GREEN)Mock data loaded$(RESET)"
+generate-keys:
+	@echo "$(BLUE)Generating JWT keys$(RESET)"
+	docker exec php mkdir -p config/jwt
+	docker exec php openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:2e414ac83c14890447ec817d3b8f067f0f4d0082b9947534e27c875c0d37cacd
+	docker exec php openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:2e414ac83c14890447ec817d3b8f067f0f4d0082b9947534e27c875c0d37cacd
+	@echo "$(GREEN)Keys generated$(RESET)"
+
+load-db:
+	@echo "$(BLUE)Loading database scripts$(RESET)"
+	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API < db_scripts/init.sql
+	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API < db_scripts/mock_populate.sql
+	@echo "$(GREEN)Database scripts loaded$(RESET)"
+
+init: install generate-keys load-db
+	@echo "$(GREEN)Initialization complete$(RESET)"
