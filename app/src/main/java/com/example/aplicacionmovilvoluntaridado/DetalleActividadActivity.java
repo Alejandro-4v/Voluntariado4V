@@ -44,12 +44,35 @@ public class DetalleActividadActivity extends AppCompatActivity {
             // Recibir lista de ODS
             ArrayList<Ods> listaOds = (ArrayList<Ods>) extras.getSerializable("listaOds");
 
+            String imagenUrl = extras.getString("imagenUrl");
+
             // 3. Rellenamos los huecos
             tvTitulo.setText(nombre + " - " + entidad);
             tvFecha.setText(fecha);
             tvLugar.setText(lugar);
             tvDescripcion.setText(descripcion);
-            tvPlazas.setText("0 / " + plazas);
+            tvPlazas.setText("0 / " + plazas); // Assuming initial capacity 0 or similar, user can adjust
+
+            // Cargar imagen con Volley
+            if (imagenUrl != null && !imagenUrl.isEmpty()) {
+                android.widget.ImageView ivImagen = findViewById(R.id.ivDetalleImagen);
+                com.android.volley.toolbox.ImageRequest request = new com.android.volley.toolbox.ImageRequest(
+                    imagenUrl,
+                    new com.android.volley.Response.Listener<android.graphics.Bitmap>() {
+                        @Override
+                        public void onResponse(android.graphics.Bitmap bitmap) {
+                            android.util.Log.d("VOLLEY_DEBUG", "Image loaded successfully: " + imagenUrl);
+                            ivImagen.setImageBitmap(bitmap);
+                        }
+                    }, 0, 0, null, // Max width/height
+                    new com.android.volley.Response.ErrorListener() {
+                        public void onErrorResponse(com.android.volley.VolleyError error) {
+                           android.util.Log.e("VOLLEY_DEBUG", "Error loading image: " + imagenUrl + " Error: " + error.getMessage());
+                           error.printStackTrace();
+                        }
+                    });
+                com.android.volley.toolbox.Volley.newRequestQueue(this).add(request);
+            }
 
             // Rellenar ODS chips
             if (listaOds != null) {

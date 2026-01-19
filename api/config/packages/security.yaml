@@ -46,7 +46,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/docs, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: PUBLIC_ACCESS, allow_if: "request.attributes.get('_route') == 'app_catch_all'" }
+        # - { path: ^/, roles: PUBLIC_ACCESS, allow_if: "request.attributes.get('_route') == 'app_catch_all'" }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

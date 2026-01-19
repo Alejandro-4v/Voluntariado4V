@@ -5,15 +5,19 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Actividad implements Serializable {
+    @SerializedName("idActividad")
     private int idActividad;
     private String nombre;
     private String descripcion;
     private String estado;
-    private EntidadActividad convoca;
+    private Entidad convoca;
+    private int plazas; // Added field
     private String inicio; // ISO 8601 string
     private String fin; // ISO 8601 string
+    @SerializedName("imagenUrl")
     private String imagenUrl;
-    private Grado grado;
+    private Object grado; // Generic to handle int ID or potential object
+    @SerializedName("tiposActividad")
     private List<TipoActividad> tiposActividad;
     private List<Ods> ods;
     private List<VoluntarioActividad> voluntarios;
@@ -56,19 +60,23 @@ public class Actividad implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
-    public EntidadActividad getConvoca() {
+    public int getPlazas() {
+        return plazas;
+    }
+
+    public void setPlazas(int plazas) {
+        this.plazas = plazas;
+    }
+
+    public Entidad getConvoca() {
         return convoca;
     }
 
-    public void setConvoca(EntidadActividad convoca) {
+    public void setConvoca(Entidad convoca) {
         this.convoca = convoca;
     }
 
@@ -96,11 +104,11 @@ public class Actividad implements Serializable {
         this.imagenUrl = imagenUrl;
     }
 
-    public Grado getGrado() {
+    public Object getGrado() {
         return grado;
     }
 
-    public void setGrado(Grado grado) {
+    public void setGrado(Object grado) {
         this.grado = grado;
     }
 

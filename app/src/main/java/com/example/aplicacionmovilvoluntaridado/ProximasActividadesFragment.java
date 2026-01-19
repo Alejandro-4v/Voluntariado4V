@@ -57,7 +57,8 @@ public class ProximasActividadesFragment extends Fragment {
                 intent.putExtra("fecha", actividad.getFechaFormatted());
                 intent.putExtra("lugar", actividad.getLugar());
                 intent.putExtra("descripcion", actividad.getDescripcion());
-                intent.putExtra("plazas", 0); // No disponible en API actual
+                intent.putExtra("plazas", actividad.getPlazas());
+                intent.putExtra("imagenUrl", actividad.getImagenUrl());
                 intent.putExtra("listaOds",
                         (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
                 startActivity(intent);
@@ -81,18 +82,24 @@ public class ProximasActividadesFragment extends Fragment {
                         progressBar.setVisibility(View.GONE); // Hide loading
                         if (response.isSuccessful() && response.body() != null) {
                             List<Actividad> todas = response.body();
+                            Toast.makeText(getContext(), "Recibidas: " + todas.size() + " actividades", Toast.LENGTH_SHORT).show();
+
                             List<Actividad> proximas = new ArrayList<>();
 
                             // Filtrar por fecha > hoy
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()); // Matches DB format
                             String ahora = sdf.format(new Date());
 
                             for (Actividad a : todas) {
-                                // Comparación lexicográfica de ISO 8601 funciona
-                                if (a.getInicio() != null && a.getInicio().compareTo(ahora) > 0) {
+                                // Normalize dates for string comparison (replace T with space if needed)
+                                String inicioStr = a.getInicio() != null ? a.getInicio().replace("T", " ") : "";
+                                String ahoraStr = ahora.replace("T", " ");
+                                
+                                if (inicioStr.compareTo(ahoraStr) > 0) {
                                     proximas.add(a);
                                 }
                             }
+                            Toast.makeText(getContext(), "Proximas: " + proximas.size(), Toast.LENGTH_SHORT).show();
                             adapter.setDatos(proximas);
                         } else {
                             // Mostrar código de error para depuración
@@ -104,9 +111,13 @@ public class ProximasActividadesFragment extends Fragment {
                     @Override
                     public void onFailure(Call<List<Actividad>> call, Throwable t) {
                         progressBar.setVisibility(View.GONE); // Hide loading
-                        // Mostrar mensaje de excepción
-                        Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                        t.printStackTrace(); // Para ver en Logcat si es posible
+                        // Mostrar mensaje de excepción DETALLADO
+                        String msg = "Fallo: " + t.getMessage();
+                        if (t instanceof com.google.gson.JsonSyntaxException) {
+                            msg += " (JSON Error)";
+                        }
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                        t.printStackTrace(); 
                     }
                 });
     }

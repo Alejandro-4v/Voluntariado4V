@@ -1,8 +1,12 @@
 package com.example.aplicacionmovilvoluntaridado.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TipoActividad {
+    @SerializedName("id_tipo_actividad")
     private int idTipoActividad;
     private String descripcion;
+    @SerializedName("imagen_url")
     private String imagenUrl;
 
     // Getters and Setters

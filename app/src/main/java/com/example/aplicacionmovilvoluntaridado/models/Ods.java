@@ -1,10 +1,13 @@
 package com.example.aplicacionmovilvoluntaridado.models;
 
 import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 public class Ods implements Serializable {
+    @SerializedName("id_ods")
     private int idOds;
     private String descripcion;
+    @SerializedName("imagen_url")
     private String imagenUrl;
 
     // Getters and Setters
