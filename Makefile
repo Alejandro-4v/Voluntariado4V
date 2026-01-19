@@ -60,8 +60,8 @@ generate-keys:
 
 load-db:
 	@echo "$(BLUE)Loading database scripts$(RESET)"
-	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API < db_scripts/init.sql
-	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API < db_scripts/mock_populate.sql
+	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API --default-character-set=utf8mb4 < db_scripts/init.sql
+	docker compose exec -T -e MYSQL_PWD=root mysql mysql -u root API --default-character-set=utf8mb4 < db_scripts/mock_populate.sql
 	@echo "$(GREEN)Database scripts loaded$(RESET)"
 
 init: install generate-keys load-db
