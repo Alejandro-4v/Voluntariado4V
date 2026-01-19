@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         LogIn loginData = new LogIn(email, password);
 
         // Realizamos la llamada asíncrona
-        ApiClient.getApiService().login(loginData, "voluntario").enqueue(new Callback<Token>() {
+        ApiClient.getApiService(this).login(loginData, "voluntario").enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putInt("user_grade_id", user.getGradeId());
                     }
 
-                    editor.apply();
+                    editor.commit();
 
                     Toast.makeText(LoginActivity.this, "¡Bienvenido/a!", Toast.LENGTH_SHORT).show();
 
