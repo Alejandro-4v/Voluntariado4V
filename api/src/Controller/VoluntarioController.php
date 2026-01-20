@@ -26,8 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class VoluntarioController extends AbstractController
 {
-    private const ESTADOS_VALIDOS = ['A', 'I', 'V'];
-
+    private const ESTADOS_VALIDOS = ['A', 'P', 'R', 'I'];
     #[Route('/voluntario', name: 'voluntario_index', methods: ['GET'])]
     public function index(
         VoluntarioRepository $voluntarioRepository,
