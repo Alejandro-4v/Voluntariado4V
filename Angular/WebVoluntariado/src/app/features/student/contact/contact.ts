@@ -8,6 +8,7 @@ import { AppCarrouselComponent } from '../../../shared/components/app-carrousel/
 import { ActivityModalComponent } from '../../../shared/components/activity-modal/activity-modal';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { fadeIn, slideUp } from '../../../shared/animations/animations';
+import { CONTACT_EMAIL } from '../../../config/api.config';
 
 @Component({
   selector: 'app-contact',
@@ -24,7 +25,7 @@ export class ContactComponent implements OnInit {
   private entitiesService = inject(EntitiesService);
 
   currentUser: User | null = null;
-  allActivities: any[] = []; 
+  allActivities: any[] = [];
   upcomingActivities: any[] = [];
   entities: any[] = [];
   selectedActivity: any = null;
@@ -34,19 +35,19 @@ export class ContactComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    
-    
-    
-    
+
+
+
+
 
     this.isLoading = true;
 
-    
+
     this.activitiesService.getAll().subscribe({
       next: (activities) => {
         const now = new Date();
 
-        
+
         this.allActivities = activities.filter(a => {
           const isPast = new Date(a.fin) < now;
           const isParticipant = a.voluntarios?.some(v => v.nif === this.currentUser?.nif);
@@ -54,9 +55,9 @@ export class ContactComponent implements OnInit {
         }).sort((a, b) => new Date(b.fin).getTime() - new Date(a.fin).getTime());
 
 
-        
+
         this.upcomingActivities = activities.filter(a => {
-          return new Date(a.inicio) >= now && a.estado === 'A'; 
+          return new Date(a.inicio) >= now && a.estado === 'A';
         }).sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
         this.checkLoading();
@@ -67,7 +68,7 @@ export class ContactComponent implements OnInit {
       }
     });
 
-    
+
     this.entitiesService.getAll().subscribe({
       next: (entities) => {
         this.entities = entities;
@@ -99,7 +100,11 @@ export class ContactComponent implements OnInit {
   }
 
   onActivityAction() {
-    console.log('Participar:', this.selectedActivity?.nombre);
+    if (this.selectedActivity) {
+      const subject = `Consulta sobre la actividad: ${this.selectedActivity.nombre}`;
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}&su=${encodeURIComponent(subject)}`;
+      window.open(gmailUrl, '_blank');
+    }
     this.closeActivityModal();
   }
 
