@@ -261,6 +261,17 @@ export class ManagementVolunteersComponent implements OnInit {
         this.router.navigate(['/management/voluntarios/editar', volunteer.nif]);
     }
 
+    onContact(volunteer: Voluntario) {
+        console.log('Contact requested for:', volunteer);
+        if (volunteer.mail) {
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${volunteer.mail}`;
+            window.open(gmailUrl, '_blank');
+        } else {
+            console.warn('Volunteer has no email');
+            alert('Este voluntario no tiene email registrado.');
+        }
+    }
+
     getEstadoLabel(estado: string): string {
         const estadoMap: { [key: string]: string } = {
             'P': 'Pendiente',

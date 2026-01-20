@@ -23,6 +23,7 @@ export class GenericListComponent {
     @Input() showEdit: boolean = false;
     @Output() select = new EventEmitter<any>();
     @Output() edit = new EventEmitter<any>();
+    @Output() contact = new EventEmitter<any>();
 
     onSelect(item: any) {
         this.select.emit(item);
@@ -31,6 +32,11 @@ export class GenericListComponent {
     onEdit(item: any, event: Event) {
         event.stopPropagation();
         this.edit.emit(item);
+    }
+
+    onContact(item: any, event: Event) {
+        event.stopPropagation();
+        this.contact.emit(item);
     }
 
     getFieldValue(item: any, field: string): any {

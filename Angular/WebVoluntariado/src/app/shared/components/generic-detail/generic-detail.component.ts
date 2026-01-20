@@ -29,6 +29,7 @@ export class GenericDetailComponent {
     @Input() config: DetailConfig | null = null;
     @Input() showEdit: boolean = false;
     @Output() edit = new EventEmitter<void>();
+    @Output() contact = new EventEmitter<any>();
 
     onEdit() {
         this.edit.emit();
@@ -39,16 +40,7 @@ export class GenericDetailComponent {
     }
 
     onContact() {
-        if (!this.item || !this.config || !this.config.emailField) {
-            console.warn('Cannot send email: configuration or item missing.');
-            return;
-        }
-
-        const email = this.getFieldValue(this.item, this.config.emailField);
-        if (email) {
-            window.location.href = `mailto:${email}`;
-        } else {
-            console.warn('No email found for field:', this.config.emailField);
-        }
+        if (!this.item) return;
+        this.contact.emit(this.item);
     }
 }

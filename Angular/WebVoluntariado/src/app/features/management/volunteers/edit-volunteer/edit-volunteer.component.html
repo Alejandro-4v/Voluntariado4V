@@ -61,7 +61,7 @@
                                 [class.is-invalid]="isInvalid('grado')">
                             <option value="" disabled>Seleccionar grado</option>
                             @for (g of grados; track g.idGrado) {
-                                <option [value]="g.idGrado">{{ g.descripcion }}</option>
+                                <option [ngValue]="g.idGrado">{{ g.descripcion }}</option>
                             }
                         </select>
                         @if (isInvalid('grado')) {

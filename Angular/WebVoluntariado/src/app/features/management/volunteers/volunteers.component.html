@@ -34,7 +34,7 @@
         <div class="col-lg-7" @slideUp>
             <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
                 [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)"
-                [showEdit]="true" (edit)="onEdit($event)">
+                [showEdit]="true" (edit)="onEdit($event)" (contact)="onContact($event)">
             </app-generic-list>
         </div>
 
@@ -42,7 +42,7 @@
         <div class="col-lg-5 mb-4 sticky-sidebar" @slideUp>
             @if (selectedVolunteer) {
             <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig" [showEdit]="true"
-                (edit)="onEdit(selectedVolunteer!)">
+                (edit)="onEdit(selectedVolunteer!)" (contact)="onContact($event)">
             </app-generic-detail>
             }
         </div>
