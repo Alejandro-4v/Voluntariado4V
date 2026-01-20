@@ -19,6 +19,13 @@
         </div>
     </div>
 
+    @if (successMessage) {
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+            <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Close"></button>
+        </div>
+    }
+
     @if (isLoading) {
     <app-loading-spinner [text]="'Cargando voluntarios...'"></app-loading-spinner>
     } @else {
@@ -26,14 +33,16 @@
         
         <div class="col-lg-7" @slideUp>
             <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
-                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)">
+                [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)"
+                [showEdit]="true" (edit)="onEdit($event)">
             </app-generic-list>
         </div>
 
         
         <div class="col-lg-5 mb-4 sticky-sidebar" @slideUp>
             @if (selectedVolunteer) {
-            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig">
+            <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig" [showEdit]="true"
+                (edit)="onEdit(selectedVolunteer!)">
             </app-generic-detail>
             }
         </div>

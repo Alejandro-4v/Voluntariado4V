@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface DetailField {
@@ -27,6 +27,12 @@ export interface DetailConfig {
 export class GenericDetailComponent {
     @Input() item: any | null = null;
     @Input() config: DetailConfig | null = null;
+    @Input() showEdit: boolean = false;
+    @Output() edit = new EventEmitter<void>();
+
+    onEdit() {
+        this.edit.emit();
+    }
 
     getFieldValue(item: any, field: string): any {
         return field.split('.').reduce((obj, key) => obj?.[key], item);

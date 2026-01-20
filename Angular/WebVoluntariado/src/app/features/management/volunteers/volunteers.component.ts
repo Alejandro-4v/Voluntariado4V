@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { VolunteersService } from '../../../services/volunteers.service';
 import { TipoActividadService } from '../../../services/tipo-actividad.service';
@@ -32,11 +33,14 @@ export class ManagementVolunteersComponent implements OnInit {
     private volunteersService = inject(VolunteersService);
     private excelService = inject(ExcelService);
     private tipoActividadService = inject(TipoActividadService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
 
+    successMessage: string = '';
 
     listColumns: ColumnConfig[] = [
         { header: 'Nombre Completo', field: 'nombreCompleto', className: 'col-3' },
-        { header: 'Email', field: 'mail', className: 'col-5' },
+        { header: 'Email', field: 'mail', className: 'col-4' },
         { header: 'Estado', field: 'estadoLabel', className: 'col-2' }
     ];
 
@@ -86,6 +90,24 @@ export class ManagementVolunteersComponent implements OnInit {
     ngOnInit() {
         this.updateFilterSections();
         this.isLoading = true;
+
+        this.route.queryParams.subscribe((params: any) => {
+            if (params['success'] === 'true') {
+                this.successMessage = 'Usuario editado correctamente';
+                // Remove the query param to prevent showing message on refresh if desired, 
+                // but for now keeping it simple or clearing it after timeout
+                setTimeout(() => {
+                    this.successMessage = '';
+                    // Optionally navigate to replace url
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { success: null },
+                        queryParamsHandling: 'merge',
+                        replaceUrl: true
+                    });
+                }, 3000);
+            }
+        });
 
         this.volunteersService.getAll().subscribe({
             next: (data) => {
@@ -233,6 +255,10 @@ export class ManagementVolunteersComponent implements OnInit {
         }));
 
         this.excelService.exportAsExcelFile(dataToExport, 'voluntarios');
+    }
+
+    onEdit(volunteer: Voluntario) {
+        this.router.navigate(['/management/voluntarios/editar', volunteer.nif]);
     }
 
     getEstadoLabel(estado: string): string {

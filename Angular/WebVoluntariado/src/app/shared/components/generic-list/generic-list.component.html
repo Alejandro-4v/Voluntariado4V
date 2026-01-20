@@ -8,7 +8,7 @@
                 <div [class]="col.className || 'col'" class="text-truncate" [title]="col.header">{{ col.header }}</div>
                 }
                 
-                <div class="col-2 text-end"></div>
+                <div class="col-3 text-end"></div>
             </div>
         </div>
 
@@ -29,7 +29,13 @@
                 </div>
                 }
 
-                <div class="col-2 text-end">
+                <div class="col-3 text-end d-flex gap-2 justify-content-end">
+                    @if (showEdit) {
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                        (click)="onEdit(item, $event)">
+                        Editar
+                    </button>
+                    }
                     <button class="btn btn-sm btn-primary rounded-pill px-3"
                         style="background-color: #0d47a1; border: none;">
                         Contacto
