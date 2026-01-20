@@ -49,6 +49,9 @@ public class PasadasActividadesFragment extends Fragment {
     }
 
     private void cargarDatos() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("VoluntariadoPrefs", android.content.Context.MODE_PRIVATE);
+        String currentNif = prefs.getString("user_nif", null);
+
         progressBar.setVisibility(View.VISIBLE); // Show
         ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)
                 .enqueue(new Callback<List<Actividad>>() {
@@ -63,7 +66,20 @@ public class PasadasActividadesFragment extends Fragment {
                             String ahora = sdf.format(new Date());
 
                             for (Actividad a : todas) {
-                                if (a.getInicio() != null && a.getInicio().compareTo(ahora) <= 0) {
+                                // Filter by date (past) AND user enrollment
+                                boolean isPast = a.getInicio() != null && a.getInicio().compareTo(ahora) <= 0;
+                                boolean isEnrolled = false;
+
+                                if (currentNif != null && a.getVoluntarios() != null) {
+                                    for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad v : a.getVoluntarios()) {
+                                        if (v.getNif() != null && v.getNif().equalsIgnoreCase(currentNif)) {
+                                            isEnrolled = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (isPast && isEnrolled) {
                                     pasadas.add(a);
                                 }
                             }

@@ -74,6 +74,8 @@ public class ProximasActividadesFragment extends Fragment {
     }
 
     private void cargarDatos() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("VoluntariadoPrefs", android.content.Context.MODE_PRIVATE);
+        String currentNif = prefs.getString("user_nif", null);
         progressBar.setVisibility(View.VISIBLE); // Show loading
         ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)
                 .enqueue(new Callback<List<Actividad>>() {
@@ -95,7 +97,19 @@ public class ProximasActividadesFragment extends Fragment {
                                 String inicioStr = a.getInicio() != null ? a.getInicio().replace("T", " ") : "";
                                 String ahoraStr = ahora.replace("T", " ");
                                 
-                                if (inicioStr.compareTo(ahoraStr) > 0) {
+                                boolean isFuture = inicioStr.compareTo(ahoraStr) > 0;
+                                boolean isEnrolled = false;
+
+                                if (currentNif != null && a.getVoluntarios() != null) {
+                                    for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad v : a.getVoluntarios()) {
+                                        if (v.getNif() != null && v.getNif().equalsIgnoreCase(currentNif)) {
+                                            isEnrolled = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (isFuture && !isEnrolled) {
                                     proximas.add(a);
                                 }
                             }

@@ -27,4 +27,6 @@ public interface ApiService {
             @Query("grado") Integer idGrado
     // Add other list filters if needed
     );
+    @GET("voluntario/{nif}")
+    Call<com.example.aplicacionmovilvoluntaridado.models.Voluntario> getVoluntario(@retrofit2.http.Path("nif") String nif);
 }
