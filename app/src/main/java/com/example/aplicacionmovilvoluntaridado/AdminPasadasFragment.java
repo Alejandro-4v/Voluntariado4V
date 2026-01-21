@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
+import com.example.aplicacionmovilvoluntaridado.models.Ods;
 import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ public class AdminPasadasFragment extends Fragment {
             @Override
             public void onItemClick(Actividad actividad, int position) {
                  Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
+                intent.putExtra("actividad_object", actividad); // Pass full object
                 intent.putExtra("nombre", actividad.getNombre());
                 intent.putExtra("entidad", actividad.getEntidadNombre());
                 intent.putExtra("fecha", actividad.getFechaFormatted());
@@ -53,7 +55,7 @@ public class AdminPasadasFragment extends Fragment {
                 intent.putExtra("plazas", actividad.getPlazas());
                  intent.putExtra("imagenUrl", actividad.getImagenUrl());
                 intent.putExtra("listaOds",
-                        (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
+                        (ArrayList<Ods>) actividad.getOds());
                 startActivity(intent);
             }
         });
@@ -63,7 +65,6 @@ public class AdminPasadasFragment extends Fragment {
 
         return view;
     }
-
     private void cargarDatos() {
         progressBar.setVisibility(View.VISIBLE);
         ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)

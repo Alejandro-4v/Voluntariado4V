@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
                  intent.putExtra("plazas", actividad.getPlazas());
                  intent.putExtra("imagenUrl", actividad.getImagenUrl());
                  intent.putExtra("listaOds", (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
+                 intent.putExtra("actividad_object", actividad);
                  startActivity(intent);
             }
         });

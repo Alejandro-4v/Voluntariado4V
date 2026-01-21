@@ -52,6 +52,7 @@ public class ProximasActividadesFragment extends Fragment {
             public void onItemClick(Actividad actividad, int position) {
                 // Lógica de abrir detalle
                 Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
+                intent.putExtra("actividad_object", actividad); // Pass full object
                 intent.putExtra("nombre", actividad.getNombre());
                 intent.putExtra("entidad", actividad.getEntidadNombre());
                 intent.putExtra("fecha", actividad.getFechaFormatted());

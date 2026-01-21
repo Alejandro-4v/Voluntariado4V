@@ -2,7 +2,9 @@ package com.example.aplicacionmovilvoluntaridado.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TipoActividad {
+import java.io.Serializable;
+
+public class TipoActividad implements Serializable {
     @SerializedName("id_tipo_actividad")
     private int idTipoActividad;
     private String descripcion;

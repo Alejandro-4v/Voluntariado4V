@@ -18,6 +18,23 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_dashboard);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        
+        android.widget.ImageButton btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+                // Clear session
+                getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE).edit().clear().apply();
+                com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
+                
+                // Go to login
+                android.content.Intent intent = new android.content.Intent(AdminDashboardActivity.this, LoginActivity.class);
+                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

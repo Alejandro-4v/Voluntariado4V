@@ -6,156 +6,279 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/surfaceColor"
-    android:padding="16dp"
     tools:context=".DetalleActividadActivity">
 
-    <ImageView
-        android:id="@+id/ivDetalleImagen"
-        android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:background="@color/colorSecondary"
-        android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvDetalleTitulo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        tools:text="Nombre Actividad - Entidad"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivDetalleImagen" />
-
-    <LinearLayout
-        android:id="@+id/layoutDatos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDetalleTitulo">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:text="Fecha y hora"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorSecondary"/>
-            <TextView
-                android:id="@+id/tvDetalleFecha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="15/10/2025\n10:00"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:text="Lugar"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorSecondary"/>
-            <TextView
-                android:id="@+id/tvDetalleLugar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Polideportivo\nMunicipal"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:orientation="vertical">
-            <TextView
-                android:text="Plazas"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/textColorSecondary"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-            <TextView
-                android:id="@+id/tvDetallePlazas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="10 / 10"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-        app:layout_constraintTop_toBottomOf="@+id/tvDetalleTitulo">
-
-        <!-- ... existing nested LinearLayouts ... -->
-        
-    </LinearLayout>
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupDetalleOds"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDatos" />
-
-    <TextView
-        android:id="@+id/tvLabelDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Descripción de la actividad"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/textColorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupDetalleOds"/>
-
-    <TextView
-        android:id="@+id/tvDetalleDescripcion"
+    <!-- Scrollable Content Area -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        tools:text="Aquí va la descripción detallada de la actividad..."
-        android:textColor="@color/textColorSecondary"
-        android:textSize="14sp"
-        android:ellipsize="end"
-        android:lineSpacingExtra="4dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btnValorar"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelDesc"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/ivDetalleImagen"
+                android:layout_width="0dp"
+                android:layout_height="220dp"
+                android:background="@color/colorSecondary"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDetalleTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                tools:text="Nombre Actividad - Entidad"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivDetalleImagen" />
+
+            <LinearLayout
+                android:id="@+id/layoutDatos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDetalleTitulo">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text="Fecha y hora"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorSecondary"/>
+                    <TextView
+                        android:id="@+id/tvDetalleFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="15/10/2025\n10:00"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text="Lugar"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorSecondary"/>
+                    <TextView
+                        android:id="@+id/tvDetalleLugar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Polideportivo\nMunicipal"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text="Plazas ocupadas"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textColorSecondary"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                    <TextView
+                        android:id="@+id/tvDetallePlazas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="10 / 10"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupDetalleOds"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDatos" />
+
+            <!-- New Info Sections -->
+            <TextView
+                android:id="@+id/tvLabelEntidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Organiza"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroupDetalleOds"/>
+
+            <TextView
+                android:id="@+id/tvDetalleEntidadInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Responsable: Juan Pérez\nEmail: contacto@entidad.org"
+                android:textColor="@color/textColorSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelEntidad"/>
+
+            <TextView
+                android:id="@+id/tvLabelGrado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Destinado a"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDetalleEntidadInfo"/>
+
+            <TextView
+                android:id="@+id/tvDetalleGrado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Grado Superior - DAM"
+                android:textColor="@color/textColorSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelGrado"/>
+
+            <TextView
+                android:id="@+id/tvLabelTipos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Categorías"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDetalleGrado"/>
+            
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupDetalleTipos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelTipos" />
+
+            <TextView
+                android:id="@+id/tvLabelDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Descripción de la actividad"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroupDetalleTipos"/>
+ 
+            <TextView
+                android:id="@+id/tvDetalleDescripcion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                tools:text="Aquí va la descripción detallada de la actividad..."
+                android:textColor="@color/textColorSecondary"
+                android:textSize="14sp"
+                android:lineSpacingExtra="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelDesc"/>
+
+            <TextView
+                android:id="@+id/tvLabelVoluntarios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Voluntarios inscritos"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDetalleDescripcion"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDetalleVoluntarios"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelVoluntarios"/>
+                
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Fixed Bottom Buttons -->
+    <Button
+        android:id="@+id/btnValorar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="Valorar"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/textColorWhite"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCerrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/btnCerrar"
         android:layout_width="0dp"
         android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="16dp"
         android:text="Cerrar"
         android:backgroundTint="@color/surfaceColor"
         android:textColor="@color/colorPrimary"
@@ -164,19 +287,6 @@
         app:strokeWidth="1dp"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <Button
-        android:id="@+id/btnValorar"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="12dp"
-        android:text="Valorar"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/textColorWhite"
-        app:cornerRadius="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnCerrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

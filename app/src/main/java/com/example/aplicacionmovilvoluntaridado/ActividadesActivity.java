@@ -24,6 +24,22 @@ public class ActividadesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividades);
 
+        android.widget.ImageButton btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Clear session
+                getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE).edit().clear().apply();
+                com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
+                
+                // Go to login
+                android.content.Intent intent = new android.content.Intent(ActividadesActivity.this, LoginActivity.class);
+                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         searchView = findViewById(R.id.searchView);
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);

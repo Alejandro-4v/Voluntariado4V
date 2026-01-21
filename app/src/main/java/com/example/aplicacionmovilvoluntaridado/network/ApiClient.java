@@ -14,6 +14,10 @@ public class ApiClient {
     private static final String BASE_URL = "http://10.0.2.2/";
     private static Retrofit retrofit = null;
 
+    public static void reset() {
+        retrofit = null;
+    }
+
     public static ApiService getApiService(android.content.Context context) {
         if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

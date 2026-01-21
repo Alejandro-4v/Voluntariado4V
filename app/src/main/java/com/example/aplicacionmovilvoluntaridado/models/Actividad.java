@@ -16,7 +16,8 @@ public class Actividad implements Serializable {
     private String fin; // ISO 8601 string
     @SerializedName("imagenUrl")
     private String imagenUrl;
-    private Object grado; // Generic to handle int ID or potential object
+    private Grado grado; // Changed from Object
+
     @SerializedName("tiposActividad")
     private List<TipoActividad> tiposActividad;
     private List<Ods> ods;
@@ -104,11 +105,11 @@ public class Actividad implements Serializable {
         this.imagenUrl = imagenUrl;
     }
 
-    public Object getGrado() {
+    public Grado getGrado() {
         return grado;
     }
 
-    public void setGrado(Object grado) {
+    public void setGrado(Grado grado) {
         this.grado = grado;
     }
 
