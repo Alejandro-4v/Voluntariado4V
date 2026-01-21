@@ -7,6 +7,7 @@ import { EditActivityComponent } from './activities/edit-activity/edit-activity.
 import { EditVolunteerComponent } from './volunteers/edit-volunteer/edit-volunteer.component';
 import { ManagementVolunteersComponent } from './volunteers/volunteers.component';
 import { ManagementEntitiesComponent } from './entities/entities.component';
+import { EditEntityComponent } from './entities/edit-entity/edit-entity.component';
 
 export const MANAGEMENT_ROUTES: Routes = [
     {
@@ -19,6 +20,7 @@ export const MANAGEMENT_ROUTES: Routes = [
             { path: 'actividades/editar/:id', component: EditActivityComponent },
             { path: 'voluntarios', component: ManagementVolunteersComponent },
             { path: 'voluntarios/editar/:nif', component: EditVolunteerComponent },
+            { path: 'entidades/editar/:id', component: EditEntityComponent },
             { path: 'entidades', component: ManagementEntitiesComponent },
             { path: '', redirectTo: 'panel', pathMatch: 'full' }
         ]

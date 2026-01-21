@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EntitiesService } from '../../../services/entities.service';
 import { Entidad } from '../../../models/entidad.model';
@@ -27,12 +28,13 @@ export class ManagementEntitiesComponent implements OnInit {
     groupBy: string = '';
 
     private entitiesService = inject(EntitiesService);
+    private router = inject(Router);
 
 
     listColumns: ColumnConfig[] = [
         { header: 'Nombre Entidad', field: 'nombre' },
         { header: 'Fecha de Inscripción', field: 'fechaRegistro', pipe: 'date' },
-        { header: 'Responsable', field: 'nombreResponsable' }
+        { header: 'Responsable', field: 'responsableCompleto' }
     ];
 
 
@@ -40,8 +42,9 @@ export class ManagementEntitiesComponent implements OnInit {
         imageField: 'perfilUrl',
         titleField: 'nombre',
         subtitles: [
+            { label: 'CIF', field: 'cif' },
             { label: 'Fecha de inscripción', field: 'fechaRegistro', pipe: 'date' },
-            { label: 'Responsable', field: 'nombreResponsable' },
+            { label: 'Responsable', field: 'responsableCompleto' },
             { label: 'Email', field: 'contactMail' }
         ],
         listField: 'actividades',
@@ -81,7 +84,10 @@ export class ManagementEntitiesComponent implements OnInit {
         this.isLoading = true;
         this.entitiesService.getAll().subscribe({
             next: (data) => {
-                this.entities = data;
+                this.entities = data.map(e => ({
+                    ...e,
+                    responsableCompleto: `${e.nombreResponsable} ${e.apellidosResponsable}`.trim()
+                }));
                 this.displayEntities = [...this.entities];
                 if (this.entities.length > 0) {
                     this.selectedEntity = this.entities[0];
@@ -129,6 +135,7 @@ export class ManagementEntitiesComponent implements OnInit {
         temp.sort((a, b) => {
 
             if (this.groupBy === 'nombreResponsable') {
+                // We can group by responsableCompleto too if we want, but keeping logic compatible
                 const groupCompare = (a.nombreResponsable || '').localeCompare(b.nombreResponsable || '');
                 if (groupCompare !== 0) return groupCompare;
             }
@@ -144,5 +151,11 @@ export class ManagementEntitiesComponent implements OnInit {
         });
 
         this.displayEntities = temp;
+    }
+
+    onEdit(entity: Entidad) {
+        if (entity && entity.idEntidad) {
+            this.router.navigate(['/management/entidades/editar', entity.idEntidad]);
+        }
     }
 }

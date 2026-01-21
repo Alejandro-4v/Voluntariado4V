@@ -1,0 +1,95 @@
+<div class="container-fluid py-4 ps-5 pe-5">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 text-dark fw-bold mb-0">Editar Entidad: {{ entityName }}</h1>
+        <button class="btn btn-outline-secondary" (click)="onCancel()">
+            <i class="bi bi-arrow-left"></i> Volver
+        </button>
+    </div>
+
+    @if (isLoading) {
+        <app-loading-spinner text="Cargando datos de la entidad..."></app-loading-spinner>
+    } @else {
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <form [formGroup]="entityForm" (ngSubmit)="onSubmit()">
+                <div class="row g-3">
+                    
+                    <!-- Entity Name -->
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre de la Entidad</label>
+                        <input type="text" class="form-control" formControlName="nombre"
+                               [class.is-invalid]="isInvalid('nombre')">
+                        @if (isInvalid('nombre')) {
+                            <div class="invalid-feedback">
+                                El nombre es obligatorio.
+                            </div>
+                        }
+                    </div>
+
+                    <!-- CIF -->
+                    <div class="col-md-6">
+                        <label class="form-label">CIF</label>
+                        <input type="text" class="form-control" formControlName="cif"
+                               [class.is-invalid]="isInvalid('cif')">
+                        @if (isInvalid('cif')) {
+                            <div class="invalid-feedback">
+                                @if (entityForm.get('cif')?.hasError('required')) {
+                                    El CIF es obligatorio.
+                                } @else if (entityForm.get('cif')?.hasError('pattern')) {
+                                    Formato inválido (Ej: A12345678 o A1234567A).
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Responsible Person Name -->
+                    <div class="col-md-4">
+                        <label class="form-label">Nombre Responsable</label>
+                        <input type="text" class="form-control" formControlName="nombreResponsable"
+                               [class.is-invalid]="isInvalid('nombreResponsable')">
+                        @if (isInvalid('nombreResponsable')) {
+                            <div class="invalid-feedback">
+                                El nombre del responsable es obligatorio.
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Responsible Person Surname -->
+                    <div class="col-md-4">
+                        <label class="form-label">Apellidos Responsable</label>
+                        <input type="text" class="form-control" formControlName="apellidosResponsable"
+                               [class.is-invalid]="isInvalid('apellidosResponsable')">
+                        @if (isInvalid('apellidosResponsable')) {
+                            <div class="invalid-feedback">
+                                Los apellidos del responsable son obligatorios.
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Contact Email -->
+                    <div class="col-md-4">
+                        <label class="form-label">Email de Contacto</label>
+                        <input type="email" class="form-control" formControlName="contactMail"
+                               [class.is-invalid]="isInvalid('contactMail')">
+                        @if (isInvalid('contactMail')) {
+                            <div class="invalid-feedback">
+                                Introduzca un email válido.
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-12 mt-5 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="entityForm.invalid || isSaving">
+                            @if (isSaving) {
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Guardando...
+                            } @else {
+                                Guardar Cambios
+                            }
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</div>
