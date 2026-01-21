@@ -9,6 +9,8 @@ public class Voluntario {
     private String apellido2;
     private String mail;
     private String perfilUrl;
+    private Grado grado;
+    private String estado;
     private List<Actividad> actividades;
 
     public String getNif() {
@@ -57,6 +59,22 @@ public class Voluntario {
 
     public void setPerfilUrl(String perfilUrl) {
         this.perfilUrl = perfilUrl;
+    }
+
+    public Grado getGrado() {
+        return grado;
+    }
+
+    public void setGrado(Grado grado) {
+        this.grado = grado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public List<Actividad> getActividades() {

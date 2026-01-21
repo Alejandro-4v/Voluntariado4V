@@ -29,4 +29,7 @@ public interface ApiService {
     );
     @GET("voluntario/{nif}")
     Call<com.example.aplicacionmovilvoluntaridado.models.Voluntario> getVoluntario(@retrofit2.http.Path("nif") String nif);
+
+    @GET("voluntario")
+    Call<List<com.example.aplicacionmovilvoluntaridado.models.Voluntario>> getVoluntarios();
 }

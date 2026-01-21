@@ -32,6 +32,11 @@ public class ApiClient {
                 okhttp3.Request.Builder requestBuilder = original.newBuilder();
 
                 if (appContext != null) {
+                    // Skip Auth header for Login requests
+                    if (original.url().encodedPath().contains("/login")) {
+                         return chain.proceed(original);
+                    }
+
                     android.content.SharedPreferences prefs = appContext.getSharedPreferences("VoluntariadoPrefs",
                             android.content.Context.MODE_PRIVATE);
                     String token = prefs.getString("auth_token", null);
