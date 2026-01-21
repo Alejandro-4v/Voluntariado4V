@@ -158,4 +158,14 @@ export class ManagementEntitiesComponent implements OnInit {
             this.router.navigate(['/management/entidades/editar', entity.idEntidad]);
         }
     }
+
+    onContact(entity: Entidad) {
+        if (entity.contactMail) {
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${entity.contactMail}`;
+            window.open(gmailUrl, '_blank');
+        } else {
+            console.warn('Entity has no contact email');
+            alert('Esta entidad no tiene email de contacto registrado.');
+        }
+    }
 }
