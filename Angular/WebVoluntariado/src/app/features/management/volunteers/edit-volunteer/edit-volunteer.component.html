@@ -1,6 +1,6 @@
 <div class="container-fluid py-4 ps-5 pe-5">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 text-dark fw-bold mb-0">Editar Voluntario: {{ nif }}</h1>
+        <h1 class="h3 text-dark fw-bold mb-0">Editar Voluntario: {{ fullName || nif }}</h1>
         <button class="btn btn-outline-secondary" (click)="onCancel()">
             <i class="bi bi-arrow-left"></i> Volver
         </button>
@@ -49,10 +49,7 @@
                         }
                     </div>
                     
-                    <div class="col-md-6">
-                        <label class="form-label">Foto de Perfil (URL)</label>
-                        <input type="text" class="form-control" formControlName="perfilUrl">
-                    </div>
+
 
                     <!-- Grado -->
                     <div class="col-md-6">
@@ -80,7 +77,6 @@
                             <option value="I">Inactivo</option>
                             <option value="P">Pendiente</option>
                             <option value="R">Rechazado</option>
-                            <option value="V">Validado</option>
                         </select>
                          @if (isInvalid('estado')) {
                             <div class="invalid-feedback">
@@ -89,24 +85,7 @@
                         }
                     </div>
 
-                    <!-- Intereses -->
-                    <div class="col-12 mt-4">
-                        <label class="form-label fw-bold">Intereses</label>
-                        <div class="d-flex flex-wrap gap-3">
-                            @for (type of tiposActividad; track type.idTipoActividad) {
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                        [value]="type.idTipoActividad"
-                                        [checked]="isChecked(type.idTipoActividad)"
-                                        (change)="onCheckboxChange($event, type.idTipoActividad)"
-                                        id="type-{{type.idTipoActividad}}">
-                                    <label class="form-check-label" for="type-{{type.idTipoActividad}}">
-                                        {{ type.descripcion }}
-                                    </label>
-                                </div>
-                            }
-                        </div>
-                    </div>
+
 
                     <div class="col-12 mt-5 d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving">Cancelar</button>

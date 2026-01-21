@@ -20,6 +20,7 @@ export class EditVolunteerComponent implements OnInit {
     isLoading = true;
     isSaving = false;
     nif: string = '';
+    fullName: string = '';
 
     grados: any[] = [];
     tiposActividad: any[] = [];
@@ -83,6 +84,8 @@ export class EditVolunteerComponent implements OnInit {
     }
 
     patchForm(volunteer: Voluntario) {
+        this.fullName = `${volunteer.nombre} ${volunteer.apellido1} ${volunteer.apellido2 || ''}`.trim();
+
         this.volunteerForm.patchValue({
             nombre: volunteer.nombre,
             apellido1: volunteer.apellido1,
