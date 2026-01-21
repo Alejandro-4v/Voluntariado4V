@@ -123,25 +123,40 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 
                 // Nuevos campos
                 TextView tvEntidadInfo = findViewById(R.id.tvDetalleEntidadInfo);
+                
+                TextView tvLabelGrado = findViewById(R.id.tvLabelGrado);
                 TextView tvGrado = findViewById(R.id.tvDetalleGrado);
+                
+                TextView tvLabelTipos = findViewById(R.id.tvLabelTipos);
                 ChipGroup chipGroupTipos = findViewById(R.id.chipGroupDetalleTipos);
+                
+                TextView tvLabelOds = findViewById(R.id.tvLabelOds);
+                // chipGroupOds is already bound at top
                 
                 // Entidad Info
                 if (actividadObj.getConvoca() != null) {
                     String info = "Responsable: " + actividadObj.getConvoca().getNombreResponsable() + " " + actividadObj.getConvoca().getApellidosResponsable();
                     info += "\nEmail: " + actividadObj.getConvoca().getContactMail();
                     tvEntidadInfo.setText(info);
+                    android.text.util.Linkify.addLinks(tvEntidadInfo, android.text.util.Linkify.EMAIL_ADDRESSES);
+                    tvEntidadInfo.setLinksClickable(true);
                 }
                 
                 // Grado Info
                 if (actividadObj.getGrado() != null) {
+                     tvLabelGrado.setVisibility(View.VISIBLE);
+                     tvGrado.setVisibility(View.VISIBLE);
                      tvGrado.setText(actividadObj.getGrado().getDescripcion() + " (" + actividadObj.getGrado().getNivel() + ")");
                 } else {
-                     tvGrado.setText("Para todos los públicos");
+                     tvLabelGrado.setVisibility(View.GONE);
+                     tvGrado.setVisibility(View.GONE);
                 }
                 
                 // Tipos Chips
-                if (actividadObj.getTiposActividad() != null) {
+                if (actividadObj.getTiposActividad() != null && !actividadObj.getTiposActividad().isEmpty()) {
+                    tvLabelTipos.setVisibility(View.VISIBLE);
+                    chipGroupTipos.setVisibility(View.VISIBLE);
+                    chipGroupTipos.removeAllViews(); // Clear previous if any
                     for (com.example.aplicacionmovilvoluntaridado.models.TipoActividad tipo : actividadObj.getTiposActividad()) {
                         Chip chip = new Chip(this);
                         chip.setText(tipo.getDescripcion());
@@ -150,23 +165,39 @@ public class DetalleActividadActivity extends AppCompatActivity {
                         chip.setTextColor(getResources().getColor(android.R.color.white));
                         chipGroupTipos.addView(chip);
                     }
+                } else {
+                    tvLabelTipos.setVisibility(View.GONE);
+                    chipGroupTipos.setVisibility(View.GONE);
                 }
-                 // ODS chips
-                 // (Usamos la lista del objeto si la del intent es null, o viceversa)
-                if (actividadObj.getOds() != null) {
+
+                 // ODS chips logic
+                 boolean hasOds = false;
+                 chipGroupOds.removeAllViews();
+                 
+                if (actividadObj.getOds() != null && !actividadObj.getOds().isEmpty()) {
+                    hasOds = true;
                     for (com.example.aplicacionmovilvoluntaridado.models.Ods ods : actividadObj.getOds()) {
                         Chip chip = new Chip(this);
                         chip.setText(ods.getDescripcion());
                         chip.setCheckable(false);
                         chipGroupOds.addView(chip);
                     }
-                } else if (listaOds != null) {
+                } else if (listaOds != null && !listaOds.isEmpty()) {
+                     hasOds = true;
                      for (Ods ods : listaOds) {
                         Chip chip = new Chip(this);
                         chip.setText(ods.getDescripcion());
                         chip.setCheckable(false);
                         chipGroupOds.addView(chip);
                     }
+                }
+                
+                if (hasOds) {
+                    if (tvLabelOds != null) tvLabelOds.setVisibility(View.VISIBLE);
+                    chipGroupOds.setVisibility(View.VISIBLE);
+                } else {
+                    if (tvLabelOds != null) tvLabelOds.setVisibility(View.GONE);
+                    chipGroupOds.setVisibility(View.GONE);
                 }
 
 

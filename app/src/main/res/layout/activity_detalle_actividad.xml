@@ -126,14 +126,27 @@
 
             </LinearLayout>
 
+            <!-- ODS Section -->
+            <TextView
+                android:id="@+id/tvLabelOds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="ODS"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDatos"/>
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupDetalleOds"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutDatos" />
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelOds" />
 
             <!-- New Info Sections -->
             <TextView

@@ -36,15 +36,31 @@ public class HomeFragment extends Fragment {
     private View cardEmptyState;
     private RecyclerDataAdapter adapter;
 
+    // Loading Views
+    private View progressBar;
+    private View contentLayout;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+    
+    // ... existing variables ...
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Bind Loading Views
+        progressBar = view.findViewById(R.id.progressBar);
+        contentLayout = view.findViewById(R.id.contentLayout);
+        
+        // Initial State: Loading
+        progressBar.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
+
+        // ... existing bindings (tvUserName, etc.) ...
+        
         // 1. Personalizar saludo
         TextView tvUserName = view.findViewById(R.id.tvUserName);
         String nif = null;
@@ -57,7 +73,9 @@ public class HomeFragment extends Fragment {
                 tvUserName.setText(userName);
             }
         }
-
+        
+        // ... (rest of binding code) ...
+        
         // 2. Bind Stats & Lists
         tvTotalHours = view.findViewById(R.id.tvTotalHours);
         tvTotalActivities = view.findViewById(R.id.tvTotalActivities);
@@ -66,8 +84,8 @@ public class HomeFragment extends Fragment {
 
         rvMyActivities.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Actividad actividad, int position) {
+             @Override
+              public void onItemClick(Actividad actividad, int position) {
                  Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
                  intent.putExtra("nombre", actividad.getNombre());
                  intent.putExtra("entidad", actividad.getEntidadNombre());
@@ -79,12 +97,11 @@ public class HomeFragment extends Fragment {
                  intent.putExtra("listaOds", (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
                  intent.putExtra("actividad_object", actividad);
                  startActivity(intent);
-            }
+              }
         });
         rvMyActivities.setAdapter(adapter);
 
-
-        // 3. Configurar botones de navegación
+        // ... (rest of button listeners) ...
         Button btnFindActivities = view.findViewById(R.id.btnFindActivities);
         View cardExplore = view.findViewById(R.id.cardExplore);
         View cardHistory = view.findViewById(R.id.cardHistory);
@@ -95,20 +112,10 @@ public class HomeFragment extends Fragment {
             }
         };
 
-        if (btnFindActivities != null) {
-            btnFindActivities.setOnClickListener(goToUpcoming);
-        }
-        if (cardExplore != null) {
-            cardExplore.setOnClickListener(goToUpcoming);
-        }
+        if (btnFindActivities != null) btnFindActivities.setOnClickListener(goToUpcoming);
+        if (cardExplore != null) cardExplore.setOnClickListener(goToUpcoming);
+        if (cardHistory != null) cardHistory.setOnClickListener(v -> ((ActividadesActivity) getActivity()).viewPager.setCurrentItem(2, true));
 
-        if (cardHistory != null) {
-            cardHistory.setOnClickListener(v -> {
-                if (getActivity() instanceof ActividadesActivity) {
-                    ((ActividadesActivity) getActivity()).viewPager.setCurrentItem(2, true);
-                }
-            });
-        }
 
         // 4. Fetch Data
         if (nif != null) {
@@ -116,7 +123,9 @@ public class HomeFragment extends Fragment {
             loadUserData(nif);
         } else {
              android.util.Log.e("DashboardDebug", "NIF is null in SharedPreferences");
+             progressBar.setVisibility(View.GONE); // Hide loading on error
              Toast.makeText(getContext(), "Error: Usuario no identificado (NIF nulo)", Toast.LENGTH_LONG).show();
+             // Consider showing error state or redirecting to login
         }
 
         return view;
@@ -127,6 +136,10 @@ public class HomeFragment extends Fragment {
         ApiClient.getApiService(getContext()).getActividades(null, null, null, null, null, null).enqueue(new Callback<List<Actividad>>() {
             @Override
             public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
+                // Hide Loading, Show Content
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (contentLayout != null) contentLayout.setVisibility(View.VISIBLE);
+
                 if (response.isSuccessful() && response.body() != null) {
                     List<Actividad> allActivities = response.body();
                     List<Actividad> myActivities = new ArrayList<>();
@@ -149,31 +162,35 @@ public class HomeFragment extends Fragment {
 
                     // Update Stats
                     int count = myActivities.size();
-                    tvTotalActivities.setText(String.valueOf(count));
+                    if (tvTotalActivities != null) tvTotalActivities.setText(String.valueOf(count));
                     
                     // Mock calculation for hours (e.g. 2 hours per activity)
-                    tvTotalHours.setText(String.valueOf(count * 2)); 
+                    if (tvTotalHours != null) tvTotalHours.setText(String.valueOf(count * 2)); 
 
                     // Update List
                     if (count > 0) {
-                        rvMyActivities.setVisibility(View.VISIBLE);
-                        cardEmptyState.setVisibility(View.GONE);
-                        adapter.setDatos(myActivities);
+                        if (rvMyActivities != null) rvMyActivities.setVisibility(View.VISIBLE);
+                        if (cardEmptyState != null) cardEmptyState.setVisibility(View.GONE);
+                        if (adapter != null) adapter.setDatos(myActivities);
                     } else {
-                        rvMyActivities.setVisibility(View.GONE);
-                        cardEmptyState.setVisibility(View.VISIBLE);
+                        if (rvMyActivities != null) rvMyActivities.setVisibility(View.GONE);
+                        if (cardEmptyState != null) cardEmptyState.setVisibility(View.VISIBLE);
                     }
 
                 } else {
                      android.util.Log.e("DashboardDebug", "API Error: " + response.code());
-                    Toast.makeText(getContext(), "Error cargando dashboard", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getContext(), "Error cargando dashboard", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Actividad>> call, Throwable t) {
+                // Hide Loading, Show Content (even if error, maybe show cached data or empty state)
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (contentLayout != null) contentLayout.setVisibility(View.VISIBLE); // Or show specific error view
+
                 android.util.Log.e("DashboardDebug", "API Connection Failure: " + t.getMessage());
-                 Toast.makeText(getContext(), "Error conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
