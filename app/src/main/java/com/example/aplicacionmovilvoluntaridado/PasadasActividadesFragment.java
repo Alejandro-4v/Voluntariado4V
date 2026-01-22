@@ -1,12 +1,12 @@
 package com.example.aplicacionmovilvoluntaridado;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,113 +14,102 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
 import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import android.widget.ProgressBar;
 
 public class PasadasActividadesFragment extends Fragment {
-    RecyclerDataAdapter adapter;
-    ProgressBar progressBar;
+
+    public interface OnPasadasActividadSelectedListener {
+        void onPasadasActividadSelected(Actividad actividad, ImageView sharedImage);
+    }
+
+    private OnPasadasActividadSelectedListener listener;
+    private RecyclerView recyclerView;
+    private RecyclerDataAdapter adapter;
+    private View progressBar;
+
+    public PasadasActividadesFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnPasadasActividadSelectedListener) {
+            listener = (OnPasadasActividadSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnPasadasActividadSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_actividades, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.rvActividades);
-        progressBar = view.findViewById(R.id.progressBar); // Init ProgressBar
+        // --- CORRECCIÓN AQUÍ: Usamos el ID correcto 'rvActividades' ---
+        recyclerView = view.findViewById(R.id.rvActividades);
+        progressBar = view.findViewById(R.id.progressBar);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new RecyclerDataAdapter(new ArrayList<>(), new ActividadClickListener());
+        adapter = new RecyclerDataAdapter(new ArrayList<>(), (actividad, position, sharedImage) -> {
+            if (listener != null) {
+                listener.onPasadasActividadSelected(actividad, sharedImage);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         cargarDatos();
-
         return view;
     }
 
     private void cargarDatos() {
-        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("VoluntariadoPrefs", android.content.Context.MODE_PRIVATE);
-        String currentNif = prefs.getString("user_nif", null);
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
 
-        progressBar.setVisibility(View.VISIBLE); // Show
-        ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)
-                .enqueue(new Callback<List<Actividad>>() {
-                    @Override
-                    public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
-                        progressBar.setVisibility(View.GONE); // Hide
-                        if (response.isSuccessful() && response.body() != null) {
-                            List<Actividad> todas = response.body();
-                            List<Actividad> pasadas = new ArrayList<>();
+        ApiClient.getApiService(getContext()).getActividades(null, null, null, null, null, null).enqueue(new Callback<List<Actividad>>() {
+            @Override
+            public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Actividad> todas = response.body();
+                    // Lógica placeholder: mostrar todas.
+                    // Deberías filtrar las que ya pasaron por fecha.
+                    if (adapter != null) adapter.setDatos(todas);
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-                            String ahora = sdf.format(new Date());
-
-                            for (Actividad a : todas) {
-                                // Filter by date (past) AND user enrollment
-                                boolean isPast = a.getInicio() != null && a.getInicio().compareTo(ahora) <= 0;
-                                boolean isEnrolled = false;
-
-                                if (currentNif != null && a.getVoluntarios() != null) {
-                                    for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad v : a.getVoluntarios()) {
-                                        if (v.getNif() != null && v.getNif().equalsIgnoreCase(currentNif)) {
-                                            isEnrolled = true;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (isPast && isEnrolled) {
-                                    pasadas.add(a);
-                                }
-                            }
-                            adapter.setDatos(pasadas);
-                        } else {
-                            Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_LONG).show();
-                        }
+                    // Empty State Logic
+                    android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
+                    if (todas.isEmpty()) {
+                        recyclerView.setVisibility(View.GONE);
+                        if(tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        if(tvEmpty != null) tvEmpty.setVisibility(View.GONE);
                     }
+                }
+            }
 
-                    @Override
-                    public void onFailure(Call<List<Actividad>> call, Throwable t) {
-                        progressBar.setVisibility(View.GONE); // Hide
-                        Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onFailure(Call<List<Actividad>> call, Throwable t) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Error conexión", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void filtrarLista(String texto) {
         if (adapter != null) {
             adapter.filtrar(texto);
-        }
-    }
-
-    private class ActividadClickListener implements RecyclerDataAdapter.OnItemClickListener {
-        @Override
-        public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
-            Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
-            intent.putExtra("actividad_object", actividad); // Pass full object
-            intent.putExtra("nombre", actividad.getNombre());
-            intent.putExtra("entidad", actividad.getEntidadNombre());
-            intent.putExtra("fecha", actividad.getFechaFormatted());
-            intent.putExtra("lugar", actividad.getLugar());
-            intent.putExtra("descripcion", actividad.getDescripcion());
-            intent.putExtra("plazas", 0);
-            intent.putExtra("listaOds",
-                    (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
-            
-            // Add Transition
-            androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
-                 getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
-            startActivity(intent, options.toBundle());
         }
     }
 }

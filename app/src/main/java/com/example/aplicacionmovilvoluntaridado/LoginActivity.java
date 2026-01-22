@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         // Mostrar carga y bloquear botón
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
-        btnLogin.setText(""); // Opcional: Ocultar texto para mostrar solo spinner si estuviera encima
+        btnLogin.setText("Iniciando sesión..."); // Feedback visual textual
 
         // Creamos el objeto con los datos de login
         LogIn loginData = new LogIn(email, password);

@@ -10,8 +10,16 @@ public class VoluntarioActividad implements Serializable {
     private Grado grado;
     private String mail;
     private String perfilUrl;
+    private String estado;
 
     // Getters and Setters
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     public String getNif() {
         return nif;
     }

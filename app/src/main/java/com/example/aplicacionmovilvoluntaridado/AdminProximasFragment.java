@@ -29,8 +29,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AdminProximasFragment extends Fragment {
+
+    public interface OnAdminProximasSelectedListener {
+        void onAdminProximasSelected(Actividad actividad, android.widget.ImageView sharedImage);
+    }
+
+    private OnAdminProximasSelectedListener listener;
     RecyclerDataAdapter adapter;
     ProgressBar progressBar;
+
+    @Override
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
+        if (context instanceof OnAdminProximasSelectedListener) {
+            listener = (OnAdminProximasSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnAdminProximasSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
 
     @Nullable
     @Override
@@ -45,21 +67,9 @@ public class AdminProximasFragment extends Fragment {
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
-                Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
-                intent.putExtra("actividad_object", actividad); // Pass full object
-                intent.putExtra("nombre", actividad.getNombre());
-                intent.putExtra("entidad", actividad.getEntidadNombre());
-                intent.putExtra("fecha", actividad.getFechaFormatted());
-                intent.putExtra("lugar", actividad.getLugar());
-                intent.putExtra("descripcion", actividad.getDescripcion());
-                intent.putExtra("plazas", actividad.getPlazas());
-                intent.putExtra("imagenUrl", actividad.getImagenUrl());
-                intent.putExtra("listaOds",
-                        (ArrayList<Ods>) actividad.getOds());
-                // Add Transition
-                androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
-                     getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
-                startActivity(intent, options.toBundle());
+                if (listener != null) {
+                    listener.onAdminProximasSelected(actividad, sharedImage);
+                }
             }
         });
         recyclerView.setAdapter(adapter);
@@ -92,6 +102,20 @@ public class AdminProximasFragment extends Fragment {
                                 }
                             }
                             adapter.setDatos(proximas);
+
+                            // Empty State Logic
+                            // Empty State Logic
+                            if (getView() != null) {
+                                android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
+                                RecyclerView rv = getView().findViewById(R.id.rvActividades);
+                                if (proximas.isEmpty()) {
+                                    rv.setVisibility(View.GONE);
+                                    if(tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE);
+                                } else {
+                                    rv.setVisibility(View.VISIBLE);
+                                    if(tvEmpty != null) tvEmpty.setVisibility(View.GONE);
+                                }
+                            }
                         } else {
                             Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_LONG).show();
                         }
@@ -103,5 +127,10 @@ public class AdminProximasFragment extends Fragment {
                         Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+    public void filtrarLista(String texto) {
+        if (adapter != null) {
+            adapter.filtrar(texto);
+        }
     }
 }

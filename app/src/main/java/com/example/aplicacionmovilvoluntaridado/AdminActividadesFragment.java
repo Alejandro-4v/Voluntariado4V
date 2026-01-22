@@ -57,4 +57,14 @@ public class AdminActividadesFragment extends Fragment {
             return 2;
         }
     }
+
+    public void filtrarLista(String texto) {
+        for (Fragment f : getChildFragmentManager().getFragments()) {
+            if (f instanceof AdminProximasFragment) {
+                ((AdminProximasFragment) f).filtrarLista(texto);
+            } else if (f instanceof AdminPasadasFragment) {
+                ((AdminPasadasFragment) f).filtrarLista(texto);
+            }
+        }
+    }
 }

@@ -1,8 +1,6 @@
 package com.example.aplicacionmovilvoluntaridado;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView; // Necesario para la imagen compartida
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
-import com.example.aplicacionmovilvoluntaridado.models.Voluntario;
 import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
 
 import java.util.ArrayList;
@@ -29,6 +27,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
+
+    // 1. Definimos la Interfaz de comunicación (PDF pág. 21)
+    // El fragmento define "qué pasó" (se seleccionó una actividad), pero no "qué hacer" (abrir actividad nueva).
+    public interface OnActividadSelectedListener {
+        void onActividadSelected(Actividad actividad, ImageView sharedImage);
+    }
+
+    private OnActividadSelectedListener listener;
 
     private TextView tvTotalHours;
     private TextView tvTotalActivities;
@@ -45,6 +51,24 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // 2. Conectamos el listener al adjuntar el Fragmento a la Activity (PDF pág. 24)
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnActividadSelectedListener) {
+            listener = (OnActividadSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnActividadSelectedListener");
+        }
+    }
+
+    // Limpiamos la referencia para evitar fugas de memoria
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,20 +79,18 @@ public class HomeFragment extends Fragment {
         contentLayout = view.findViewById(R.id.contentLayout);
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
 
-        // Initial State: Loading (only if not refreshing)
+        // Initial State: Loading
         progressBar.setVisibility(View.VISIBLE);
         contentLayout.setVisibility(View.GONE);
 
-        // ... existing bindings (tvUserName, etc.) ...
-
-        // 1. Personalizar saludo
+        // Personalizar saludo
         TextView tvUserName = view.findViewById(R.id.tvUserName);
         final String nifVal = (getActivity() != null)
-            ? requireActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).getString("user_nif", null)
-            : null;
+                ? requireActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).getString("user_nif", null)
+                : null;
         String userName = (getActivity() != null)
-            ? requireActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).getString("user_name", "Voluntario")
-            : "Voluntario";
+                ? requireActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).getString("user_name", "Voluntario")
+                : "Voluntario";
 
         if (tvUserName != null) {
             tvUserName.setText(userName);
@@ -81,7 +103,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onRefresh() {
                     if (nifVal != null) {
-                        loadUserData(nifVal, false); // false = don't show full screen progress
+                        loadUserData(nifVal, false);
                     } else {
                         swipeRefresh.setRefreshing(false);
                     }
@@ -89,38 +111,49 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // ... (rest of binding code) ...
+        // Logout Button Logic
+        android.widget.ImageButton btnLogout = view.findViewById(R.id.btnLogoutFragment);
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                new androidx.appcompat.app.AlertDialog.Builder(getContext())
+                        .setTitle("Cerrar sesión")
+                        .setMessage("¿Estás seguro de que quieres salir?")
+                        .setPositiveButton("Salir", (dialog, which) -> {
+                            if (getActivity() != null) {
+                                getActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).edit().clear().apply();
+                                com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
+                                android.content.Intent intent = new android.content.Intent(getActivity(), LoginActivity.class);
+                                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+            });
+        }
 
-        // 2. Bind Stats & Lists
+        // Bind Stats & Lists
         tvTotalHours = view.findViewById(R.id.tvTotalHours);
         tvTotalActivities = view.findViewById(R.id.tvTotalActivities);
         rvMyActivities = view.findViewById(R.id.rvMyActivities);
         cardEmptyState = view.findViewById(R.id.cardEmptyState);
 
         rvMyActivities.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // 3. Modificamos el Adapter para usar el Listener
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
-             @Override
-              public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
-                 Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
-                 intent.putExtra("nombre", actividad.getNombre());
-                 intent.putExtra("entidad", actividad.getEntidadNombre());
-                 intent.putExtra("fecha", actividad.getFechaFormatted());
-                 intent.putExtra("lugar", actividad.getLugar());
-                 intent.putExtra("descripcion", actividad.getDescripcion());
-                 intent.putExtra("plazas", actividad.getPlazas());
-                 intent.putExtra("imagenUrl", actividad.getImagenUrl());
-                 intent.putExtra("listaOds", (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
-                 intent.putExtra("actividad_object", actividad);
-                 
-                 androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
-                     getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
-                 
-                 startActivity(intent, options.toBundle());
-              }
+            @Override
+            public void onItemClick(Actividad actividad, int position, ImageView sharedImage) {
+                // DELEGAMOS la acción a la Activity a través de la interfaz
+                if (listener != null) {
+                    listener.onActividadSelected(actividad, sharedImage);
+                }
+            }
         });
         rvMyActivities.setAdapter(adapter);
 
-        // ... (rest of button listeners) ...
+        // Listeners de botones adicionales
         Button btnFindActivities = view.findViewById(R.id.btnFindActivities);
         View cardExplore = view.findViewById(R.id.cardExplore);
         View cardHistory = view.findViewById(R.id.cardHistory);
@@ -133,18 +166,18 @@ public class HomeFragment extends Fragment {
 
         if (btnFindActivities != null) btnFindActivities.setOnClickListener(goToUpcoming);
         if (cardExplore != null) cardExplore.setOnClickListener(goToUpcoming);
-        if (cardHistory != null) cardHistory.setOnClickListener(v -> ((ActividadesActivity) getActivity()).viewPager.setCurrentItem(2, true));
+        if (cardHistory != null) cardHistory.setOnClickListener(v -> {
+            if (getActivity() instanceof ActividadesActivity) {
+                ((ActividadesActivity) getActivity()).viewPager.setCurrentItem(2, true);
+            }
+        });
 
-
-        // 4. Fetch Data
+        // Fetch Data
         if (nifVal != null) {
-            android.util.Log.d("DashboardDebug", "Loading data for NIF: " + nifVal);
-            loadUserData(nifVal, true); // true = show full screen progress initially
+            loadUserData(nifVal, true);
         } else {
-             android.util.Log.e("DashboardDebug", "NIF is null in SharedPreferences");
-             progressBar.setVisibility(View.GONE);
-             Toast.makeText(getContext(), "Error: Usuario no identificado (NIF nulo)", Toast.LENGTH_LONG).show();
-             // Consider showing error state or redirecting to login
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "Error: Usuario no identificado", Toast.LENGTH_LONG).show();
         }
 
         return view;
@@ -156,11 +189,9 @@ public class HomeFragment extends Fragment {
             if (contentLayout != null) contentLayout.setVisibility(View.GONE);
         }
 
-        // Fetch ALL activities and filter client-side (Angular logic)
         ApiClient.getApiService(getContext()).getActividades(null, null, null, null, null, null).enqueue(new Callback<List<Actividad>>() {
             @Override
             public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
-                // Hide Loading specific controls
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (contentLayout != null) contentLayout.setVisibility(View.VISIBLE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
@@ -169,30 +200,21 @@ public class HomeFragment extends Fragment {
                     List<Actividad> allActivities = response.body();
                     List<Actividad> myActivities = new ArrayList<>();
 
-                    android.util.Log.d("DashboardDebug", "Fetched total activities: " + allActivities.size());
-
-                    // Filter client-side
                     for (Actividad act : allActivities) {
-                         if (act.getVoluntarios() != null) {
-                             for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad v : act.getVoluntarios()) {
-                                 if (v.getNif() != null && v.getNif().equalsIgnoreCase(nif)) {
-                                     myActivities.add(act);
-                                     break;
-                                 }
-                             }
-                         }
+                        if (act.getVoluntarios() != null) {
+                            for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad v : act.getVoluntarios()) {
+                                if (v.getNif() != null && v.getNif().equalsIgnoreCase(nif)) {
+                                    myActivities.add(act);
+                                    break;
+                                }
+                            }
+                        }
                     }
-                    
-                    android.util.Log.d("DashboardDebug", "Filtered activities for user: " + myActivities.size());
 
-                    // Update Stats
                     int count = myActivities.size();
                     if (tvTotalActivities != null) tvTotalActivities.setText(String.valueOf(count));
-                    
-                    // Mock calculation for hours (e.g. 2 hours per activity)
-                    if (tvTotalHours != null) tvTotalHours.setText(String.valueOf(count * 2)); 
+                    if (tvTotalHours != null) tvTotalHours.setText(String.valueOf(count * 2));
 
-                    // Update List
                     if (count > 0) {
                         if (rvMyActivities != null) rvMyActivities.setVisibility(View.VISIBLE);
                         if (cardEmptyState != null) cardEmptyState.setVisibility(View.GONE);
@@ -203,19 +225,15 @@ public class HomeFragment extends Fragment {
                     }
 
                 } else {
-                     android.util.Log.e("DashboardDebug", "API Error: " + response.code());
-                     Toast.makeText(getContext(), "Error cargando dashboard", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error cargando dashboard", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Actividad>> call, Throwable t) {
-                // Hide Loading, Show Content (even if error, maybe show cached data or empty state)
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
-                if (contentLayout != null) contentLayout.setVisibility(View.VISIBLE); // Or show specific error view
+                if (contentLayout != null) contentLayout.setVisibility(View.VISIBLE);
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
-
-                android.util.Log.e("DashboardDebug", "API Connection Failure: " + t.getMessage());
                 Toast.makeText(getContext(), "Error conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class AdminDashboardActivity extends AppCompatActivity {
+public class AdminDashboardActivity extends AppCompatActivity implements
+        AdminProximasFragment.OnAdminProximasSelectedListener,
+        AdminPasadasFragment.OnAdminPasadasSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,64 @@ public class AdminDashboardActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AdminActividadesFragment())
                     .commit();
+        }
+
+        // Search View Logic
+        androidx.appcompat.widget.SearchView searchView = findViewById(R.id.searchViewAdmin);
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (f instanceof AdminActividadesFragment) {
+                    ((AdminActividadesFragment) f).filtrarLista(newText);
+                } else if (f instanceof AdminVoluntariosFragment) {
+                    ((AdminVoluntariosFragment) f).filtrarLista(newText);
+                }
+                return true;
+            }
+        });
+    }
+
+    // =========================================================================
+    // IMPLEMENTACIÓN DE LAS INTERFACES DE NAVEGACIÓN (Fragment -> Activity)
+    // =========================================================================
+
+    @Override
+    public void onAdminProximasSelected(com.example.aplicacionmovilvoluntaridado.models.Actividad actividad, android.widget.ImageView sharedImage) {
+        abrirDetalle(actividad, sharedImage);
+    }
+
+    @Override
+    public void onAdminPasadasSelected(com.example.aplicacionmovilvoluntaridado.models.Actividad actividad, android.widget.ImageView sharedImage) {
+        abrirDetalle(actividad, sharedImage);
+    }
+
+    private void abrirDetalle(com.example.aplicacionmovilvoluntaridado.models.Actividad actividad, android.widget.ImageView sharedImage) {
+        android.content.Intent intent = new android.content.Intent(this, DetalleActividadActivity.class);
+        intent.putExtra("actividad_object", actividad);
+        intent.putExtra("nombre", actividad.getNombre());
+        intent.putExtra("entidad", actividad.getEntidadNombre());
+        intent.putExtra("fecha", actividad.getFechaFormatted());
+        intent.putExtra("lugar", actividad.getLugar());
+        intent.putExtra("descripcion", actividad.getDescripcion());
+        intent.putExtra("plazas", actividad.getPlazas());
+        intent.putExtra("imagenUrl", actividad.getImagenUrl());
+        
+         if (actividad.getOds() != null) {
+            intent.putExtra("listaOds", (java.util.ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
+        }
+
+        if (sharedImage != null) {
+            androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this, sharedImage, "transition_image_" + actividad.getIdActividad());
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
         }
     }
 }

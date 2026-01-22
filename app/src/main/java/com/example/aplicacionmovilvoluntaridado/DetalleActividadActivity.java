@@ -287,7 +287,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                         v.setMail(va.getMail());
                         v.setPerfilUrl(va.getPerfilUrl());
                         v.setGrado(va.getGrado());
-                        v.setEstado("A"); // Suponemos aceptado si está en la lista de la actividad
+                        v.setEstado(va.getEstado()); // Usamos el estado real que viene de la API
                         mappedList.add(v);
                     }
                     adapter.setDatos(mappedList);

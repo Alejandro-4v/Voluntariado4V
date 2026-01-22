@@ -16,19 +16,38 @@ import java.util.List;
 public class VoluntariosAdapter extends RecyclerView.Adapter<VoluntariosAdapter.ViewHolder> {
 
     private List<Voluntario> voluntarios;
+    private List<Voluntario> listaOriginal;
 
     public VoluntariosAdapter() {
         this.voluntarios = new ArrayList<>();
+        this.listaOriginal = new ArrayList<>();
     }
 
     public void setDatos(List<Voluntario> datos) {
         this.voluntarios = datos;
+        this.listaOriginal = new ArrayList<>(datos);
         notifyDataSetChanged();
     }
     
-    // Filter helper if needed later
-    public void filtrar(List<Voluntario> filtered) {
-        this.voluntarios = filtered;
+    public void filtrar(String texto) {
+        if (texto.isEmpty()) {
+            voluntarios = new ArrayList<>(listaOriginal);
+        } else {
+            List<Voluntario> filtrada = new ArrayList<>();
+            String busqueda = texto.toLowerCase();
+            for (Voluntario v : listaOriginal) {
+                boolean coincideNombre = v.getNombre() != null && v.getNombre().toLowerCase().contains(busqueda);
+                boolean coincideApellido1 = v.getApellido1() != null && v.getApellido1().toLowerCase().contains(busqueda);
+                boolean coincideApellido2 = v.getApellido2() != null && v.getApellido2().toLowerCase().contains(busqueda);
+                boolean coincideEmail = v.getMail() != null && v.getMail().toLowerCase().contains(busqueda);
+                boolean coincideNif = v.getNif() != null && v.getNif().toLowerCase().contains(busqueda);
+
+                if (coincideNombre || coincideApellido1 || coincideApellido2 || coincideEmail || coincideNif) {
+                    filtrada.add(v);
+                }
+            }
+            voluntarios = filtrada;
+        }
         notifyDataSetChanged();
     }
 

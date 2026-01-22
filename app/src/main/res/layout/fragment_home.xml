@@ -62,10 +62,14 @@
                         android:textStyle="bold" />
                 </LinearLayout>
     
-                <ImageView
+                <ImageButton
+                    android:id="@+id/btnLogoutFragment"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_lock_power_off"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:tint="@color/colorPrimary"/>
             </LinearLayout>
     

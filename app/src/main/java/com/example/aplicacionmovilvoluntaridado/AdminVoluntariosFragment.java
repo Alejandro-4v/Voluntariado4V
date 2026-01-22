@@ -67,4 +67,10 @@ public class AdminVoluntariosFragment extends Fragment {
             }
         });
     }
+    
+    public void filtrarLista(String texto) {
+        if (adapter != null) {
+            adapter.filtrar(texto);
+        }
+    }
 }

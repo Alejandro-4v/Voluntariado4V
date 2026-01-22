@@ -15,21 +15,13 @@
         android:padding="16dp">
 
         <TextView
-            android:layout_width="92dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Actividades"
             android:textColor="@color/textColorPrimary"
             android:textSize="28sp"
             android:textStyle="bold" />
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:iconifiedByDefault="false"
-            app:queryHint="Buscar..." />
 
         <ImageButton
             android:id="@+id/btnLogout"
@@ -43,6 +35,25 @@
             android:elevation="10dp"
             app:tint="@color/colorPrimary" />
     </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"
+            app:queryHint="Buscar..."
+            app:queryBackground="@android:color/transparent"/>
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
