@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router'; 
+import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard';
 import { PastActivitiesComponent } from './past-activities/past-activities';
 import { ContactComponent } from './contact/contact';

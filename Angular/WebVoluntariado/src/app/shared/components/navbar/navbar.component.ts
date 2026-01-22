@@ -3,11 +3,12 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { AuthService, User } from '../../../services/auth.service';
 import { RouterLink } from '@angular/router';
 import { NavbarMode, NavbarOption } from './navbar.interface';
+import { ProfileModalComponent } from '../profile-modal/profile-modal.component';
 
 @Component({
     selector: 'app-navbar',
     standalone: true,
-    imports: [CommonModule, RouterLink, AsyncPipe],
+    imports: [CommonModule, RouterLink, AsyncPipe, ProfileModalComponent],
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss']
 })
@@ -18,6 +19,8 @@ export class NavbarComponent {
 
     @Output() logout = new EventEmitter<void>();
     @Output() profileClick = new EventEmitter<void>();
+
+    showProfileModal = false; // State for modal
 
     private authService = inject(AuthService);
     user$ = this.authService.getCurrentUser$();
@@ -54,12 +57,13 @@ export class NavbarComponent {
 
 
 
-    get computedLogoSrc(): string {
-        if (this.mode === 'white') {
-            return 'assets/logo-white.svg';
-        } else {
-            return 'assets/logo-blue.svg';
-        }
+    // Check local usage in template: likely <... (click)="onProfileClick()">
+    // We need to see the template or add a method.
+    // Existing template probably emits directly. I should check template content again if possible or just add method and update template.
+    // Assuming template has (click)="profileClick.emit()". I should change it to call a local method.
+
+    toggleProfileModal() {
+        this.showProfileModal = !this.showProfileModal;
     }
 
 

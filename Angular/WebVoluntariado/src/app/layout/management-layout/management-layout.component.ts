@@ -42,11 +42,6 @@ export class ManagementLayoutComponent {
     }
 
     handleProfileClick() {
-        const user = this.authService.getCurrentUser();
-        if (user?.role === 'entity') {
-            this.router.navigate(['/management/entidades/editar', user.id]);
-        } else {
-            this.router.navigate(['/management/panel']);
-        }
+        console.log('Profile clicked');
     }
 }

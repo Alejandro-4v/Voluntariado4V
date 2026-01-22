@@ -284,7 +284,7 @@ final class VoluntarioController extends AbstractController
             if ($user instanceof Voluntario && $user->getNif() === $nif) {
                 $isSelf = true;
 
-                $allowed = ['disponibilidades', 'tiposActividad', 'perfilUrl'];
+                $allowed = ['disponibilidades', 'tiposActividad', 'perfilUrl', 'mail'];
                 $data = array_intersect_key($data, array_flip($allowed));
 
             } else {

@@ -160,7 +160,7 @@ class Entidad implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPerfilUrl(): string
+    public function getPerfilUrl(): ?string
     {
         return $this->perfilUrl;
     }

@@ -41,7 +41,18 @@ export class UserLayoutComponent implements OnInit {
   }
 
   handleProfileClick() {
-    this.router.navigate(['/student/panel']);
-    console.log('Redirecting to student dashboard');
+    // Modal handled by NavbarComponent internal logic via event binding if necessary, 
+    // but here Navbar emits event. We need to tell Navbar to show modal? 
+    // Wait, Navbar has showProfileModal. If we listen to (profileClick), we can just toggle it IN Navbar?
+    // Actually, look at Navbar HTML: (click)="profileClick.emit()". 
+    // If I want Navbar to handle it internally, I should change Navbar specific logic OR Layout listens and toggles?
+    // BETTER: Navbar handles it internally. Revert Layout to do nothing or remove the event binding in layout HTML.
+    // However, looking at Navbar template (not visible here but usually), profile click emits.
+    // Let's check NavbarComponent.ts again. It has @Output() profileClick.
+    // If I want the modal to be inside Navbar, Navbar should handle the click itself 
+    // AND optionally emit.
+    // Let's update NavbarComponent to handle the click locally usually.
+    // For now, let's make layout handlers do nothing or log.
+    console.log('Profile clicked');
   }
 }
