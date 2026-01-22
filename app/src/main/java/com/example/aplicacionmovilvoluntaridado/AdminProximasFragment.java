@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
+import com.example.aplicacionmovilvoluntaridado.models.Ods;
 import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class AdminProximasFragment extends Fragment {
 
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Actividad actividad, int position) {
+            public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
                 Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
                 intent.putExtra("actividad_object", actividad); // Pass full object
                 intent.putExtra("nombre", actividad.getNombre());
@@ -54,8 +55,11 @@ public class AdminProximasFragment extends Fragment {
                 intent.putExtra("plazas", actividad.getPlazas());
                 intent.putExtra("imagenUrl", actividad.getImagenUrl());
                 intent.putExtra("listaOds",
-                        (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
-                startActivity(intent);
+                        (ArrayList<Ods>) actividad.getOds());
+                // Add Transition
+                androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                     getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
+                startActivity(intent, options.toBundle());
             }
         });
         recyclerView.setAdapter(adapter);

@@ -105,7 +105,7 @@ public class PasadasActividadesFragment extends Fragment {
 
     private class ActividadClickListener implements RecyclerDataAdapter.OnItemClickListener {
         @Override
-        public void onItemClick(Actividad actividad, int position) {
+        public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
             Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
             intent.putExtra("actividad_object", actividad); // Pass full object
             intent.putExtra("nombre", actividad.getNombre());
@@ -116,7 +116,11 @@ public class PasadasActividadesFragment extends Fragment {
             intent.putExtra("plazas", 0);
             intent.putExtra("listaOds",
                     (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
-            startActivity(intent);
+            
+            // Add Transition
+            androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                 getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
+            startActivity(intent, options.toBundle());
         }
     }
 }

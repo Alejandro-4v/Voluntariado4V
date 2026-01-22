@@ -73,6 +73,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     public class RecyclerDataHolder extends RecyclerView.ViewHolder {
         // [cite: 131] Referencias a los elementos visuales
         TextView tvNombre, tvEntidad, tvFecha;
+        android.widget.ImageView ivImagen;
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +81,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             tvNombre = itemView.findViewById(R.id.tvItemActivityName);
             tvEntidad = itemView.findViewById(R.id.tvItemEntityName);
             tvFecha = itemView.findViewById(R.id.tvItemDateLocation);
+            ivImagen = itemView.findViewById(R.id.ivItemImage);
         }
 
         // Método assignData modificado para recibir datos y listener
@@ -88,19 +90,40 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             tvNombre.setText(actividad.getNombre());
             tvEntidad.setText(actividad.getEntidadNombre());
             tvFecha.setText(actividad.getFechaFormatted());
+            
+            // Imagen
+            if (actividad.getImagenUrl() != null && !actividad.getImagenUrl().isEmpty()) {
+                com.android.volley.toolbox.ImageRequest request = new com.android.volley.toolbox.ImageRequest(
+                    actividad.getImagenUrl(),
+                    new com.android.volley.Response.Listener<android.graphics.Bitmap>() {
+                        @Override
+                        public void onResponse(android.graphics.Bitmap bitmap) {
+                            ivImagen.setImageBitmap(bitmap);
+                        }
+                    }, 0, 0, null, null,
+                    error -> {
+                         ivImagen.setImageResource(android.R.drawable.ic_menu_gallery); // Error placeholder
+                    });
+                com.android.volley.toolbox.Volley.newRequestQueue(itemView.getContext()).add(request);
+            } else {
+                ivImagen.setImageResource(android.R.drawable.ic_menu_gallery);
+            }
+
+            // Transition Name
+            ivImagen.setTransitionName("transition_image_" + actividad.getIdActividad());
 
             // [cite: 221] Configuramos el click en todo el elemento (itemView)
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // [cite: 227] Devolvemos el objeto y la posición al listener
-                    onItemClickListener.onItemClick(actividad, getAdapterPosition());
+                    // [cite: 227] Devolvemos el objeto, la posición y la vista compartida
+                    onItemClickListener.onItemClick(actividad, getAdapterPosition(), ivImagen);
                 }
             });
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Actividad actividad, int position);
+        void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage);
     }
 }

@@ -228,6 +228,12 @@ public class DetalleActividadActivity extends AppCompatActivity {
             if (imagenUrl != null && !imagenUrl.isEmpty()) {
                 final String finalUrl = imagenUrl;
                 android.widget.ImageView ivImagen = findViewById(R.id.ivDetalleImagen);
+                
+                // Set Transition Name
+                if (actividadObj != null) {
+                    ivImagen.setTransitionName("transition_image_" + actividadObj.getIdActividad());
+                }
+
                 com.android.volley.toolbox.ImageRequest request = new com.android.volley.toolbox.ImageRequest(
                     finalUrl,
                     new com.android.volley.Response.Listener<android.graphics.Bitmap>() {

@@ -28,15 +28,24 @@ public class ActividadesActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Clear session
-                getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE).edit().clear().apply();
-                com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
-                
-                // Go to login
-                android.content.Intent intent = new android.content.Intent(ActividadesActivity.this, LoginActivity.class);
-                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                new androidx.appcompat.app.AlertDialog.Builder(ActividadesActivity.this)
+                    .setTitle("Cerrar sesión")
+                    .setMessage("¿Estás seguro de que quieres salir?")
+                    .setPositiveButton("Salir", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface dialog, int which) {
+                            // Clear session
+                            getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE).edit().clear().apply();
+                            com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
+                            
+                            // Go to login
+                            android.content.Intent intent = new android.content.Intent(ActividadesActivity.this, LoginActivity.class);
+                            intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
             }
         });
 

@@ -49,7 +49,7 @@ public class ProximasActividadesFragment extends Fragment {
         // Inicializamos con lista vacía
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Actividad actividad, int position) {
+            public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
                 // Lógica de abrir detalle
                 Intent intent = new Intent(getContext(), DetalleActividadActivity.class);
                 intent.putExtra("actividad_object", actividad); // Pass full object
@@ -62,7 +62,11 @@ public class ProximasActividadesFragment extends Fragment {
                 intent.putExtra("imagenUrl", actividad.getImagenUrl());
                 intent.putExtra("listaOds",
                         (ArrayList<com.example.aplicacionmovilvoluntaridado.models.Ods>) actividad.getOds());
-                startActivity(intent);
+                
+                // Add Transition
+                androidx.core.app.ActivityOptionsCompat options = androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation(
+                     getActivity(), sharedImage, "transition_image_" + actividad.getIdActividad());
+                startActivity(intent, options.toBundle());
             }
         });
         recyclerView.setAdapter(adapter);
