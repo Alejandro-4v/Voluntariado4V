@@ -11,6 +11,7 @@ export interface Voluntario {
     mail: string;
     estado: string;
     perfilUrl?: string;
+    perfil_url?: string;
     disponibilidades?: Disponibilidad[];
     tiposActividad?: TipoActividad[];
 }

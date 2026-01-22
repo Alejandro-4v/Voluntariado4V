@@ -7,14 +7,16 @@ import { Voluntario } from '../models/voluntario.model';
 import { Entidad } from '../models/entidad.model';
 
 export interface User {
-  id?: number; 
+  id?: number;
   nif?: string;
   cif?: string;
   email: string;
   name: string;
   role: 'volunteer' | 'entity' | 'admin';
   gradeId?: number;
-  details?: Voluntario | Entidad; 
+  perfilUrl?: string;
+  perfil_url?: string;
+  details?: Voluntario | Entidad;
 }
 
 @Injectable({
@@ -26,15 +28,16 @@ export class AuthService {
   private apiUrl = `${API_URL}/login`;
 
   constructor(private http: HttpClient) {
-    
+
     this.checkExistingSession();
   }
 
-  
+
   login(email: string, password: string, type: 'voluntario' | 'entidad' | 'administrador' = 'voluntario'): Observable<{ success: boolean; user?: User; message?: string }> {
     return this.http.post<{ token: string; user: User }>(`${this.apiUrl}?usuario=${type}`, { loginMail: email, password }).pipe(
       map(response => {
         if (response.token && response.user) {
+          console.log('AuthService Login Response:', response.user); // DEBUG: Check user data from API
           localStorage.setItem('auth_token', response.token);
           this.isAuthenticated$.next(true);
           this.saveUserSession(response.user);
@@ -44,10 +47,10 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Login error', error);
-        
+
         let message = error.error?.error || 'Credenciales incorrectas o error de servidor';
 
-        
+
         if (message === 'Invalid credentials') {
           message = 'El correo electrónico o la contraseña son incorrectos.';
         }
@@ -62,7 +65,7 @@ export class AuthService {
     this.currentUser$.next(user);
   }
 
-  
+
   logout(): void {
     localStorage.removeItem('auth_user');
     localStorage.removeItem('auth_token');
@@ -70,27 +73,27 @@ export class AuthService {
     this.isAuthenticated$.next(false);
   }
 
-  
+
   getCurrentUser$(): Observable<User | null> {
     return this.currentUser$.asObservable();
   }
 
-  
+
   getCurrentUser(): User | null {
     return this.currentUser$.getValue();
   }
 
-  
+
   isAuthenticated(): Observable<boolean> {
     return this.isAuthenticated$.asObservable();
   }
 
-  
+
   getToken(): string | null {
     return localStorage.getItem('auth_token');
   }
 
-  
+
   private checkExistingSession(): void {
     const storedUser = localStorage.getItem('auth_user');
     const token = localStorage.getItem('auth_token');

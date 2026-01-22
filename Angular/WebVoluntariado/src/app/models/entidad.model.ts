@@ -12,6 +12,7 @@ export interface Entidad {
     contactMail: string;
     loginMail?: string;
     perfilUrl?: string;
+    perfil_url?: string;
     actividades?: ActividadEntidad[];
 }
 
@@ -26,5 +27,5 @@ export interface ActividadEntidad {
     grado: Grado;
     tiposActividad: TipoActividad[];
     ods: Ods[];
-    
+
 }

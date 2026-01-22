@@ -63,12 +63,15 @@ final class LoginController extends AbstractController
                 $userData['nif'] = $user->getNif();
                 $userData['name'] = $user->getNombre() . ' ' . $user->getApellido1();
                 $userData['gradeId'] = $user->getGrado()->getIdGrado();
+                $userData['perfilUrl'] = $user->getPerfilUrl();
             } elseif ($type === 'entidad') {
                 $userData['id'] = $user->getIdEntidad();
                 $userData['cif'] = $user->getCif();
                 $userData['name'] = $user->getNombre();
+                $userData['perfilUrl'] = $user->getPerfilUrl();
             } elseif ($type === 'administrador') {
                 $userData['name'] = $user->getNombre();
+                $userData['perfilUrl'] = $user->getPerfilUrl();
             }
 
             return $this->json([

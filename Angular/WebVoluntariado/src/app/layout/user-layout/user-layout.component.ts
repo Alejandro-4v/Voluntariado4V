@@ -8,12 +8,12 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-    selector: 'app-user-layout',
-    standalone: true,
-    imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
-    template: `
+  selector: 'app-user-layout',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
+  template: `
     <div class="dashboard-wrapper min-vh-100 bg-light d-flex flex-column">
-      <app-navbar [options]="currentOptions" mode="white" (logout)="handleLogout()"></app-navbar>
+      <app-navbar [options]="currentOptions" mode="white" (logout)="handleLogout()" (profileClick)="handleProfileClick()"></app-navbar>
       <div class="flex-grow-1">
         <router-outlet></router-outlet>
       </div>
@@ -22,21 +22,26 @@ import { AuthService } from '../../services/auth.service';
   `
 })
 export class UserLayoutComponent implements OnInit {
-    private router = inject(Router);
-    private authService = inject(AuthService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
-    currentOptions: NavbarOption[] = [
-        { label: 'Mis actividades pasadas', path: '/student/actividades-pasadas' },
-        { label: 'Contacto', path: '/student/contacto' },
-        { label: 'Nuevas actividades', type: 'button', path: '/student/panel' }
-    ];
+  currentOptions: NavbarOption[] = [
+    { label: 'Mis actividades pasadas', path: '/student/actividades-pasadas' },
+    { label: 'Contacto', path: '/student/contacto' },
+    { label: 'Nuevas actividades', type: 'button', path: '/student/panel' }
+  ];
 
-    ngOnInit() {
-        
-    }
+  ngOnInit() {
 
-    handleLogout() {
-        this.authService.logout();
-        this.router.navigate(['/auth/iniciar-sesion']);
-    }
+  }
+
+  handleLogout() {
+    this.authService.logout();
+    this.router.navigate(['/auth/iniciar-sesion']);
+  }
+
+  handleProfileClick() {
+    this.router.navigate(['/student/panel']);
+    console.log('Redirecting to student dashboard');
+  }
 }

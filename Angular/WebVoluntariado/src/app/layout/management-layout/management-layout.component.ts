@@ -11,7 +11,7 @@ import { NavbarOption } from '../../shared/components/navbar/navbar.interface';
     imports: [CommonModule, RouterOutlet, NavbarComponent],
     template: `
     <div class="management-wrapper min-vh-100 bg-light">
-        <app-navbar [options]="navbarOptions" mode="blue" (logout)="handleLogout()"></app-navbar>
+        <app-navbar [options]="navbarOptions" mode="blue" (logout)="handleLogout()" (profileClick)="handleProfileClick()"></app-navbar>
         <router-outlet></router-outlet>
     </div>
     `
@@ -39,5 +39,14 @@ export class ManagementLayoutComponent {
     handleLogout() {
         this.authService.logout();
         this.router.navigate(['/auth/iniciar-sesion']);
+    }
+
+    handleProfileClick() {
+        const user = this.authService.getCurrentUser();
+        if (user?.role === 'entity') {
+            this.router.navigate(['/management/entidades/editar', user.id]);
+        } else {
+            this.router.navigate(['/management/panel']);
+        }
     }
 }
