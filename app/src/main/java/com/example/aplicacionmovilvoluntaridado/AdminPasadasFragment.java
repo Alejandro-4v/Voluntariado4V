@@ -102,8 +102,8 @@ public class AdminPasadasFragment extends Fragment {
                             }
                             adapter.setDatos(pasadas);
 
-                            // Empty State Logic
-                            // Empty State Logic
+                             
+                             
                             if (getView() != null) {
                                 android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
                                 RecyclerView rv = getView().findViewById(R.id.rvActividades);

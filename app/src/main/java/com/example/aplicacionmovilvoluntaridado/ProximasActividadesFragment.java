@@ -32,7 +32,7 @@ public class ProximasActividadesFragment extends Fragment {
     private View progressBar;
 
     public ProximasActividadesFragment() {
-        // Required empty public constructor
+         
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ProximasActividadesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_actividades, container, false);
 
-        // --- CORRECCIÓN AQUÍ: Usamos el ID correcto del XML 'rvActividades' ---
+         
         recyclerView = view.findViewById(R.id.rvActividades);
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -85,12 +85,32 @@ public class ProximasActividadesFragment extends Fragment {
                     List<Actividad> todas = response.body();
                     List<Actividad> proximas = new ArrayList<>();
 
-                    // Aquí puedes añadir tu lógica de filtrado de fechas real
-                    proximas.addAll(todas);
+                     
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    java.util.Date now = new java.util.Date();
+
+                    for (Actividad a : todas) {
+                         if (a.getInicio() != null) {
+                             try {
+                                 String dateStr = a.getInicio().replace("T", " ");
+                                 if (dateStr.contains("+")) {
+                                     dateStr = dateStr.substring(0, dateStr.indexOf("+"));
+                                 }
+                                 
+                                 java.util.Date activityDate = sdf.parse(dateStr);
+                                 // "Upcoming" means future or present? Usually >= now.
+                                 if (activityDate != null && (activityDate.after(now) || activityDate.equals(now))) {
+                                     proximas.add(a);
+                                 }
+                             } catch (java.text.ParseException e) {
+                                 e.printStackTrace();
+                             }
+                         }
+                    }
 
                     if (adapter != null) adapter.setDatos(proximas);
 
-                    // Empty State Logic
+                     
                     android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
                     if (proximas.isEmpty()) {
                         recyclerView.setVisibility(View.GONE);

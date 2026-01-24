@@ -11,7 +11,7 @@ public class TipoActividad implements Serializable {
     @SerializedName("imagen_url")
     private String imagenUrl;
 
-    // Getters and Setters
+     
     public int getIdTipoActividad() {
         return idTipoActividad;
     }

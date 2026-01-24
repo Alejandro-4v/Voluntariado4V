@@ -55,7 +55,7 @@ public class PasadasActividadesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_actividades, container, false);
 
-        // --- CORRECCIÓN AQUÍ: Usamos el ID correcto 'rvActividades' ---
+         
         recyclerView = view.findViewById(R.id.rvActividades);
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -81,13 +81,40 @@ public class PasadasActividadesFragment extends Fragment {
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     List<Actividad> todas = response.body();
-                    // Lógica placeholder: mostrar todas.
-                    // Deberías filtrar las que ya pasaron por fecha.
-                    if (adapter != null) adapter.setDatos(todas);
+                    List<Actividad> pasadas = new ArrayList<>();
+                    
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    java.util.Date now = new java.util.Date();
 
-                    // Empty State Logic
+                    for (Actividad a : todas) {
+                         if (a.getInicio() != null) {
+                             try {
+                                 // Handle potential T separator and timezone if needed, 
+                                 // assuming standard format "yyyy-MM-dd HH:mm:ss" which is common
+                                 // The user screenshot showed +00:00, so we might need to handle that.
+                                 // Let's clean the string first to be safe or use a robust formatter
+                                 String dateStr = a.getInicio().replace("T", " ");
+                                 // Remove timezone if present for simple comparison or match format
+                                 if (dateStr.contains("+")) {
+                                     dateStr = dateStr.substring(0, dateStr.indexOf("+"));
+                                 }
+                                 
+                                 java.util.Date activityDate = sdf.parse(dateStr);
+                                 if (activityDate != null && activityDate.before(now)) {
+                                     pasadas.add(a);
+                                 }
+                             } catch (java.text.ParseException e) {
+                                 e.printStackTrace();
+                                 // If parse fails, maybe keep it or discard? Safe to discard if we can't verify date.
+                             }
+                         }
+                    }
+
+                    if (adapter != null) adapter.setDatos(pasadas);
+                    
                     android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
-                    if (todas.isEmpty()) {
+                    // Update empty state check based on filtered list
+                    if (pasadas.isEmpty()) {
                         recyclerView.setVisibility(View.GONE);
                         if(tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE);
                     } else {

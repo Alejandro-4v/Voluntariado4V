@@ -8,7 +8,7 @@
     android:background="@color/surfaceColor"
     tools:context=".DetalleActividadActivity">
 
-    <!-- Scrollable Content Area -->
+    
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -126,7 +126,7 @@
 
             </LinearLayout>
 
-            <!-- ODS Section -->
+            
             <TextView
                 android:id="@+id/tvLabelOds"
                 android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLabelOds" />
 
-            <!-- New Info Sections -->
+            
             <TextView
                 android:id="@+id/tvLabelEntidad"
                 android:layout_width="wrap_content"
@@ -271,7 +271,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Fixed Bottom Buttons -->
+    
     <Button
         android:id="@+id/btnValorar"
         android:layout_width="0dp"

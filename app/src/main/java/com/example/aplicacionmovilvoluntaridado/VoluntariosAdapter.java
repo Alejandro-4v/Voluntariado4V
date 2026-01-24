@@ -75,17 +75,17 @@ public class VoluntariosAdapter extends RecyclerView.Adapter<VoluntariosAdapter.
             holder.tvGrado.setText("Sin grado");
         }
         
-        // Simple status mapping
+         
         String estado = v.getEstado() != null ? v.getEstado() : "?";
         String estadoLabel = estado;
         int color = android.graphics.Color.GRAY;
         
         if ("A".equals(estado)) {
             estadoLabel = "Activo";
-            color = android.graphics.Color.parseColor("#4CAF50"); // Green
+            color = android.graphics.Color.parseColor("#4CAF50");  
         } else if ("P".equals(estado)) {
              estadoLabel = "Pendiente";
-             color = android.graphics.Color.parseColor("#FF9800"); // Orange
+             color = android.graphics.Color.parseColor("#FF9800");  
         } else if ("I".equals(estado)) {
              estadoLabel = "Inactivo";
              color = android.graphics.Color.GRAY;

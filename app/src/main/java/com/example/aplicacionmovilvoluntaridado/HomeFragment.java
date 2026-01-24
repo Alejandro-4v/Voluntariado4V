@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ImageView; // Necesario para la imagen compartida
+import android.widget.ImageView;  
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +28,8 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
-    // 1. Definimos la Interfaz de comunicación (PDF pág. 21)
-    // El fragmento define "qué pasó" (se seleccionó una actividad), pero no "qué hacer" (abrir actividad nueva).
+     
+     
     public interface OnActividadSelectedListener {
         void onActividadSelected(Actividad actividad, ImageView sharedImage);
     }
@@ -42,16 +42,16 @@ public class HomeFragment extends Fragment {
     private View cardEmptyState;
     private RecyclerDataAdapter adapter;
 
-    // Loading Views
+     
     private View progressBar;
     private View contentLayout;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh;
 
     public HomeFragment() {
-        // Required empty public constructor
+         
     }
 
-    // 2. Conectamos el listener al adjuntar el Fragmento a la Activity (PDF pág. 24)
+     
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // Limpiamos la referencia para evitar fugas de memoria
+     
     @Override
     public void onDetach() {
         super.onDetach();
@@ -74,16 +74,16 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Bind Loading Views
+         
         progressBar = view.findViewById(R.id.progressBar);
         contentLayout = view.findViewById(R.id.contentLayout);
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
 
-        // Initial State: Loading
+         
         progressBar.setVisibility(View.VISIBLE);
         contentLayout.setVisibility(View.GONE);
 
-        // Personalizar saludo
+         
         TextView tvUserName = view.findViewById(R.id.tvUserName);
         final String nifVal = (getActivity() != null)
                 ? requireActivity().getSharedPreferences("VoluntariadoPrefs", Context.MODE_PRIVATE).getString("user_nif", null)
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
             tvUserName.setText(userName);
         }
 
-        // Setup Swipe Refresh
+         
         if (swipeRefresh != null) {
             swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
             swipeRefresh.setOnRefreshListener(new androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener() {
@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Logout Button Logic
+         
         android.widget.ImageButton btnLogout = view.findViewById(R.id.btnLogoutFragment);
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Bind Stats & Lists
+         
         tvTotalHours = view.findViewById(R.id.tvTotalHours);
         tvTotalActivities = view.findViewById(R.id.tvTotalActivities);
         rvMyActivities = view.findViewById(R.id.rvMyActivities);
@@ -141,11 +141,11 @@ public class HomeFragment extends Fragment {
 
         rvMyActivities.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // 3. Modificamos el Adapter para usar el Listener
+         
         adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Actividad actividad, int position, ImageView sharedImage) {
-                // DELEGAMOS la acción a la Activity a través de la interfaz
+                 
                 if (listener != null) {
                     listener.onActividadSelected(actividad, sharedImage);
                 }
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
         });
         rvMyActivities.setAdapter(adapter);
 
-        // Listeners de botones adicionales
+         
         Button btnFindActivities = view.findViewById(R.id.btnFindActivities);
         View cardExplore = view.findViewById(R.id.cardExplore);
         View cardHistory = view.findViewById(R.id.cardHistory);
@@ -172,7 +172,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Fetch Data
+         
         if (nifVal != null) {
             loadUserData(nifVal, true);
         } else {

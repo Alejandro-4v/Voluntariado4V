@@ -12,7 +12,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.example.aplicacionmovilvoluntaridado.models.Ods;
 import java.util.ArrayList;
 
-// ...
+ 
 
 public class DetalleActividadActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_actividad);
 
-        // 1. Enlazamos con el XML
+         
         TextView tvTitulo = findViewById(R.id.tvDetalleTitulo);
         TextView tvFecha = findViewById(R.id.tvDetalleFecha);
         TextView tvLugar = findViewById(R.id.tvDetalleLugar);
@@ -31,7 +31,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
         Button btnCerrar = findViewById(R.id.btnCerrar);
         Button btnValorar = findViewById(R.id.btnValorar);
 
-        // 2. Recibimos los datos que nos envía la lista
+         
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String nombre = extras.getString("nombre");
@@ -41,54 +41,54 @@ public class DetalleActividadActivity extends AppCompatActivity {
             String descripcion = extras.getString("descripcion");
             int plazas = extras.getInt("plazas");
 
-            // Recibir lista de ODS
+             
             ArrayList<Ods> listaOds = (ArrayList<Ods>) extras.getSerializable("listaOds");
 
             String imagenUrl = extras.getString("imagenUrl");
 
             com.example.aplicacionmovilvoluntaridado.models.Actividad actividadObj = (com.example.aplicacionmovilvoluntaridado.models.Actividad) extras.getSerializable("actividad_object");
 
-            // 3. Rellenamos los huecos
-            // 3. Rellenamos los huecos con datos del objeto completo
+             
+             
             if (actividadObj != null) {
                 tvTitulo.setText(actividadObj.getNombre() + " - " + actividadObj.getEntidadNombre());
                 
-                // Formato fechas
-                // Formato fechas
+                 
+                 
                 String fechaStr = "";
                 try {
                     String inicioRaw = actividadObj.getInicio();
                     String finRaw = actividadObj.getFin();
                     
                     java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
-                    // Handle potential timezone offset if simple parser fails or use a more robust pattern if needed.
-                    // Ideally, use a pattern that matches the server output.
-                    // Server: 2026-12-05T15:30:00+00:00 -> This is typically ISO 8601
-                    // Android SimpleDateFormat with 'X' or 'Z' handles timezones.
+                     
+                     
+                     
+                     
                     
-                    // Let's try to parse the first part if timezone parsing is tricky with older APIs.
-                    // Or use a precise pattern:
-                    // Note: Patterns with 'XXX' require API 24. For compatibility, we might need to strip or handle manually if needed, 
-                    // but assumes API is reasonably modern. If 'XXX' causes issues, we can try generic parsing.
+                     
+                     
+                     
+                     
                     
-                    // Attempting a robust dual-parser approach
+                     
                     java.util.Date dateInicio = null;
                     java.util.Date dateFin = null;
 
-                    // Try standard ISO with offset
+                     
                     try {
-                         // This pattern handles "2026-12-05T15:30:00+00:00"
+                          
                         java.text.SimpleDateFormat iso8601 = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.getDefault());
                         dateInicio = iso8601.parse(inicioRaw);
                         if (finRaw != null) dateFin = iso8601.parse(finRaw);
                     } catch (Exception e1) {
                         try {
-                             // Fallback for no offset or different format
+                              
                             java.text.SimpleDateFormat isoLegacy = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
                             dateInicio = isoLegacy.parse(inicioRaw);
                             if (finRaw != null) dateFin = isoLegacy.parse(finRaw);
                         } catch (Exception e2) {
-                            // If all fails, keep raw
+                             
                         }
                     }
 
@@ -102,7 +102,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                              fechaStr += "\nFin:    " + outputDate.format(dateFin) + "  " + outputHour.format(dateFin);
                         }
                     } else {
-                         // Fallback to raw string replacement if parsing failed completely
+                          
                          fechaStr = "Inicio: " + (inicioRaw != null ? inicioRaw.replace("T", " ") : "?");
                     }
                     
@@ -114,14 +114,14 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 tvLugar.setText(actividadObj.getLugar());
                 tvDescripcion.setText(actividadObj.getDescripcion());
                 
-                // Plazas Logic
+                 
                 int currentVolunteers = 0;
                 if (actividadObj.getVoluntarios() != null) {
                     currentVolunteers = actividadObj.getVoluntarios().size();
                 }
                 tvPlazas.setText(currentVolunteers + " / " + actividadObj.getPlazas());
                 
-                // Nuevos campos
+                 
                 TextView tvEntidadInfo = findViewById(R.id.tvDetalleEntidadInfo);
                 
                 TextView tvLabelGrado = findViewById(R.id.tvLabelGrado);
@@ -131,9 +131,9 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 ChipGroup chipGroupTipos = findViewById(R.id.chipGroupDetalleTipos);
                 
                 TextView tvLabelOds = findViewById(R.id.tvLabelOds);
-                // chipGroupOds is already bound at top
+                 
                 
-                // Entidad Info
+                 
                 if (actividadObj.getConvoca() != null) {
                     String info = "Responsable: " + actividadObj.getConvoca().getNombreResponsable() + " " + actividadObj.getConvoca().getApellidosResponsable();
                     info += "\nEmail: " + actividadObj.getConvoca().getContactMail();
@@ -142,7 +142,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                     tvEntidadInfo.setLinksClickable(true);
                 }
                 
-                // Grado Info
+                 
                 if (actividadObj.getGrado() != null) {
                      tvLabelGrado.setVisibility(View.VISIBLE);
                      tvGrado.setVisibility(View.VISIBLE);
@@ -152,11 +152,11 @@ public class DetalleActividadActivity extends AppCompatActivity {
                      tvGrado.setVisibility(View.GONE);
                 }
                 
-                // Tipos Chips
+                 
                 if (actividadObj.getTiposActividad() != null && !actividadObj.getTiposActividad().isEmpty()) {
                     tvLabelTipos.setVisibility(View.VISIBLE);
                     chipGroupTipos.setVisibility(View.VISIBLE);
-                    chipGroupTipos.removeAllViews(); // Clear previous if any
+                    chipGroupTipos.removeAllViews();  
                     for (com.example.aplicacionmovilvoluntaridado.models.TipoActividad tipo : actividadObj.getTiposActividad()) {
                         Chip chip = new Chip(this);
                         chip.setText(tipo.getDescripcion());
@@ -170,7 +170,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                     chipGroupTipos.setVisibility(View.GONE);
                 }
 
-                 // ODS chips logic
+                  
                  boolean hasOds = false;
                  chipGroupOds.removeAllViews();
                  
@@ -201,19 +201,19 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 }
 
 
-                // Imagen
+                 
                 if (actividadObj.getImagenUrl() != null && !actividadObj.getImagenUrl().isEmpty()) {
-                     imagenUrl = actividadObj.getImagenUrl(); // Update local var for volley
+                     imagenUrl = actividadObj.getImagenUrl();  
                 }
             } else {
-                 // Fallback to extras legacy (should not happen with new flow)
+                  
                  tvTitulo.setText(nombre + " - " + entidad);
                  tvFecha.setText(fecha);
                  tvLugar.setText(lugar);
                  tvDescripcion.setText(descripcion);
                  tvPlazas.setText("0 / " + plazas);
                  
-                 // ODS Legacy
+                  
                  if (listaOds != null) {
                     for (Ods ods : listaOds) {
                         Chip chip = new Chip(this);
@@ -224,12 +224,12 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 }
             }
             
-            // Cargar imagen con Volley (Común)
+             
             if (imagenUrl != null && !imagenUrl.isEmpty()) {
                 final String finalUrl = imagenUrl;
                 android.widget.ImageView ivImagen = findViewById(R.id.ivDetalleImagen);
                 
-                // Set Transition Name
+                 
                 if (actividadObj != null) {
                     ivImagen.setTransitionName("transition_image_" + actividadObj.getIdActividad());
                 }
@@ -242,7 +242,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                             android.util.Log.d("VOLLEY_DEBUG", "Image loaded successfully: " + finalUrl);
                             ivImagen.setImageBitmap(bitmap);
                         }
-                    }, 0, 0, null, // Max width/height
+                    }, 0, 0, null,  
                     new com.android.volley.Response.ErrorListener() {
                         public void onErrorResponse(com.android.volley.VolleyError error) {
                            android.util.Log.e("VOLLEY_DEBUG", "Error loading image: " + finalUrl + " Error: " + error.getMessage());
@@ -254,29 +254,29 @@ public class DetalleActividadActivity extends AppCompatActivity {
 
 
             
-            // 4. Lógica de Roles
+             
             android.content.SharedPreferences prefs = getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE);
             String userRole = prefs.getString("user_role", "voluntario");
             
-            // Views extras
+             
             TextView tvLabelVoluntarios = findViewById(R.id.tvLabelVoluntarios);
             androidx.recyclerview.widget.RecyclerView rvVoluntarios = findViewById(R.id.rvDetalleVoluntarios);
             
 
 
             if ("ROLE_ADMIN".equals(userRole) || "admin".equalsIgnoreCase(userRole)) {
-                // ADMIN VIEW
+                 
                 btnValorar.setVisibility(View.GONE);
                 
                 if (actividadObj != null && actividadObj.getVoluntarios() != null && !actividadObj.getVoluntarios().isEmpty()) {
                     tvLabelVoluntarios.setVisibility(View.VISIBLE);
                     rvVoluntarios.setVisibility(View.VISIBLE);
                     
-                    // Setup Adapter
+                     
                     rvVoluntarios.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
                     VoluntariosAdapter adapter = new VoluntariosAdapter();
                     
-                    // Map VoluntarioActividad -> Voluntario
+                     
                     ArrayList<com.example.aplicacionmovilvoluntaridado.models.Voluntario> mappedList = new ArrayList<>();
                     for (com.example.aplicacionmovilvoluntaridado.models.VoluntarioActividad va : actividadObj.getVoluntarios()) {
                         com.example.aplicacionmovilvoluntaridado.models.Voluntario v = new com.example.aplicacionmovilvoluntaridado.models.Voluntario();
@@ -287,7 +287,7 @@ public class DetalleActividadActivity extends AppCompatActivity {
                         v.setMail(va.getMail());
                         v.setPerfilUrl(va.getPerfilUrl());
                         v.setGrado(va.getGrado());
-                        v.setEstado(va.getEstado()); // Usamos el estado real que viene de la API
+                        v.setEstado(va.getEstado());  
                         mappedList.add(v);
                     }
                     adapter.setDatos(mappedList);
@@ -298,13 +298,13 @@ public class DetalleActividadActivity extends AppCompatActivity {
                 }
                 
             } else {
-                // STUDENT VIEW
+                 
                 btnValorar.setText("Informar de un problema");
                 btnValorar.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_dialog_email, 0, 0, 0);
                 btnValorar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String contactMail = "soporte@cuatrovientos.org"; // Fallback
+                        String contactMail = "soporte@cuatrovientos.org";  
                         if (actividadObj != null && actividadObj.getConvoca() != null) {
                             contactMail = actividadObj.getConvoca().getContactMail();
                         }
@@ -325,14 +325,14 @@ public class DetalleActividadActivity extends AppCompatActivity {
             }
         }
 
-        // 5. Funcionalidad botones
+         
         btnCerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // Cierra la actividad y vuelve a la lista
+                finish();  
             }
         });
         
-        // Listener original de valorar se ha movido/eliminado arriba
+         
     }
 }

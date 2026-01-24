@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// Importante: Asegúrate de que esta importación no esté en rojo tras sincronizar el gradle
+ 
 import com.bumptech.glide.Glide;
 
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
@@ -79,41 +79,41 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     }
 
     public static class RecyclerDataHolder extends RecyclerView.ViewHolder {
-        // Variables corregidas para coincidir con tu XML conceptualmente
+         
         ImageView imgActividad;
         TextView txtNombre;
         TextView txtEntidad;
-        TextView txtFechaLugar; // En tu XML están juntos en 'tvItemDateLocation'
+        TextView txtFechaLugar;  
 
         public RecyclerDataHolder(@NonNull View itemView) {
             super(itemView);
 
-            // CORRECCIÓN DE IDs SEGÚN TU XML (item_actividad.xml)
-            imgActividad = itemView.findViewById(R.id.ivItemImage);           // Antes imgActividad
-            txtNombre = itemView.findViewById(R.id.tvItemActivityName);       // Antes txtNombre
-            txtEntidad = itemView.findViewById(R.id.tvItemEntityName);        // Antes txtEntidad
-            txtFechaLugar = itemView.findViewById(R.id.tvItemDateLocation);   // Antes txtFecha y txtLugar por separado
+             
+            imgActividad = itemView.findViewById(R.id.ivItemImage);            
+            txtNombre = itemView.findViewById(R.id.tvItemActivityName);        
+            txtEntidad = itemView.findViewById(R.id.tvItemEntityName);         
+            txtFechaLugar = itemView.findViewById(R.id.tvItemDateLocation);    
         }
 
         public void assignData(Actividad actividad, OnItemClickListener listener) {
             txtNombre.setText(actividad.getNombre());
             txtEntidad.setText(actividad.getEntidadNombre());
 
-            // Combinamos lugar y fecha porque tu XML solo tiene un campo para ambos
+             
             String info = actividad.getLugar() + " - " + actividad.getFechaFormatted();
             txtFechaLugar.setText(info);
 
-            // Asignar nombre de transición para la animación compartida
+             
             imgActividad.setTransitionName("transition_image_" + actividad.getIdActividad());
 
-            // Cargar imagen con Glide
+             
             if (actividad.getImagenUrl() != null && !actividad.getImagenUrl().isEmpty()) {
                 Glide.with(itemView.getContext())
                         .load(actividad.getImagenUrl())
                         .placeholder(R.drawable.ic_launcher_background)
                         .into(imgActividad);
             } else {
-                // Es buena práctica poner una imagen por defecto si viene vacía
+                 
                 imgActividad.setImageResource(R.drawable.ic_launcher_background);
             }
 

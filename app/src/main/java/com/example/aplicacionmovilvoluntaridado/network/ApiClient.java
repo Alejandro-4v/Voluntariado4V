@@ -29,14 +29,14 @@ public class ApiClient {
             httpClient.readTimeout(60, TimeUnit.SECONDS);
             httpClient.writeTimeout(60, TimeUnit.SECONDS);
 
-            // Add Auth Interceptor
+             
             android.content.Context appContext = context.getApplicationContext();
             httpClient.addInterceptor(chain -> {
                 okhttp3.Request original = chain.request();
                 okhttp3.Request.Builder requestBuilder = original.newBuilder();
 
                 if (appContext != null) {
-                    // Skip Auth header for Login requests
+                     
                     if (original.url().encodedPath().contains("/login")) {
                          return chain.proceed(original);
                     }

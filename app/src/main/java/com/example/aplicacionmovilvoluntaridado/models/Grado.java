@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class Grado implements Serializable {
     private int idGrado;
-    private String nivel; // "M" or "S"
+    private String nivel;  
     private String descripcion;
 
-    // Getters and Setters
+     
     public int getIdGrado() {
         return idGrado;
     }

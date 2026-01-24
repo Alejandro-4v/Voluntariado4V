@@ -12,7 +12,7 @@ public class VoluntarioActividad implements Serializable {
     private String perfilUrl;
     private String estado;
 
-    // Getters and Setters
+     
     public String getEstado() {
         return estado;
     }

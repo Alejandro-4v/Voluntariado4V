@@ -26,7 +26,7 @@ public interface ApiService {
             @Query("convoca") Integer idEntidad,
             @Query("fecha") String fecha,
             @Query("grado") Integer idGrado
-    // Add other list filters if needed
+     
     );
     @GET("voluntario/{nif}")
     Call<Voluntario> getVoluntario(@retrofit2.http.Path("nif") String nif);

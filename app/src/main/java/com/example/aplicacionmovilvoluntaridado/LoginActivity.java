@@ -29,14 +29,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 1. Inicializar vistas
+         
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         toggleUserType = findViewById(R.id.toggleUserType);
         progressBar = findViewById(R.id.progressBar);
 
-        // 2. Programar el botón
+         
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,15 +58,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginConAPI(String email, String password, String userType) {
-        // Mostrar carga y bloquear botón
+         
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
-        btnLogin.setText("Iniciando sesión..."); // Feedback visual textual
+        btnLogin.setText("Iniciando sesión...");  
 
-        // Creamos el objeto con los datos de login
+         
         LogIn loginData = new LogIn(email, password);
 
-        // Realizamos la llamada asíncrona
+         
         ApiClient.getApiService(this).login(loginData, userType).enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> almendrasConSalYcall, Response<Token> response) {
@@ -75,12 +75,12 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setText("Iniciar sesión");
 
                 if (response.isSuccessful() && response.body() != null) {
-                    // Si el login es correcto, recibimos el token y el usuario
+                     
                     Token tokenResponse = response.body();
                     String token = tokenResponse.getToken();
                     com.example.aplicacionmovilvoluntaridado.models.User user = tokenResponse.getUser();
 
-                    // Guardar token en SharedPreferences para futuras peticiones
+                     
                     android.content.SharedPreferences.Editor editor = getSharedPreferences("VoluntariadoPrefs",
                             MODE_PRIVATE).edit();
                     editor.putString("auth_token", token);
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this, "¡Bienvenido/a!", Toast.LENGTH_SHORT).show();
 
-                    // Navegar a la pantalla correspondiente según rol
+                     
                     if (user != null && ("ROLE_ADMIN".equals(user.getRole()) || "admin".equalsIgnoreCase(user.getRole()))) {
                          Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
                          startActivity(intent);
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 btnLogin.setEnabled(true);
                 btnLogin.setText("Iniciar sesión");
-                // Error de red o servidor caído
+                 
                 Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

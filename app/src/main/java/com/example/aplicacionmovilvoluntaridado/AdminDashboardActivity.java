@@ -30,11 +30,11 @@ public class AdminDashboardActivity extends AppCompatActivity implements
                     .setMessage("¿Estás seguro de que quieres salir?")
                     .setPositiveButton("Salir", new android.content.DialogInterface.OnClickListener() {
                         public void onClick(android.content.DialogInterface dialog, int which) {
-                            // Clear session
+                             
                             getSharedPreferences("VoluntariadoPrefs", MODE_PRIVATE).edit().clear().apply();
                             com.example.aplicacionmovilvoluntaridado.network.ApiClient.reset();
                             
-                            // Go to login
+                             
                             android.content.Intent intent = new android.content.Intent(AdminDashboardActivity.this, LoginActivity.class);
                             intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -66,14 +66,14 @@ public class AdminDashboardActivity extends AppCompatActivity implements
             }
         });
 
-        // Set default fragment
+         
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new AdminActividadesFragment())
                     .commit();
         }
 
-        // Search View Logic
+         
         androidx.appcompat.widget.SearchView searchView = findViewById(R.id.searchViewAdmin);
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -94,9 +94,9 @@ public class AdminDashboardActivity extends AppCompatActivity implements
         });
     }
 
-    // =========================================================================
-    // IMPLEMENTACIÓN DE LAS INTERFACES DE NAVEGACIÓN (Fragment -> Activity)
-    // =========================================================================
+     
+     
+     
 
     @Override
     public void onAdminProximasSelected(com.example.aplicacionmovilvoluntaridado.models.Actividad actividad, android.widget.ImageView sharedImage) {
