@@ -37,7 +37,11 @@ public class AdminVoluntariosFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBarVoluntarios);
         
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new VoluntariosAdapter();
+        adapter = new VoluntariosAdapter(voluntario -> {
+            android.content.Intent intent = new android.content.Intent(getContext(), DetalleVoluntarioActivity.class);
+            intent.putExtra("voluntario_object", voluntario);
+            startActivity(intent);
+        });
         recyclerView.setAdapter(adapter);
         
         cargarVoluntarios();

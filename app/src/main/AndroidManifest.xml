@@ -15,6 +15,10 @@
         android:theme="@style/Theme.AplicacionMovilVoluntaridado"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".DetalleVoluntarioActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".DetalleActividadActivity"
             android:exported="false" />
         <activity

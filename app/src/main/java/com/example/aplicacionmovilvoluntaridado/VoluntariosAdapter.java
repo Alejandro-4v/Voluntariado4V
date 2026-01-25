@@ -17,10 +17,18 @@ public class VoluntariosAdapter extends RecyclerView.Adapter<VoluntariosAdapter.
 
     private List<Voluntario> voluntarios;
     private List<Voluntario> listaOriginal;
+    private final OnVoluntarioClickListener listener;
 
-    public VoluntariosAdapter() {
+    public interface OnVoluntarioClickListener {
+        void onItemClick(Voluntario voluntario);
+    }
+
+
+
+    public VoluntariosAdapter(OnVoluntarioClickListener listener) {
         this.voluntarios = new ArrayList<>();
         this.listaOriginal = new ArrayList<>();
+        this.listener = listener;
     }
 
     public void setDatos(List<Voluntario> datos) {
@@ -60,42 +68,7 @@ public class VoluntariosAdapter extends RecyclerView.Adapter<VoluntariosAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Voluntario v = voluntarios.get(position);
-        
-        String nombreCompleto = (v.getNombre() != null ? v.getNombre() : "") + " " + 
-                                (v.getApellido1() != null ? v.getApellido1() : "") + " " +
-                                (v.getApellido2() != null ? v.getApellido2() : "");
-                                
-        holder.tvName.setText(nombreCompleto.trim());
-        holder.tvEmail.setText(v.getMail());
-        holder.tvNif.setText(v.getNif());
-        if (v.getGrado() != null) {
-            holder.tvGrado.setText(v.getGrado().getDescripcion());
-        } else {
-            holder.tvGrado.setText("Sin grado");
-        }
-        
-         
-        String estado = v.getEstado() != null ? v.getEstado() : "?";
-        String estadoLabel = estado;
-        int color = android.graphics.Color.GRAY;
-        
-        if ("A".equals(estado)) {
-            estadoLabel = "Activo";
-            color = android.graphics.Color.parseColor("#4CAF50");  
-        } else if ("P".equals(estado)) {
-             estadoLabel = "Pendiente";
-             color = android.graphics.Color.parseColor("#FF9800");  
-        } else if ("I".equals(estado)) {
-             estadoLabel = "Inactivo";
-             color = android.graphics.Color.GRAY;
-        } else if ("R".equals(estado)) {
-             estadoLabel = "Rechazado";
-             color = android.graphics.Color.RED;
-        }
-        
-        holder.tvEstado.setText(estadoLabel);
-        holder.tvEstado.setTextColor(color);
+        holder.bind(voluntarios.get(position), listener);
     }
 
     @Override
@@ -113,6 +86,49 @@ public class VoluntariosAdapter extends RecyclerView.Adapter<VoluntariosAdapter.
             tvNif = itemView.findViewById(R.id.tvVoluntarioNif);
             tvGrado = itemView.findViewById(R.id.tvVoluntarioGrado);
             tvEstado = itemView.findViewById(R.id.tvVoluntarioEstado);
+        }
+
+        public void bind(final Voluntario item, final OnVoluntarioClickListener listener) {
+             // Bind data logic (moved from onBindViewHolder)
+             String nombreCompleto = (item.getNombre() != null ? item.getNombre() : "") + " " + 
+                                (item.getApellido1() != null ? item.getApellido1() : "") + " " +
+                                (item.getApellido2() != null ? item.getApellido2() : "");
+                                
+            tvName.setText(nombreCompleto.trim());
+            tvEmail.setText(item.getMail());
+            tvNif.setText(item.getNif());
+            if (item.getGrado() != null) {
+                tvGrado.setText(item.getGrado().getDescripcion());
+            } else {
+                tvGrado.setText("Sin grado");
+            }
+            
+            String estado = item.getEstado() != null ? item.getEstado() : "?";
+            String estadoLabel = estado;
+            int color = android.graphics.Color.GRAY;
+            
+            if ("A".equals(estado)) {
+                estadoLabel = "Activo";
+                color = android.graphics.Color.parseColor("#4CAF50");  
+            } else if ("P".equals(estado)) {
+                 estadoLabel = "Pendiente";
+                 color = android.graphics.Color.parseColor("#FF9800");  
+            } else if ("I".equals(estado)) {
+                 estadoLabel = "Inactivo";
+                 color = android.graphics.Color.GRAY;
+            } else if ("R".equals(estado)) {
+                 estadoLabel = "Rechazado";
+                 color = android.graphics.Color.RED;
+            }
+            
+            tvEstado.setText(estadoLabel);
+            tvEstado.setTextColor(color);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 }

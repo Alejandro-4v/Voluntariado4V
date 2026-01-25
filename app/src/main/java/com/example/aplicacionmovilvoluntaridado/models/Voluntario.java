@@ -1,8 +1,9 @@
 package com.example.aplicacionmovilvoluntaridado.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Voluntario {
+public class Voluntario implements Serializable {
     private String nif;
     private String nombre;
     private String apellido1;

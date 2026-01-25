@@ -274,7 +274,11 @@ public class DetalleActividadActivity extends AppCompatActivity {
                     
                      
                     rvVoluntarios.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
-                    VoluntariosAdapter adapter = new VoluntariosAdapter();
+                    VoluntariosAdapter adapter = new VoluntariosAdapter(voluntario -> {
+                        android.content.Intent intent = new android.content.Intent(DetalleActividadActivity.this, DetalleVoluntarioActivity.class);
+                        intent.putExtra("voluntario_object", voluntario);
+                        startActivity(intent);
+                    });
                     
                      
                     ArrayList<com.example.aplicacionmovilvoluntaridado.models.Voluntario> mappedList = new ArrayList<>();
