@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Detalle Voluntario" 
+            app:navigationIcon="@android:drawable/ic_menu_revert"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Profile Info Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center_horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivDetalleImagen"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@android:drawable/sym_def_app_icon"
+                        android:background="@drawable/bg_pill_gray"
+                        android:padding="16dp" />
+
+                    <TextView
+                        android:id="@+id/tvDetalleNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Nombre Apellido"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/textColorPrimary"/>
+
+                    <TextView
+                        android:id="@+id/tvDetalleEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="email@example.com"
+                        android:textSize="14sp"
+                        android:textColor="@color/textColorSecondary"
+                        android:layout_marginTop="4dp"/>
+                    
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginVertical="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+                        
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="NIF"
+                                android:textSize="12sp"
+                                android:textColor="@color/textColorSecondary"/>
+                            <TextView
+                                android:id="@+id/tvDetalleNif"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12345678X"
+                                android:textStyle="bold"
+                                android:textColor="@color/textColorPrimary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GRADO"
+                                android:textSize="12sp"
+                                android:textColor="@color/textColorSecondary"/>
+                            <TextView
+                                android:id="@+id/tvDetalleGrado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Grado Medio"
+                                android:textStyle="bold"
+                                android:textColor="@color/textColorPrimary"
+                                android:paddingHorizontal="4dp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ESTADO"
+                                android:textSize="12sp"
+                                android:textColor="@color/textColorSecondary"/>
+                            <TextView
+                                android:id="@+id/tvDetalleEstado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Activo"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorPrimary"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRÓXIMAS ACTIVIDADES"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorSecondary"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"/>
+
+            <ProgressBar
+                android:id="@+id/progressBarActividades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvEmptyActividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No tiene actividades próximas."
+                android:gravity="center"
+                android:padding="16dp"
+                android:visibility="gone"
+                android:textColor="@color/textColorSecondary"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDetalleActividades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_actividad"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

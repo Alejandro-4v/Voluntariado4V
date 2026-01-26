@@ -11,31 +11,32 @@ public class Actividad implements Serializable {
     private String descripcion;
     private String estado;
     private Entidad convoca;
-    private int plazas; // Added field
-    private String inicio; // ISO 8601 string
-    private String fin; // ISO 8601 string
+    private int plazas;  
+    private String inicio;  
+    private String fin;  
     @SerializedName("imagenUrl")
     private String imagenUrl;
-    private Object grado; // Generic to handle int ID or potential object
+    private Grado grado;  
+
     @SerializedName("tiposActividad")
     private List<TipoActividad> tiposActividad;
     private List<Ods> ods;
     private List<VoluntarioActividad> voluntarios;
 
-    // Future optional field
+     
     private String lugar;
 
-    // Helper methods for UI compatibility or formatting
+     
     public String getEntidadNombre() {
         return convoca != null ? convoca.getNombre() : "";
     }
 
-    // Formatted date string (could be improved with a proper Date formatter)
+     
     public String getFechaFormatted() {
         return inicio != null ? inicio.replace("T", " ") : "";
     }
 
-    // Getters and Setters
+     
     public int getIdActividad() {
         return idActividad;
     }
@@ -104,11 +105,11 @@ public class Actividad implements Serializable {
         this.imagenUrl = imagenUrl;
     }
 
-    public Object getGrado() {
+    public Grado getGrado() {
         return grado;
     }
 
-    public void setGrado(Object grado) {
+    public void setGrado(Grado grado) {
         this.grado = grado;
     }
 

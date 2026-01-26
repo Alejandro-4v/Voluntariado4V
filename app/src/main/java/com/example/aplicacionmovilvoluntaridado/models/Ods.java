@@ -10,7 +10,7 @@ public class Ods implements Serializable {
     @SerializedName("imagen_url")
     private String imagenUrl;
 
-    // Getters and Setters
+     
     public int getIdOds() {
         return idOds;
     }

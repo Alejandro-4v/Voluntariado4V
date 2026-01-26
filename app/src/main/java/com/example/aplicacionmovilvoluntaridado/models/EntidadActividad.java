@@ -16,7 +16,7 @@ public class EntidadActividad {
     @SerializedName("perfil_url")
     private String perfilUrl;
 
-    // Getters and Setters
+     
     public int getIdEntidad() {
         return idEntidad;
     }

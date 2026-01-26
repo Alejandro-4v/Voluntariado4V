@@ -1,0 +1,136 @@
+package com.example.aplicacionmovilvoluntaridado;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.aplicacionmovilvoluntaridado.models.Actividad;
+import com.example.aplicacionmovilvoluntaridado.models.Ods;
+import com.example.aplicacionmovilvoluntaridado.network.ApiClient;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class AdminProximasFragment extends Fragment {
+
+    public interface OnAdminProximasSelectedListener {
+        void onAdminProximasSelected(Actividad actividad, android.widget.ImageView sharedImage);
+    }
+
+    private OnAdminProximasSelectedListener listener;
+    RecyclerDataAdapter adapter;
+    ProgressBar progressBar;
+
+    @Override
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
+        if (context instanceof OnAdminProximasSelectedListener) {
+            listener = (OnAdminProximasSelectedListener) context;
+        } else {
+            throw new ClassCastException(context.toString() + " debe implementar OnAdminProximasSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_lista_actividades, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.rvActividades);
+        progressBar = view.findViewById(R.id.progressBar);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = new RecyclerDataAdapter(new ArrayList<>(), new RecyclerDataAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Actividad actividad, int position, android.widget.ImageView sharedImage) {
+                if (listener != null) {
+                    listener.onAdminProximasSelected(actividad, sharedImage);
+                }
+            }
+        });
+        recyclerView.setAdapter(adapter);
+
+        cargarDatos();
+
+        return view;
+    }
+
+    private void cargarDatos() {
+        progressBar.setVisibility(View.VISIBLE);
+        ApiClient.getApiService(getContext()).getActividades(50, null, null, null, null, null)
+                .enqueue(new Callback<List<Actividad>>() {
+                    @Override
+                    public void onResponse(Call<List<Actividad>> call, Response<List<Actividad>> response) {
+                        progressBar.setVisibility(View.GONE);
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<Actividad> todas = response.body();
+                            List<Actividad> proximas = new ArrayList<>();
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            String ahora = sdf.format(new Date());
+
+                            for (Actividad a : todas) {
+                                String inicioStr = a.getInicio() != null ? a.getInicio().replace("T", " ") : "";
+                                String ahoraStr = ahora.replace("T", " ");
+                                
+                                if (inicioStr.compareTo(ahoraStr) > 0) {
+                                    proximas.add(a);
+                                }
+                            }
+                            adapter.setDatos(proximas);
+
+                             
+                             
+                            if (getView() != null) {
+                                android.widget.TextView tvEmpty = getView().findViewById(R.id.tvEmptyState);
+                                RecyclerView rv = getView().findViewById(R.id.rvActividades);
+                                if (proximas.isEmpty()) {
+                                    rv.setVisibility(View.GONE);
+                                    if(tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE);
+                                } else {
+                                    rv.setVisibility(View.VISIBLE);
+                                    if(tvEmpty != null) tvEmpty.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Actividad>> call, Throwable t) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Fallo: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+    public void filtrarLista(String texto) {
+        if (adapter != null) {
+            adapter.filtrar(texto);
+        }
+    }
+}

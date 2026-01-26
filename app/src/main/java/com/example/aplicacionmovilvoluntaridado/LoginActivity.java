@@ -21,48 +21,66 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
+    private com.google.android.material.button.MaterialButtonToggleGroup toggleUserType;
+    private android.widget.ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 1. Inicializar vistas
+         
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        toggleUserType = findViewById(R.id.toggleUserType);
+        progressBar = findViewById(R.id.progressBar);
 
-        // 2. Programar el botón
+         
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
+                
+                String userType = "voluntario";
+                if (toggleUserType.getCheckedButtonId() == R.id.btnAdmin) {
+                    userType = "administrador";
+                }
 
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
                 } else {
-                    loginConAPI(email, password);
+                    loginConAPI(email, password, userType);
                 }
             }
         });
     }
 
-    private void loginConAPI(String email, String password) {
-        // Creamos el objeto con los datos de login
+    private void loginConAPI(String email, String password, String userType) {
+         
+        progressBar.setVisibility(View.VISIBLE);
+        btnLogin.setEnabled(false);
+        btnLogin.setText("Iniciando sesión...");  
+
+         
         LogIn loginData = new LogIn(email, password);
 
-        // Realizamos la llamada asíncrona
-        ApiClient.getApiService(this).login(loginData, "voluntario").enqueue(new Callback<Token>() {
+         
+        ApiClient.getApiService(this).login(loginData, userType).enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
+            public void onResponse(Call<Token> almendrasConSalYcall, Response<Token> response) {
+                progressBar.setVisibility(View.GONE);
+                btnLogin.setEnabled(true);
+                btnLogin.setText("Iniciar sesión");
+
                 if (response.isSuccessful() && response.body() != null) {
-                    // Si el login es correcto, recibimos el token y el usuario
+                     
                     Token tokenResponse = response.body();
                     String token = tokenResponse.getToken();
                     com.example.aplicacionmovilvoluntaridado.models.User user = tokenResponse.getUser();
 
-                    // Guardar token en SharedPreferences para futuras peticiones
+                     
                     android.content.SharedPreferences.Editor editor = getSharedPreferences("VoluntariadoPrefs",
                             MODE_PRIVATE).edit();
                     editor.putString("auth_token", token);
@@ -81,9 +99,14 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this, "¡Bienvenido/a!", Toast.LENGTH_SHORT).show();
 
-                    // Navegar a la pantalla de actividades
-                    Intent intent = new Intent(LoginActivity.this, ActividadesActivity.class);
-                    startActivity(intent);
+                     
+                    if (user != null && ("ROLE_ADMIN".equals(user.getRole()) || "admin".equalsIgnoreCase(user.getRole()))) {
+                         Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                         startActivity(intent);
+                    } else {
+                         Intent intent = new Intent(LoginActivity.this, ActividadesActivity.class);
+                         startActivity(intent);
+                    }
                     finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Error: Credenciales incorrectas", Toast.LENGTH_LONG).show();
@@ -92,7 +115,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                // Error de red o servidor caído
+                progressBar.setVisibility(View.GONE);
+                btnLogin.setEnabled(true);
+                btnLogin.setText("Iniciar sesión");
+                 
                 Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

@@ -1,25 +1,19 @@
 package com.example.aplicacionmovilvoluntaridado.models;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class VoluntarioActividad implements Serializable {
+public class Voluntario implements Serializable {
     private String nif;
     private String nombre;
     private String apellido1;
     private String apellido2;
-    private Grado grado;
     private String mail;
     private String perfilUrl;
+    private Grado grado;
     private String estado;
+    private List<Actividad> actividades;
 
-     
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
     public String getNif() {
         return nif;
     }
@@ -52,14 +46,6 @@ public class VoluntarioActividad implements Serializable {
         this.apellido2 = apellido2;
     }
 
-    public Grado getGrado() {
-        return grado;
-    }
-
-    public void setGrado(Grado grado) {
-        this.grado = grado;
-    }
-
     public String getMail() {
         return mail;
     }
@@ -74,5 +60,29 @@ public class VoluntarioActividad implements Serializable {
 
     public void setPerfilUrl(String perfilUrl) {
         this.perfilUrl = perfilUrl;
+    }
+
+    public Grado getGrado() {
+        return grado;
+    }
+
+    public void setGrado(Grado grado) {
+        this.grado = grado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public List<Actividad> getActividades() {
+        return actividades;
+    }
+
+    public void setActividades(List<Actividad> actividades) {
+        this.actividades = actividades;
     }
 }

@@ -1,272 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
-        <!-- Header Section -->
-        <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvGreeting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="¡Hola!"
-                    android:textColor="@color/textColorSecondary"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bienvenido/a"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@android:drawable/ic_menu_myplaces"
-                app:tint="@color/colorPrimary"/>
-        </LinearLayout>
-
-        <!-- Stats Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/colorPrimary">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tu Impacto"
-                    android:textColor="@color/textColorWhite"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/textColorWhite"
-                            android:textSize="28sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Horas Totales"
-                            android:textColor="#E0E0E0"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#4DFFFFFF"
-                        android:layout_marginHorizontal="16dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/textColorWhite"
-                            android:textSize="28sp"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Actividades"
-                            android:textColor="#E0E0E0"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Do you have next activity? -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tu Próxima Actividad"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:padding="20dp">
 
-                <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@android:drawable/ic_menu_agenda"
-                    app:tint="#BDBDBD"
-                    android:layout_marginBottom="12dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+            
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+    
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="No tienes actividades próximas"
-                    android:textColor="@color/textColorSecondary"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="¡Es buen momento para apuntarte a una!"
-                    android:textColor="#9E9E9E"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="16dp"/>
-
-                <Button
-                    android:id="@+id/btnFindActivities"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Buscar Actividades"
-                    android:backgroundTint="@color/colorSecondary"
-                    android:textColor="@color/textColorWhite"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+    
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¡Hola!"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="16sp" />
+    
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bienvenido/a"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+    
+                <ImageButton
+                    android:id="@+id/btnLogoutFragment"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_lock_power_off"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:tint="@color/colorPrimary"/>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Quick Explore -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Descubre"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+    
+            
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardExplore"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+    
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:orientation="vertical">
+    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tu Impacto"
+                        android:textColor="@color/textColorWhite"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="16dp"/>
+    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+    
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvTotalHours"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/textColorWhite"
+                                android:textSize="28sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Horas Totales"
+                                android:textColor="#E0E0E0"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+    
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="#4DFFFFFF"
+                            android:layout_marginHorizontal="16dp"/>
+    
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvTotalActivities"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/textColorWhite"
+                                android:textSize="28sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Actividades"
+                                android:textColor="#E0E0E0"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+    
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tu Próxima Actividad"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"/>
+    
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMyActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:visibility="gone"/>
+    
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-                
+                app:cardElevation="2dp"
+                app:strokeColor="#E0E0E0"
+                app:strokeWidth="1dp">
+    
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
+    
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@android:drawable/ic_menu_agenda"
+                        app:tint="#BDBDBD"
+                        android:layout_marginBottom="12dp"/>
+    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No tienes actividades próximas"
+                        android:textColor="@color/textColorSecondary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"/>
+    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¡Es buen momento para apuntarte a una!"
+                        android:textColor="#9E9E9E"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="16dp"/>
+    
+                    <Button
+                        android:id="@+id/btnFindActivities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Buscar Actividades"
+                        android:backgroundTint="@color/colorSecondary"
+                        android:textColor="@color/textColorWhite"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+    
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descubre"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"/>
+    
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+    
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardExplore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
                     
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nuevas"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/textColorPrimary"/>
+                        android:padding="16dp"
+                        android:orientation="vertical">
                         
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Oportunidades"
-                        android:textSize="12sp"
-                        android:textColor="@color/textColorSecondary"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardHistory"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nuevas"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColorPrimary"/>
+                            
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Oportunidades"
+                            android:textSize="12sp"
+                            android:textColor="@color/textColorSecondary"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+    
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHistory"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+    
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Historial"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/textColorPrimary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mis actividades"
-                        android:textSize="12sp"
-                        android:textColor="@color/textColorSecondary"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
+                        android:padding="16dp"
+                        android:orientation="vertical">
+    
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Historial"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textColorPrimary"/>
+    
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mis actividades"
+                            android:textSize="12sp"
+                            android:textColor="@color/textColorSecondary"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+    
+            </LinearLayout>
+    
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-</ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</FrameLayout>

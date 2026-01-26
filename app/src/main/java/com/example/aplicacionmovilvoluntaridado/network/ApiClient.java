@@ -14,6 +14,10 @@ public class ApiClient {
     private static final String BASE_URL = "http://10.0.2.2/";
     private static Retrofit retrofit = null;
 
+    public static void reset() {
+        retrofit = null;
+    }
+
     public static ApiService getApiService(android.content.Context context) {
         if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -25,13 +29,18 @@ public class ApiClient {
             httpClient.readTimeout(60, TimeUnit.SECONDS);
             httpClient.writeTimeout(60, TimeUnit.SECONDS);
 
-            // Add Auth Interceptor
+             
             android.content.Context appContext = context.getApplicationContext();
             httpClient.addInterceptor(chain -> {
                 okhttp3.Request original = chain.request();
                 okhttp3.Request.Builder requestBuilder = original.newBuilder();
 
                 if (appContext != null) {
+                     
+                    if (original.url().encodedPath().contains("/login")) {
+                         return chain.proceed(original);
+                    }
+
                     android.content.SharedPreferences prefs = appContext.getSharedPreferences("VoluntariadoPrefs",
                             android.content.Context.MODE_PRIVATE);
                     String token = prefs.getString("auth_token", null);

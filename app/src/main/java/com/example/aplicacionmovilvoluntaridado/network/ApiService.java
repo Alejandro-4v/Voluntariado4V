@@ -3,6 +3,7 @@ package com.example.aplicacionmovilvoluntaridado.network;
 import com.example.aplicacionmovilvoluntaridado.models.Actividad;
 import com.example.aplicacionmovilvoluntaridado.models.LogIn;
 import com.example.aplicacionmovilvoluntaridado.models.Token;
+import com.example.aplicacionmovilvoluntaridado.models.Voluntario;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public interface ApiService {
             @Query("convoca") Integer idEntidad,
             @Query("fecha") String fecha,
             @Query("grado") Integer idGrado
-    // Add other list filters if needed
+     
     );
+    @GET("voluntario/{nif}")
+    Call<Voluntario> getVoluntario(@retrofit2.http.Path("nif") String nif);
+
+    @GET("voluntario")
+    Call<List<Voluntario>> getVoluntarios();
 }

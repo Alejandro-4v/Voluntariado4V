@@ -6,7 +6,7 @@ public class User {
     private String nif;
     private String name;
     private Integer gradeId;
-    private Integer id; // For entity id
+    private Integer id;  
 
     public String getEmail() {
         return email;
