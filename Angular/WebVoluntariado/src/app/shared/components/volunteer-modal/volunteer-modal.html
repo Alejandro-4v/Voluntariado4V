@@ -1,0 +1,72 @@
+@if (isOpen) {
+<div class="modal-overlay" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="modal-close" (click)="onClose()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg"
+                viewBox="0 0 16 16">
+                <path
+                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+        </button>
+
+        <div class="modal-header-custom">
+            <h2 class="modal-title">Nuevo Voluntario</h2>
+            <p class="modal-subtitle">Introduce los datos del nuevo voluntario para registrarlo en el sistema.</p>
+        </div>
+
+        <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()" class="modal-form">
+            @if (errorMessage) {
+            <div class="alert alert-danger mb-3" role="alert">
+                {{ errorMessage }}
+            </div>
+            }
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">NIF</label>
+                    <input type="text" class="form-control" formControlName="nif" placeholder="12345678X"
+                        [class.is-invalid]="volunteerForm.get('nif')?.touched && volunteerForm.get('nif')?.invalid">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" formControlName="mail" placeholder="ejemplo@mail.com"
+                        [class.is-invalid]="volunteerForm.get('mail')?.touched && volunteerForm.get('mail')?.invalid">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre"
+                        [class.is-invalid]="volunteerForm.get('nombre')?.touched && volunteerForm.get('nombre')?.invalid">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Primer Apellido</label>
+                    <input type="text" class="form-control" formControlName="apellido1" placeholder="Apellido 1"
+                        [class.is-invalid]="volunteerForm.get('apellido1')?.touched && volunteerForm.get('apellido1')?.invalid">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Segundo Apellido</label>
+                    <input type="text" class="form-control" formControlName="apellido2" placeholder="Apellido 2">
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Grado</label>
+                    <select class="form-select" formControlName="gradoId"
+                        [class.is-invalid]="volunteerForm.get('gradoId')?.touched && volunteerForm.get('gradoId')?.invalid">
+                        <option value="">Selecciona un grado</option>
+                        @for (grado of grados; track grado.idGrado) {
+                        <option [value]="grado.idGrado">{{ grado.descripcion }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-buttons mt-4">
+                <button type="submit" class="btn-action w-100" [disabled]="isLoading">
+                    {{ isLoading ? 'Guardando...' : 'Guardar Voluntario' }}
+                </button>
+                <button type="button" class="btn-secondary-custom" (click)="onClose()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+}

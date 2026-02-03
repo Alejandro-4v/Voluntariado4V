@@ -1,5 +1,5 @@
 <div class="container-fluid py-4 ps-5 pe-5">
-    
+
     <div
         class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-5 gap-3">
         <div class="d-flex align-items-center gap-3 w-100 w-md-auto justify-content-center justify-content-md-start">
@@ -7,10 +7,13 @@
             <button class="btn btn-success btn-sm d-flex align-items-center gap-2" (click)="exportToExcel()">
                 <i class="bi bi-file-earmark-excel"></i> Exportar
             </button>
+            <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" (click)="openCreateModal()">
+                <i class="bi bi-plus-lg"></i> Nuevo voluntario
+            </button>
         </div>
 
         <div class="d-flex gap-4 align-items-center w-100 w-md-auto justify-content-center justify-content-md-end">
-            
+
             <app-filter-sort [filterSections]="filterSections" [activeFilters]="activeFilters"
                 [groupOptions]="groupOptions" [sortOptions]="sortOptions" [currentGroup]="groupBy"
                 [currentSort]="sortBy" (activeFiltersChange)="onFiltersChange($event)" (groupChange)="onGroupBy($event)"
@@ -20,17 +23,17 @@
     </div>
 
     @if (successMessage) {
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
-            <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Close"></button>
-        </div>
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Close"></button>
+    </div>
     }
 
     @if (isLoading) {
     <app-loading-spinner [text]="'Cargando voluntarios...'"></app-loading-spinner>
     } @else {
     <div class="row g-5" @fadeIn>
-        
+
         <div class="col-lg-7" @slideUp>
             <app-generic-list [items]="displayVolunteers" [columns]="listColumns"
                 [selectedId]="selectedVolunteer?.nif || null" [keyField]="'nif'" (select)="selectVolunteer($event)"
@@ -38,7 +41,7 @@
             </app-generic-list>
         </div>
 
-        
+
         <div class="col-lg-5 mb-4 sticky-sidebar" @slideUp>
             @if (selectedVolunteer) {
             <app-generic-detail [item]="selectedVolunteer" [config]="detailConfig" [showEdit]="true"
@@ -48,4 +51,7 @@
         </div>
     </div>
     }
+
+    <app-volunteer-modal [isOpen]="isCreateModalOpen" (close)="closeCreateModal()" (saved)="onVolunteerSaved()">
+    </app-volunteer-modal>
 </div>

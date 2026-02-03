@@ -10,12 +10,13 @@ import { FilterSortComponent, FilterSection } from '../../../shared/components/f
 import { GenericListComponent, ColumnConfig } from '../../../shared/components/generic-list/generic-list.component';
 import { GenericDetailComponent, DetailConfig } from '../../../shared/components/generic-detail/generic-detail.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { VolunteerModalComponent } from '../../../shared/components/volunteer-modal/volunteer-modal';
 import { fadeIn, slideUp } from '../../../shared/animations/animations';
 
 @Component({
     selector: 'app-management-volunteers',
     standalone: true,
-    imports: [CommonModule, FormsModule, FilterSortComponent, GenericListComponent, GenericDetailComponent, LoadingSpinnerComponent],
+    imports: [CommonModule, FormsModule, FilterSortComponent, GenericListComponent, GenericDetailComponent, LoadingSpinnerComponent, VolunteerModalComponent],
     templateUrl: './volunteers.component.html',
     styleUrls: ['./volunteers.component.scss'],
     animations: [fadeIn, slideUp]
@@ -26,6 +27,7 @@ export class ManagementVolunteersComponent implements OnInit {
     displayVolunteers: Voluntario[] = [];
     selectedVolunteer: Voluntario | null = null;
     isLoading = true;
+    isCreateModalOpen = false;
 
     sortBy: string = '';
     groupBy: string = '';
@@ -126,7 +128,6 @@ export class ManagementVolunteersComponent implements OnInit {
                 if (this.volunteers.length > 0) {
                     this.selectedVolunteer = this.volunteers[0];
                 }
-                this.applyFilters();
                 this.isLoading = false;
             },
             error: (err) => {
@@ -136,6 +137,43 @@ export class ManagementVolunteersComponent implements OnInit {
         });
 
         this.loadTypes();
+    }
+
+    loadVolunteers() {
+        this.isLoading = true;
+        this.volunteersService.getAll().subscribe({
+            next: (data) => {
+                this.volunteers = data.map(v => ({
+                    ...v,
+                    nombreCompleto: `${v.nombre} ${v.apellido1}${v.apellido2 ? ' ' + v.apellido2 : ''}`,
+                    estadoLabel: this.getEstadoLabel(v.estado)
+                }));
+                this.displayVolunteers = [...this.volunteers];
+                if (this.volunteers.length > 0 && !this.selectedVolunteer) {
+                    this.selectedVolunteer = this.volunteers[0];
+                }
+                this.applyFilters();
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading volunteers', err);
+                this.isLoading = false;
+            }
+        });
+    }
+
+    openCreateModal() {
+        this.isCreateModalOpen = true;
+    }
+
+    closeCreateModal() {
+        this.isCreateModalOpen = false;
+    }
+
+    onVolunteerSaved() {
+        this.successMessage = 'Voluntario creado correctamente';
+        this.loadVolunteers();
+        setTimeout(() => this.successMessage = '', 3000);
     }
 
     loadTypes() {
