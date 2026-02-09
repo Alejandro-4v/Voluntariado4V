@@ -19,7 +19,7 @@ restart:
 	docker compose restart
 	@echo "$(GREEN)Containers restarted"
 
-build:
+build-php:
 	@echo "$(BLUE)Building image"
 	docker compose build --no-cache php angular
 	@echo "$(GREEN)Image built"

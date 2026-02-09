@@ -14,6 +14,7 @@ services:
       - "9003:9003"
     volumes:
       - ./api:/api
+      - ./db_scripts:/api/db_scripts
     depends_on:
       - mysql
     profiles:
@@ -29,6 +30,8 @@ services:
     container_name: mysql
     ports:
       - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: API
