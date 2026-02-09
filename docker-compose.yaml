@@ -9,7 +9,7 @@ services:
     build: ./docker/images/php
     container_name: php
     ports:
-      - "80:80"
+      - "8080:80"
       - "8000:8000"
       - "9003:9003"
     volumes:
@@ -34,6 +34,20 @@ services:
       MYSQL_DATABASE: API
       MYSQL_USER: api
       MYSQL_PASSWORD: api123
+    profiles:
+      - "api"
+    networks:
+      - api
+
+  angular:
+    build:
+      context: .
+      dockerfile: ./docker/images/angular/Dockerfile
+    container_name: angular
+    ports:
+      - "80:80"
+    depends_on:
+      - php
     profiles:
       - "api"
     networks:
