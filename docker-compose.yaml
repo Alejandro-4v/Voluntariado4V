@@ -38,3 +38,22 @@ services:
       - "api"
     networks:
       - api
+
+  angular:
+    build: ./docker/images/angular
+    container_name: angular
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./Angular/WebVoluntariado:/app
+      - /app/node_modules
+      - /app/.angular
+    depends_on:
+      - php
+    profiles:
+      - "api"
+    networks:
+      - api
+    working_dir: /app
+    stdin_open: true
+    tty: true

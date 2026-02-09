@@ -1,4 +1,4 @@
-.PHONY: up down restart build shell start stop install clean load-mock-data load-db init
+.PHONY: up down restart build shell start stop install clean load-mock-data load-db init build-angular install-angular angular-shell
 
 BLUE := \033[0;34m
 RED := \033[0;31m
@@ -11,7 +11,7 @@ up:
 
 down:
 	@echo "$(BLUE)Stopping containers"
-	docker compose down php mysql
+	docker compose down php mysql angular
 	@echo "$(GREEN)Containers stopped"
 
 restart:
@@ -21,11 +21,19 @@ restart:
 
 build:
 	@echo "$(BLUE)Building image"
-	docker compose build --no-cache php
+	docker compose build --no-cache php angular
 	@echo "$(GREEN)Image built"
+
+build-angular:
+	@echo "$(BLUE)Building Angular image"
+	docker compose build --no-cache angular
+	@echo "$(GREEN)Angular image built"
 
 shell:
 	docker exec -it php bash
+
+angular-shell:
+	docker exec -it angular bash
 
 start:
 	@echo "$(BLUE)Starting server$(RESET)"
@@ -44,7 +52,13 @@ stop:
 install:
 	@echo "$(BLUE)Installing dependencies"
 	docker exec php composer install
+	docker exec angular npm install
 	@echo "$(GREEN)Dependencies installed"
+
+install-angular:
+	@echo "$(BLUE)Installing Angular dependencies"
+	docker exec angular npm install
+	@echo "$(GREEN)Angular dependencies installed"
 
 clean: down
 	@echo "$(BLUE)Cleaning Docker resources"
