@@ -1,19 +1,13 @@
-FROM node:22-slim AS build
+FROM node:22-slim
+
+RUN apt-get update && apt-get install -y \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g @angular/cli@20.3.14
 
 WORKDIR /app
 
-COPY Angular/WebVoluntariado/package*.json ./
-RUN npm install
+EXPOSE 4200
 
-COPY Angular/WebVoluntariado/ .
-RUN npm run build -- --configuration production
-
-FROM nginx:stable-alpine
-
-COPY --from=build /app/dist/WebVoluntariado/browser /usr/share/nginx/html
-
-COPY docker/images/angular/nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "-c", "if [ ! -f node_modules/@angular/core/package.json ]; then npm install; fi && npm start -- --host 0.0.0.0"]

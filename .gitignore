@@ -15,8 +15,6 @@
 .cxx
 local.properties
 
-# Shell scripts for testing
-*.sh
 
 # IDE
 **/*.code-workspace

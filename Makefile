@@ -1,4 +1,4 @@
-.PHONY: up down restart build shell start stop install clean load-mock-data load-db init build-angular
+.PHONY: up down restart build shell start stop install clean load-mock-data load-db init build-angular install-angular angular-shell
 
 BLUE := \033[0;34m
 RED := \033[0;31m
@@ -32,6 +32,9 @@ build-angular:
 shell:
 	docker exec -it php bash
 
+angular-shell:
+	docker exec -it angular bash
+
 start:
 	@echo "$(BLUE)Starting server$(RESET)"
 	docker exec php symfony server:start --daemon --allow-all-ip --port 80
@@ -49,7 +52,13 @@ stop:
 install:
 	@echo "$(BLUE)Installing dependencies"
 	docker exec php composer install
+	docker exec angular npm install
 	@echo "$(GREEN)Dependencies installed"
+
+install-angular:
+	@echo "$(BLUE)Installing Angular dependencies"
+	docker exec angular npm install
+	@echo "$(GREEN)Angular dependencies installed"
 
 clean: down
 	@echo "$(BLUE)Cleaning Docker resources"

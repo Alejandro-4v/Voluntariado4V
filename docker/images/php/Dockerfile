@@ -6,6 +6,7 @@ RUN apt update && apt install -yqq --no-install-recommends \
     zip \
     unzip \
     libzip-dev \
+    default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) \
@@ -27,4 +28,7 @@ COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN echo "alias la='ls -la'" >> /root/.bashrc
 
-CMD ["bash"]
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+CMD ["docker-entrypoint.sh"]

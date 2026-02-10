@@ -14,6 +14,7 @@ services:
       - "9003:9003"
     volumes:
       - ./api:/api
+      - ./db_scripts:/api/db_scripts
     depends_on:
       - mysql
     profiles:
@@ -42,15 +43,20 @@ services:
       - api
 
   angular:
-    build:
-      context: .
-      dockerfile: ./docker/images/angular/Dockerfile
+    build: ./docker/images/angular
     container_name: angular
     ports:
-      - "80:80"
+      - "4200:4200"
+    volumes:
+      - ./Angular/WebVoluntariado:/app
+      - /app/node_modules
+      - /app/.angular
     depends_on:
       - php
     profiles:
       - "api"
     networks:
       - api
+    working_dir: /app
+    stdin_open: true
+    tty: true
